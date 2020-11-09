@@ -1,16 +1,26 @@
 package entities;
 
+import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 
-@Component
 public class Bid {
+
     private Long id;
-    private Long auctionId;
-    private Long userId;
+    private AuctionPost auction;
+    private User user;
     private Double offer;
-    private Timestamp timestamp;
+    private LocalDateTime dateTime;
 
     public Long getId() {
         return id;
@@ -20,20 +30,20 @@ public class Bid {
         this.id = id;
     }
 
-    public Long getAuctionId() {
-        return auctionId;
+    public AuctionPost getAuction() {
+        return auction;
     }
 
-    public void setAuctionId(Long auctionId) {
-        this.auctionId = auctionId;
+    public void setAuction(AuctionPost auction) {
+        this.auction = auction;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Double getOffer() {
@@ -44,22 +54,11 @@ public class Bid {
         this.offer = offer;
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
-
-    //@Component
-    //@Entity @IdClass(BidId.class)
-    //@RedisHash("BestBid")
-    //@Table(name = "bid")
-    //public class Bid {
-    //    @Id private Long auctionId;
-    //    @Id private Long userId;
-    //    private Double offer;
-    //    private Timestamp timestamp;
-    //
 }

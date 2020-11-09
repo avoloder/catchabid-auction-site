@@ -1,7 +1,9 @@
 package postgres.users;
 
 import entities.User;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface UserRepository<G extends User> extends CrudRepository<G, Long> {
+@Repository
+public interface UserRepository<G extends User> extends JpaRepository<G, Long> {
 }

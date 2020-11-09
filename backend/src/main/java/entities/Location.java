@@ -1,15 +1,40 @@
 package entities;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
 
-@Component
+@Entity
+@Table
 public class Location {
-    private long id;
-    private double longitude;
-    private double latitude;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column
+    @NotNull
+    private Double longitude;
+
+    @Column
+    @NotNull
+    private Double latitude;
+
+    @Column
     private String city;
+
+    @Column
     private String street;
+
+    @Column
     private String houseNr;
+
+    @Column
     private String country;
 
     public long getId() {

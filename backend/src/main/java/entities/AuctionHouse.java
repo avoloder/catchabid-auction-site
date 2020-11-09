@@ -1,9 +1,16 @@
 package entities;
 
-import org.springframework.stereotype.Component;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
-@Component
+@Entity
+@Table
 public class AuctionHouse extends User {
+
+    @Column
+    @NotNull
     private String serialNr;
 
     public String getSerialNr() {

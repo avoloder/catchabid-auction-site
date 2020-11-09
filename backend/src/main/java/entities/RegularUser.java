@@ -1,28 +1,30 @@
 package entities;
 
+import java.util.Set;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
+@Entity
+@Table
 public class RegularUser extends User {
-    private List<Category> preferences;
 
-    private List<AuctionPost> subscribed;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<Category> preferences;
 
-    public List<Category> getPreferences() {
+    public Set<Category> getPreferences() {
         return preferences;
     }
 
-    public void setPreferences(List<Category> preferences) {
+    public void setPreferences(Set<Category> preferences) {
         this.preferences = preferences;
-    }
-
-    public List<AuctionPost> getSubscribed() {
-        return subscribed;
-    }
-
-    public void setSubscribed(List<AuctionPost> subscribed) {
-        this.subscribed = subscribed;
     }
 }
