@@ -9,9 +9,15 @@ export class NavbarComponent implements OnInit {
 
   public focus;
 
+  signedIn = false;
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  changeLogin(): void {
+    this.signedIn = !this.signedIn;
   }
 
 }
