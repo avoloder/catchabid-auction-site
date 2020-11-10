@@ -70,7 +70,7 @@ public abstract class User {
         cascade = CascadeType.ALL,
         orphanRemoval = true)
     private Set<AuctionPost> ownedAuctions = new HashSet<>();
-    
+
     private Set<Bid> bids = new HashSet<>();
 
 

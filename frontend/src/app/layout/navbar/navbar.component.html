@@ -1,0 +1,122 @@
+<nav
+        class="navbar navbar-top navbar-expand navbar-dark"
+        id="navbar-main"
+        style="background-color: #5271ff;"
+>
+  <div class="container-fluid">
+    <a class="navbar-brand" style="height: 1rem;
+      margin-bottom: 35px; margin-top: -15px;">
+      <img
+              src="assets/img/brand/catchabid-logo-blue.png"
+              class="navbar-brand-img"
+              alt="..."
+              style="height: 4rem;"
+
+      />
+    </a>
+    <ul class="navbar-nav align-items-center ml-auto ml-md-0">
+      <li class="nav-item dropdown" ngbDropdown placement="bottom-right">
+        <a class="nav-link pr-0 dropdown-toggle" role="button" ngbDropdownToggle>
+          Categories
+        </a>
+        <div
+                class="dropdown-menu dropdown-menu-arrow dropdown-menu-right"
+                ngbDropdownMenu
+        >
+          <div class=" dropdown-header noti-title">
+            <h6 class="text-overflow m-0">Categories</h6>
+          </div>
+          <a
+                  routerLinkActive="active"
+                  class="dropdown-item"
+          >
+            <i class="ni ni-settings-gear-65"></i> <span>Category 1</span>
+          </a>
+          <a routerLinkActive="active"
+             class="dropdown-item"
+             style="color: black;">
+            <i class="ni ni-user-run"></i>
+            <span>Category 2</span>
+          </a>
+        </div>
+      </li>
+    </ul>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <!-- Navbar links -->
+      <ul class="navbar-nav align-items-center ml-md-auto">
+        <li class="nav-item d-xl-none">
+          <!-- Sidenav toggler -->
+          <div
+                  class="pr-3 sidenav-toggler sidenav-toggler-dark"
+                  data-action="sidenav-pin"
+                  data-target="#sidenav-main"
+          >
+            <div class="sidenav-toggler-inner">
+              <i class="sidenav-toggler-line"></i>
+              <i class="sidenav-toggler-line"></i>
+              <i class="sidenav-toggler-line"></i>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <!-- Categories -->
+
+      <form class="navbar-search navbar-search-dark ">
+        <div class="form-group mb-0" [ngClass]="{ 'focused': focus === true }">
+          <div class="input-group input-group-alternative">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-search"></i></span>
+            </div>
+            <input class="form-control" placeholder="Search" type="text" (focus)="focus = true"
+            (blur)="focus = false">
+          </div>
+        </div>
+      </form>
+
+      <!-- User -->
+      <ul class="navbar-nav align-items-center ml-auto ml-md-0">
+        <li class="nav-item dropdown" ngbDropdown placement="bottom-right">
+          <a class="nav-link pr-0 dropdown-toggle" role="button" ngbDropdownToggle>
+            John Doe
+          </a>
+          <div
+                  class="dropdown-menu dropdown-menu-arrow dropdown-menu-right"
+                  ngbDropdownMenu
+          >
+            <div class=" dropdown-header noti-title">
+              <h6 class="text-overflow m-0">Welcome!</h6>
+            </div>
+            <!--a
+                    routerLinkActive="active"
+                    [routerLink]="['/user-profile']"
+                    class="dropdown-item"
+            >
+              <i class="ni ni-single-02"></i> <span>My profile</span>
+            </a-->
+            <a
+                    routerLinkActive="active"
+                    class="dropdown-item"
+            >
+              <i class="ni ni-settings-gear-65"></i> <span>Settings</span>
+            </a>
+
+            <div class="dropdown-divider"></div>
+            <a routerLinkActive="active"
+               class="dropdown-item"
+               style="color: black;">
+              <i class="ni ni-user-run"></i>
+              <span>Logout</span>
+            </a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</nav>
+
+<div class="header pb-8 pt-5 pt-md-8 d-flex align-items-center"
+
+  style="min-height: 300px; max-height: 400px; background-size: cover; background-position: center top;">
+
+</div>

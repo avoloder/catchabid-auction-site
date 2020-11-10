@@ -1,0 +1,11 @@
+$fa-font-path: "~font-awesome/fonts";
+@import '~font-awesome/scss/font-awesome';
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+// or
+@import "~bootstrap/scss/bootstrap";
+
+// then import toastr scss
+@import "~ngx-toastr/toastr-bs4-alert.scss"
