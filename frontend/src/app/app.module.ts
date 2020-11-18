@@ -6,10 +6,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {AppComponent} from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ToastrModule } from 'ngx-toastr';
-import { LayoutModule } from './layout/layout.module';
-import { AuthGuard } from './shared/services/auth-guard.service';
-import { AuctionsModule } from './auctions/auctions.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { LayoutModule } from './components/layout/layout.module';
+import { AuctionsModule } from './components/auctions/auctions.module';
+import { AuthGuard } from './services/auth/auth-guard.service';
 
 @NgModule({
   declarations: [

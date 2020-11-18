@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AppComponent } from './app.component';
-import { AuthGuard } from './shared/services/auth-guard.service';
-import { HomeComponent } from './home/home.component';
-import { AuctionsComponent } from './auctions/auctions.component';
+import { AuctionsComponent } from './components/auctions/auctions.component';
+import { HomeComponent } from './components/home/home.component';
+import { AuthGuard } from './services/auth/auth-guard.service';
 
 
 
