@@ -10,10 +10,12 @@ import { LayoutModule } from './layout/layout.module';
 import { AuthGuard } from './shared/services/auth-guard.service';
 import { AuctionsModule } from './auctions/auctions.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AuctionhouseComponent } from './signup/auctionhouse/auctionhouse.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AuctionhouseComponent
   ],
   imports: [
     BrowserModule,
