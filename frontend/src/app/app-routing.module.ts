@@ -5,8 +5,6 @@ import { AuthGuard } from './shared/services/auth-guard.service';
 import { HomeComponent } from './home/home.component';
 import { AuctionsComponent } from './auctions/auctions.component';
 
-
-
 const routes: Routes = [
   {
     path: '',
@@ -14,7 +12,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     canActivateChild: [AuthGuard],
     children: [
-      { path: '', component: AuctionsComponent },
+      { path: '', component: AuctionsComponent }
     ]
   }
 ];
