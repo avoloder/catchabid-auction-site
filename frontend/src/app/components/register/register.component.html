@@ -11,13 +11,13 @@
         <article class="card-body">
             <h3 class="card-title text-center mb-2">Register</h3>
             <hr>
-            <form name="form" (ngSubmit)="registerUser()" novalidate class="form-horizontal">              
+            <form ngNativeValidate name="form" (ngSubmit)="registerUser()" class="form-horizontal" oninput='pass4.setCustomValidity(pass4.value != pass3.value ? "Passwords do not match." : "")'>              
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                         </div>
-                        <input name="" class="form-control" style="padding-left: 5px;" placeholder="First Name" type="text">
+                        <input name="" class="form-control" style="padding-left: 5px;" placeholder="First Name" type="text" required>
                     </div>
                 </div> 
                 <div class="form-group">
@@ -25,7 +25,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                         </div>
-                        <input name="" class="form-control" style="padding-left: 5px;" placeholder="Last Name" type="text">
+                        <input name="" class="form-control" style="padding-left: 5px;" placeholder="Last Name" type="text" required>
                     </div>
                 </div> 
                 <div class="form-group">
@@ -33,7 +33,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-envelope fa"></i> </span>
                         </div>
-                        <input name="" class="form-control" style="padding-left: 5px;" placeholder="Email Address" type="text">
+                        <input name="" class="form-control" style="padding-left: 5px;" placeholder="Email Address" type="text"required>
                     </div>
                 </div>
                 <div class="row">
@@ -43,7 +43,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                                 </div>
-                                <input class="form-control" style="padding-left: 5px;" placeholder="Password" type="password">
+                                <input name="pass3" class="form-control" style="padding-left: 5px;" placeholder="Password" type="password" pattern="(?=.*[\d@$!%*#?.])(?=.*[a-zA-Z]).{8,20}" required>
                             </div>
                         </div>
                     </div>
@@ -53,7 +53,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                                 </div>
-                                <input class="form-control" style="padding-left: 5px;" placeholder="Confirm Password" type="password">
+                                <input name="pass4" class="form-control" style="padding-left: 5px;" placeholder="Confirm Password" type="password" pattern="(?=.*[\d@$!%*#?.])(?=.*[a-zA-Z]).{8,20}" required>
                             </div>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-flag"></i> </span>
                                 </div>
-                                <input class="form-control" style="padding-left: 5px;" placeholder="Country" type="text">
+                                <input class="form-control" style="padding-left: 5px;" placeholder="Country" type="text required">
                             </div>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-map-marker"></i> </span>
                                 </div>
-                                <input class="form-control" style="padding-left: 5px;" placeholder="City" type="text">
+                                <input class="form-control" style="padding-left: 5px;" placeholder="City" type="text" required>
                             </div>
                         </div>
                     </div>
@@ -90,7 +90,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-map-pin"></i> </span>
                                 </div>
-                                <input class="form-control" style="padding-left: 5px;" placeholder="Address" type="text">
+                                <input class="form-control" style="padding-left: 5px;" placeholder="Address" type="text" required>
                             </div>
                         </div>
                     </div>
@@ -100,7 +100,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-home"></i> </span>
                                 </div>
-                                <input class="form-control" style="padding-left: 5px;" placeholder="House no." type="number">
+                                <input class="form-control" style="padding-left: 5px;" placeholder="House no." type="number" required>
                             </div>
                         </div>
                     </div>
@@ -112,13 +112,13 @@
                                 <div class="input-group-prepend">
                                 <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
                             </div>
-                            <input class="form-control" style="padding-left: 5px;" placeholder="+43" type="text">
+                            <input class="form-control" style="padding-left: 5px;" placeholder="+43" type="text" required>
                             </div>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-8 col-md-8">
                         <div class="form-group">
-                            <input class="form-control" style="padding-left: 8px;" placeholder="Phone Number" type="number">
+                            <input class="form-control" style="padding-left: 8px;" placeholder="Phone Number" type="number" required>
                         </div>
                     </div>
                 </div>
@@ -136,13 +136,13 @@
         <article class="card-body">
             <h3 class="card-title text-center mb-2">Register</h3>
             <hr>
-            <form name="form" (ngSubmit)="registerAuctionHouse()" novalidate class="form-horizontal">              
+            <form ngNativeValidate name="form" (ngSubmit)="registerAuctionHouse()" class="form-horizontal" oninput='pass2.setCustomValidity(pass2.value != pass.value ? "Passwords do not match." : "")'>              
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                         </div>
-                        <input name="name" [(ngModel)]="model.name" class="form-control" style="padding-left: 5px;" placeholder="Legal Bussines Name" type="text">
+                        <input name="name" [(ngModel)]="model.name" class="form-control" style="padding-left: 5px;" placeholder="Legal Bussines Name" type="text" required>
                     </div>
                 </div> 
                 <div class="form-group">
@@ -168,7 +168,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                                 </div>
-                                <input  name="password" class="form-control" [(ngModel)]="model.password" style="padding-left: 5px;" placeholder="Password" type="password">
+                                <input id="password" name="pass" class="form-control" [(ngModel)]="model.password" style="padding-left: 5px;" placeholder="Password" type="password"  minlength="8" maxlength="20" pattern="(?=.*[\d@$!%*#?.])(?=.*[a-zA-Z]).{8,20}" required>
                             </div>
                         </div>
                     </div>
@@ -178,8 +178,9 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                                 </div>
-                                <input class="form-control" style="padding-left: 5px;" placeholder="Confirm Password" type="password">
+                                <input id="confirmPassword" name="pass2" class="form-control" style="padding-left: 5px;" placeholder="Confirm Password" type="password" minlength="8" maxlength="20"  pattern="(?=.*[\d@$!%*#?.])(?=.*[a-zA-Z]).{8,20}" required>
                             </div>
+                            <span id="confirmMessage" class="confirmMessage"></span>
                         </div>
                     </div>
                 </div>
