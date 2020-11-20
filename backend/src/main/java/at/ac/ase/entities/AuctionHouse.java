@@ -11,14 +11,14 @@ public class AuctionHouse extends User {
 
     @Column
     @NotNull
-    private String serialNr;
+    private String tid;
 
-    public String getSerialNr() {
-        return serialNr;
+    public String getTid() {
+        return tid;
     }
 
-    public void setSerialNr(String serialNr) {
-        this.serialNr = serialNr;
+    public void setTid(String tid) {
+        this.tid = tid;
     }
 
 }

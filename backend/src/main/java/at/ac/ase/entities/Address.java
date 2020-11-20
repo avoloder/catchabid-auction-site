@@ -10,19 +10,11 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table
-public class Location {
+public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
-    @NotNull
-    private Double longitude;
-
-    @Column
-    @NotNull
-    private Double latitude;
 
     @Column
     private String city;
@@ -36,28 +28,14 @@ public class Location {
     @Column
     private String country;
 
+    public Address(){}
+
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
     }
 
     public String getCity() {

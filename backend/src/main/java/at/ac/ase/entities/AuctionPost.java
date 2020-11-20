@@ -63,8 +63,8 @@ public class AuctionPost {
     private Set<RegularUser> subscriptions = new HashSet<>();
 
     @OneToOne
-    @JoinColumn(name = "location_id", referencedColumnName = "id")
-    private Location location;
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    private Address address;
 
     public Long getId() {
         return id;
@@ -138,11 +138,11 @@ public class AuctionPost {
         this.subscriptions = subscriptions;
     }
 
-    public Location getLocation() {
-        return location;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }
