@@ -6,16 +6,20 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {AppComponent} from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ToastrModule } from 'ngx-toastr';
-import { LayoutModule } from './layout/layout.module';
-import { AuthGuard } from './shared/services/auth-guard.service';
-import { AuctionsModule } from './auctions/auctions.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { AuctionhouseComponent } from './signup/auctionhouse/auctionhouse.component';
+import {Ng2TelInputModule} from 'ng2-tel-input';
+import { SigninComponent } from './components/signin/signin.component';
+import { RegisterComponent } from './components/register/register.component';
+import { LayoutModule } from './components/layout/layout.module';
+import { AuctionsModule } from './components/auctions/auctions.module';
+import { AuthGuard } from './services/auth-guard.service';
+import { RegisterService } from './services/register.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AuctionhouseComponent
+    SigninComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -27,9 +31,10 @@ import { AuctionhouseComponent } from './signup/auctionhouse/auctionhouse.compon
     ToastrModule.forRoot(),
     LayoutModule,
     AuctionsModule,
-    NgbModule
+    NgbModule,
+    Ng2TelInputModule
   ],
-  providers: [AuthGuard],
+  providers: [AuthGuard, RegisterService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

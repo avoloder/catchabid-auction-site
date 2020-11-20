@@ -80,13 +80,13 @@
         </li>
         
           <li *ngIf="!signedIn" class="nav-item dropdown" placement="bottom-right">
-            <a class="nav-link" role="button" (click)="openModal()" mdbWavesEffect>
+            <a class="nav-link" role="button" (click)="openRegisterModal()" mdbWavesEffect>
               Register
             </a>
           </li>
           <span *ngIf="!signedIn" class="btn-separator"></span>
           <li *ngIf="!signedIn" class="nav-item dropdown" placement="bottom-right">
-            <a class="nav-link" role="button" (click)="openModal()">
+            <a class="nav-link" role="button" (click)="openLoginModal()">
               Login
             </a>
           </li>

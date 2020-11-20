@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AuctionsComponent } from '../../auctions/auctions.component';
-import { AuctionhouseComponent } from '../../signup/auctionhouse/auctionhouse.component';
+import { SigninComponent } from '../../signin/signin.component';
+import { RegisterComponent } from '../../register/register.component';
 
 @Component({
   selector: 'app-navbar',
@@ -12,6 +12,7 @@ import { AuctionhouseComponent } from '../../signup/auctionhouse/auctionhouse.co
 export class NavbarComponent implements OnInit {
 
   public focus;
+  public activeModal
 
   signedIn = false;
 
@@ -24,11 +25,12 @@ export class NavbarComponent implements OnInit {
     this.signedIn = !this.signedIn;
   }
 
-  openModal() {
-    //Here you define the name of your component
-    this.modalService.open(AuctionhouseComponent);
-    //This section is if you want to have any variable to initialize
-    //compConst.componentInstance.weight = undefined;
-}
+  openLoginModal() {   
+    this.modalService.open(SigninComponent);
+  }
+
+  openRegisterModal(){
+    this.modalService.open(RegisterComponent)
+  }
 
 }
