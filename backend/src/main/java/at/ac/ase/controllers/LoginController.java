@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * Login controller that declares and implements REST methods and forward these requests to {@link at.ac.ase.service.auth.implementation.AuthService}
  */
 @RestController
-@CrossOrigin
+@CrossOrigin(exposedHeaders = "Access-Control-Allow-Origin")
 public class LoginController {
 
     @Autowired

@@ -24,27 +24,14 @@ public class RegisterService implements IRegisterService {
 
     @Override
     public RegularUser registerUser(RegularUser userToRegister) {
-        RegularUser user = new RegularUser();
-        user.setName(userToRegister.getName());
-        user.setFirstName(userToRegister.getFirstName());
-        user.setLastName(userToRegister.getLastName());
-        user.setEmail(userToRegister.getEmail());
-        user.setAddress(userToRegister.getAddress());
-        user.setPhoneNr(userToRegister.getPhoneNr());
-        user.setPasswordHash(passwordEncoder.encode(userToRegister.getPasswordHash()));
-        return (RegularUser) userRepository.save(user);
+        userToRegister.setPasswordHash(passwordEncoder.encode(userToRegister.getPasswordHash()));
+        return (RegularUser) userRepository.save(userToRegister);
     }
 
     @Override
     public AuctionHouse registerHouse(AuctionHouse ahouse) {
-        AuctionHouse auctionHouse = new AuctionHouse();
-        auctionHouse.setTid(ahouse.getTid());
-        auctionHouse.setName(ahouse.getName());
-        auctionHouse.setPhoneNr(ahouse.getPhoneNr());
-        auctionHouse.setAddress(ahouse.getAddress());
-        auctionHouse.setPasswordHash(passwordEncoder.encode(ahouse.getPasswordHash()));
-        auctionHouse.setEmail(ahouse.getEmail());
-        return (AuctionHouse) auctionRepository.save(auctionHouse);
+        ahouse.setPasswordHash(passwordEncoder.encode(ahouse.getPasswordHash()));
+        return (AuctionHouse) auctionRepository.save(ahouse);
     }
 
 
