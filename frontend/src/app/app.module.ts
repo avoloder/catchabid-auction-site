@@ -7,7 +7,6 @@ import {AppComponent} from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ToastrModule } from 'ngx-toastr';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import {Ng2TelInputModule} from 'ng2-tel-input';
 import { SigninComponent } from './components/signin/signin.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LayoutModule } from './components/layout/layout.module';
@@ -31,8 +30,7 @@ import { RegisterService } from './services/register.service';
     ToastrModule.forRoot(),
     LayoutModule,
     AuctionsModule,
-    NgbModule,
-    Ng2TelInputModule
+    NgbModule
   ],
   providers: [AuthGuard, RegisterService],
   bootstrap: [AppComponent]
