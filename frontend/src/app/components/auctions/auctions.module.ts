@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuctionsListComponent } from './auctions-list/auctions-list.component';
+import { AuctionsListComponent } from '../auctions-list/auctions-list.component';
 import { AuctionsComponent } from './auctions.component';
 
 

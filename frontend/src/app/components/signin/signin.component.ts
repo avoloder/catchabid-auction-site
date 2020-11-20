@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
+import { RegisterComponent } from '../register/register.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-signin',
@@ -7,7 +10,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SigninComponent implements OnInit {
 
-  constructor() { }
+  constructor(private modalService: NgbModal) { }
+
+  openRegisterModal(){
+    this.modalService.dismissAll();
+    this.modalService.open(RegisterComponent)
+  }
 
   ngOnInit(): void {
   }

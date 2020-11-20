@@ -12,6 +12,7 @@ import { RegisterComponent } from '../../register/register.component';
 export class NavbarComponent implements OnInit {
 
   public focus;
+  public activeModal
 
   signedIn = false;
 
@@ -24,11 +25,8 @@ export class NavbarComponent implements OnInit {
     this.signedIn = !this.signedIn;
   }
 
-  openLoginModal() {
-    //Here you define the name of your component
+  openLoginModal() {   
     this.modalService.open(SigninComponent);
-    //This section is if you want to have any variable to initialize
-    //compConst.componentInstance.weight = undefined;
   }
 
   openRegisterModal(){
