@@ -1,12 +1,11 @@
-﻿﻿export class User {
+﻿﻿import { Address } from './address';
+
+export class User {
     id: number;
-    firstname: string;
-    lastname: string;
-    password: string;
+    firstName: string;
+    lastName: string;
+    passwordHash: string;
     email: string;
-    phoneNumber: string;
-    country: string;
-    city: string;
-    address: string;
-    houseNumber: number;
+    phoneNr: string;
+    address: Address;
 }

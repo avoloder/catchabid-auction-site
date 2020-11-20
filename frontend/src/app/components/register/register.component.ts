@@ -4,6 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SigninComponent } from '../signin/signin.component';
 import { RegisterService } from '../../services/register.service';
+import { Address } from 'src/app/models/address';
 
 @Component({
   selector: 'app-register',
@@ -13,6 +14,7 @@ import { RegisterService } from '../../services/register.service';
 export class RegisterComponent {
 
   model: any = {};
+  address: Address = new Address();
 
   constructor(
       private router: Router,
@@ -25,7 +27,7 @@ export class RegisterComponent {
   }
 
   registerUser() {
-    let phoneNumber = +this.model.phoneNumber
+    let phoneNumber = +this.model.phoneNr
     let finalPhoneNumber = this.model.areaCode + phoneNumber
     this.model.phoneNumber = finalPhoneNumber
     this.registerService.registerUser(this.model)
@@ -39,9 +41,14 @@ export class RegisterComponent {
   }
 
   registerAuctionHouse() {
-      let phoneNumber = +this.model.phoneNumber
-      let finalPhoneNumber = this.model.areaCode + phoneNumber
-      this.model.phoneNumber = finalPhoneNumber
+      let phoneNumber = +this.model.phoneNumber;
+      let finalPhoneNumber = this.model.areaCode + phoneNumber;
+      this.model.phoneNr = finalPhoneNumber;
+      this.address.city = this.model.city;
+      this.address.country = this.model.country;
+      this.address.street = this.model.street;
+      this.address.houseNr = this.model.houseNr;
+      this.model.address = this.address;
       this.registerService.registerAuctionHouse(this.model)
           .subscribe(
               data => {

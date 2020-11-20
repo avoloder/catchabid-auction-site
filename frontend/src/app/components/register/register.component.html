@@ -168,7 +168,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                                 </div>
-                                <input id="password" name="pass" class="form-control" [(ngModel)]="model.password" style="padding-left: 5px;" placeholder="Password" type="password"  minlength="8" maxlength="20" pattern="(?=.*[\d@$!%*#?.])(?=.*[a-zA-Z]).{8,20}" required>
+                                <input id="password" name="pass" class="form-control" [(ngModel)]="model.passwordHash" style="padding-left: 5px;" placeholder="Password" type="password"  minlength="8" maxlength="20" pattern="(?=.*[\d@$!%*#?.])(?=.*[a-zA-Z]).{8,20}" required>
                             </div>
                         </div>
                     </div>
@@ -217,7 +217,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-map-pin"></i> </span>
                                 </div>
-                                <input name="address" class="form-control" [(ngModel)]="model.address" style="padding-left: 5px;" placeholder="Address" type="text">
+                                <input name="address" class="form-control" [(ngModel)]="model.street" style="padding-left: 5px;" placeholder="Address" type="text">
                             </div>
                         </div>
                     </div>
@@ -227,7 +227,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-home"></i> </span>
                                 </div>
-                                <input name="houseNumber" class="form-control" [(ngModel)]="model.houseNumber" style="padding-left: 5px;" placeholder="House no." type="number">
+                                <input name="houseNumber" class="form-control" [(ngModel)]="model.houseNr" style="padding-left: 5px;" placeholder="House no." type="number">
                             </div>
                         </div>
                     </div>
