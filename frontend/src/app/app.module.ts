@@ -12,6 +12,7 @@ import { AuctionsModule } from './auctions/auctions.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SigninComponent } from './signin/signin.component';
 import { RegisterComponent } from './register/register.component';
+import {Ng2TelInputModule} from 'ng2-tel-input';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { RegisterComponent } from './register/register.component';
     ToastrModule.forRoot(),
     LayoutModule,
     AuctionsModule,
-    NgbModule
+    NgbModule,
+    Ng2TelInputModule
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]
