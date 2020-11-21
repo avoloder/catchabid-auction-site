@@ -27,9 +27,14 @@ export class RegisterComponent {
   }
 
   registerUser() {
-    let phoneNumber = +this.model.phoneNr
-    let finalPhoneNumber = this.model.areaCode + phoneNumber
-    this.model.phoneNumber = finalPhoneNumber
+    let phoneNumber = +this.model.phoneNumber;
+    let finalPhoneNumber = this.model.areaCode + phoneNumber;
+    this.model.phoneNr = finalPhoneNumber;
+    this.address.city = this.model.city;
+    this.address.country = this.model.country;
+    this.address.street = this.model.street;
+    this.address.houseNr = this.model.houseNr;
+    this.model.address = this.address;
     this.registerService.registerUser(this.model)
         .subscribe(
             data => {

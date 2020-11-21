@@ -1,5 +1,6 @@
 package at.ac.ase.controllers;
 
+import at.ac.ase.entities.Address;
 import at.ac.ase.entities.AuctionHouse;
 import at.ac.ase.entities.RegularUser;
 import at.ac.ase.entities.User;
@@ -32,6 +33,12 @@ public class LoginController {
     @RequestMapping(value = "/registerHouse", method = RequestMethod.POST)
     public ResponseEntity register(@RequestBody AuctionHouse auctionHouse){
         AuctionHouse user = registerService.registerHouse(auctionHouse);
+        return user != null ? ResponseEntity.status(HttpStatus.OK).body(user) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @RequestMapping(value = "/registerAddress", method = RequestMethod.POST)
+    public ResponseEntity register(@RequestBody Address address){
+        Address user = registerService.registerAddress(address);
         return user != null ? ResponseEntity.status(HttpStatus.OK).body(user) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 

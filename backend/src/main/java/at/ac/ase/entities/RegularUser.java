@@ -16,8 +16,6 @@ public class RegularUser extends User {
         name = "regular_user_preferences",
         joinColumns = @JoinColumn(name = "user_id")
     )
-
-
     private Set<Category> preferences = new HashSet<>();
 
     @Column

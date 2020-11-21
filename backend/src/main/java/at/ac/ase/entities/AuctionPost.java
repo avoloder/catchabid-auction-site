@@ -62,9 +62,9 @@ public class AuctionPost {
         inverseJoinColumns = { @JoinColumn(name = "user_id") })
     private Set<RegularUser> subscriptions = new HashSet<>();
 
-    @OneToOne
+    /*@OneToOne
     @JoinColumn(name = "address_id", referencedColumnName = "id")
-    private Address address;
+    private Address address;*/
 
     public Long getId() {
         return id;
@@ -138,11 +138,11 @@ public class AuctionPost {
         this.subscriptions = subscriptions;
     }
 
-    public Address getAddress() {
+    /*public Address getAddress() {
         return address;
     }
 
     public void setAddress(Address address) {
         this.address = address;
-    }
+    }*/
 }

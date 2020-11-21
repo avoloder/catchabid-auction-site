@@ -1,8 +1,10 @@
 package at.ac.ase.service.auth.implementation;
 
+import at.ac.ase.entities.Address;
 import at.ac.ase.entities.AuctionHouse;
 import at.ac.ase.entities.RegularUser;
 import at.ac.ase.entities.User;
+import at.ac.ase.postgres.address.AddressRepository;
 import at.ac.ase.postgres.auction.AuctionRepository;
 import at.ac.ase.postgres.users.UserRepository;
 import at.ac.ase.service.auth.IRegisterService;
@@ -20,7 +22,11 @@ public class RegisterService implements IRegisterService {
     AuctionRepository auctionRepository;
 
     @Autowired
+    AddressRepository addressRepository;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
+
 
     @Override
     public RegularUser registerUser(RegularUser userToRegister) {
@@ -34,6 +40,10 @@ public class RegisterService implements IRegisterService {
         return (AuctionHouse) auctionRepository.save(ahouse);
     }
 
+    @Override
+    public Address registerAddress(Address address) {
+        return (Address) addressRepository.save(address);
+    }
 
 
 }

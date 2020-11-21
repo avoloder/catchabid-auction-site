@@ -17,7 +17,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                         </div>
-                        <input name="" class="form-control" style="padding-left: 5px;" placeholder="First Name" type="text" required>
+                        <input name="firstName"  [(ngModel)]="model.firstName" class="form-control" style="padding-left: 5px;" placeholder="First Name" type="text" required>
                     </div>
                 </div> 
                 <div class="form-group">
@@ -25,7 +25,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                         </div>
-                        <input name="" class="form-control" style="padding-left: 5px;" placeholder="Last Name" type="text" required>
+                        <input name="lastName"  [(ngModel)]="model.lastName" class="form-control" style="padding-left: 5px;" placeholder="Last Name" type="text" required>
                     </div>
                 </div> 
                 <div class="form-group">
@@ -33,7 +33,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-envelope fa"></i> </span>
                         </div>
-                        <input name="" class="form-control" style="padding-left: 5px;" placeholder="Email Address" type="text"required>
+                        <input name="email"  [(ngModel)]="model.email" class="form-control" style="padding-left: 5px;" placeholder="Email Address" type="text"required>
                     </div>
                 </div>
                 <div class="row">
@@ -43,7 +43,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                                 </div>
-                                <input name="pass3" class="form-control" style="padding-left: 5px;" placeholder="Password" type="password" pattern="(?=.*[\d@$!%*#?.])(?=.*[a-zA-Z]).{8,20}" required>
+                                <input name="pass3"  [(ngModel)]="model.passwordHash" class="form-control" style="padding-left: 5px;" placeholder="Password" type="password" pattern="(?=.*[\d@$!%*#?.])(?=.*[a-zA-Z]).{8,20}" required>
                             </div>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-flag"></i> </span>
                                 </div>
-                                <input class="form-control" style="padding-left: 5px;" placeholder="Country" type="text required">
+                                <input name="country" [(ngModel)]="model.country" class="form-control" style="padding-left: 5px;" placeholder="Country" type="text required">
                             </div>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-map-marker"></i> </span>
                                 </div>
-                                <input class="form-control" style="padding-left: 5px;" placeholder="City" type="text" required>
+                                <input name="city"  [(ngModel)]="model.city" class="form-control" style="padding-left: 5px;" placeholder="City" type="text" required>
                             </div>
                         </div>
                     </div>
@@ -90,7 +90,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-map-pin"></i> </span>
                                 </div>
-                                <input class="form-control" style="padding-left: 5px;" placeholder="Address" type="text" required>
+                                <input name="street"  [(ngModel)]="model.street" class="form-control" style="padding-left: 5px;" placeholder="Address" type="text" required>
                             </div>
                         </div>
                     </div>
@@ -100,7 +100,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-home"></i> </span>
                                 </div>
-                                <input class="form-control" style="padding-left: 5px;" placeholder="House no." type="number" required>
+                                <input name="houseNr" [(ngModel)]="model.houseNr" class="form-control" style="padding-left: 5px;" placeholder="House no." type="number" required>
                             </div>
                         </div>
                     </div>
@@ -112,13 +112,13 @@
                                 <div class="input-group-prepend">
                                 <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
                             </div>
-                            <input class="form-control" style="padding-left: 5px;" placeholder="+43" type="text" required>
+                            <input name="areaCode"  [(ngModel)]="model.areaCode" class="form-control" style="padding-left: 5px;" placeholder="+43" type="text" required>
                             </div>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-8 col-md-8">
                         <div class="form-group">
-                            <input class="form-control" style="padding-left: 8px;" placeholder="Phone Number" type="number" required>
+                            <input name="phoneNumbe" [(ngModel)]="model.phoneNumber" class="form-control" style="padding-left: 8px;" placeholder="Phone Number" type="number" required>
                         </div>
                     </div>
                 </div>
