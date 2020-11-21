@@ -2,20 +2,7 @@ package at.ac.ase.entities;
 
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
@@ -31,7 +18,6 @@ public class AuctionPost {
     @ManyToOne
     @JoinColumn(name = "creator")
     private AuctionHouse creator;
-
 
     @Enumerated(EnumType.STRING)
     private Category category;
@@ -50,6 +36,17 @@ public class AuctionPost {
     @Column
     @NotNull
     private Double minPrice;
+
+    @Column
+    private String description;
+
+    @Column
+    @Lob
+    private Byte[] image;
+
+    @NotNull
+    @Column
+    private String name;
 
     @OneToOne
     @JoinColumn(name = "bid_id", referencedColumnName = "id")
@@ -144,5 +141,29 @@ public class AuctionPost {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(Byte[] image) {
+        this.image = image;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

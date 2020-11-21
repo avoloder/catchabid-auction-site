@@ -10,8 +10,11 @@ public class AuctionCreationDTO {
 
     private Long id;
 
-    @NotNull
+    //@NotNull
     private Long creatorId;
+
+    @NotNull
+    private String name;
 
     @NotNull
     private Category category;
@@ -25,6 +28,12 @@ public class AuctionCreationDTO {
     @NotNull
     @DecimalMin("0.1")
     private Double minPrice;
+
+    @NotNull
+    private String description;
+
+    //@NotNull
+    private Byte[] image;
 
     public Long getId() {
         return id;
@@ -72,5 +81,29 @@ public class AuctionCreationDTO {
 
     public void setMinPrice(Double minPrice) {
         this.minPrice = minPrice;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(Byte[] image) {
+        this.image = image;
     }
 }

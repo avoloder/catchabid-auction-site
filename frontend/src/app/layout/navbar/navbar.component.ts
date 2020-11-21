@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {AuctionsComponent} from '../../auctions/auctions.component';
+import {modalConfigDefaults} from 'ngx-bootstrap/modal/modal-options.class';
 
 @Component({
   selector: 'app-navbar',
@@ -11,7 +14,8 @@ export class NavbarComponent implements OnInit {
 
   signedIn = false;
 
-  constructor() { }
+  closeResult = '';
+  constructor(private modalService: NgbModal) { }
 
   ngOnInit(): void {
   }
@@ -20,4 +24,17 @@ export class NavbarComponent implements OnInit {
     this.signedIn = !this.signedIn;
   }
 
+  createAuction(): void {
+    this.modalService.open(AuctionsComponent, { size: 'lg', backdrop: 'static' });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
 }
