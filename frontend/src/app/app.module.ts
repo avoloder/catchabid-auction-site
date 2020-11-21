@@ -13,12 +13,21 @@ import { LayoutModule } from './components/layout/layout.module';
 import { AuctionsModule } from './components/auctions/auctions.module';
 import { AuthGuard } from './services/auth-guard.service';
 import { RegisterService } from './services/register.service';
+import { SigninService } from './services/signin.service';
+import { ResetPasswordComponent } from './components/signin/reset-password/reset-password.component';
+import { ResetPasswordTokenComponent } from './components/signin/reset-password-token/reset-password-token.component';
+import { ForgotPasswordComponent } from './components/signin/forgot-password/forgot-password.component';
+import { PasswordManagementService } from './services/password-management.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     SigninComponent,
-    RegisterComponent
+    RegisterComponent,
+    SigninComponent,
+    ResetPasswordComponent,
+    ResetPasswordTokenComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +41,7 @@ import { RegisterService } from './services/register.service';
     AuctionsModule,
     NgbModule
   ],
-  providers: [AuthGuard, RegisterService],
+  providers: [AuthGuard, RegisterService, SigninService, PasswordManagementService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
