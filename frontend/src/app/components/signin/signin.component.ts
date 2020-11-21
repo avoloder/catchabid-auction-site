@@ -4,6 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EventEmitter } from '@angular/core';
 import { SigninService } from '../../services/signin.service';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signin',
@@ -18,6 +19,7 @@ export class SigninComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private signinService: SigninService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -47,11 +49,10 @@ export class SigninComponent implements OnInit {
     this.signinService.login(this.email, this.password)
         .subscribe(
             data => {
-              console.log(data)
               this.modalService.dismissAll(); 
+              this.router.navigate(['/home'])
             },
             error => {
-              console.log("greska")
               console.log(error);
             });
   }
