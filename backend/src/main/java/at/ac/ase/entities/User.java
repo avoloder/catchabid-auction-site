@@ -40,9 +40,9 @@ public abstract class User {
     @Column
     private String passwordHash;
 
-    /*@OneToOne
+    @OneToOne
     @JoinColumn(name = "address_id", referencedColumnName = "id")
-    private Address address;*/
+    private Address address;
 
     @OneToMany(
         fetch = FetchType.LAZY,
@@ -112,13 +112,13 @@ public abstract class User {
         this.passwordHash = passwordHash;
     }
 
-    /*public Address getAddress() {
+    public Address getAddress() {
         return address;
     }
 
     public void setAddress(Address address) {
         this.address = address;
-    }*/
+    }
 
     public Set<Rating> getRatings() {
         return ratings;
@@ -151,4 +151,6 @@ public abstract class User {
     public void setOwnedAuctions(Set<AuctionPost> ownedAuctions) {
         this.ownedAuctions = ownedAuctions;
     }
+
+
 }

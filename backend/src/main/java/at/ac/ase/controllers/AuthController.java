@@ -6,18 +6,23 @@ import at.ac.ase.entities.RegularUser;
 import at.ac.ase.entities.User;
 import at.ac.ase.service.auth.IAuthService;
 import at.ac.ase.service.auth.IRegisterService;
+import at.ac.ase.util.exception.TokenUtil;
+import com.nimbusds.jose.JOSEException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.util.Map;
+
 /**
  * Login controller that declares and implements REST methods and forward these requests to {@link at.ac.ase.service.auth.implementation.AuthService}
  */
 @RestController
 @CrossOrigin(exposedHeaders = "Access-Control-Allow-Origin")
-public class LoginController {
+public class AuthController {
 
     @Autowired
     private IAuthService authService;
@@ -36,10 +41,19 @@ public class LoginController {
         return user != null ? ResponseEntity.status(HttpStatus.OK).body(user) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @RequestMapping(value = "/registerAddress", method = RequestMethod.POST)
-    public ResponseEntity register(@RequestBody Address address){
-        Address user = registerService.registerAddress(address);
-        return user != null ? ResponseEntity.status(HttpStatus.OK).body(user) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity login(@RequestBody Map<String,String> userData){
+        String token = authService.authenticate(userData);
+        try {
+            boolean verified = TokenUtil.verifyToken(token);
+            System.out.println(verified);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (JOSEException e) {
+            e.printStackTrace();
+        }
+        return token != null ? ResponseEntity.status(HttpStatus.OK).body(token) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+
 
 }

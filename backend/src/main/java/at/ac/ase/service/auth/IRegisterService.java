@@ -7,5 +7,4 @@ public interface IRegisterService {
 
     public RegularUser registerUser(RegularUser user);
     public AuctionHouse registerHouse(AuctionHouse auctionHouse);
-    public Address registerAddress(Address address);
 }
