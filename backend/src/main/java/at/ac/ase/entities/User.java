@@ -14,11 +14,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import javax.ws.rs.DefaultValue;
 
 @MappedSuperclass
 public abstract class User {
@@ -26,11 +24,6 @@ public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
-    @NotNull
-    @Size(min = 1, max = 50)
-    private String name;
 
     @Column
     private Boolean active = true;
@@ -47,9 +40,9 @@ public abstract class User {
     @Column
     private String passwordHash;
 
-    @OneToOne
-    @JoinColumn(name = "location_id", referencedColumnName = "id")
-    private Location location;
+    /*@OneToOne
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    private Address address;*/
 
     @OneToMany(
         fetch = FetchType.LAZY,
@@ -77,6 +70,7 @@ public abstract class User {
         orphanRemoval = true)
     private Set<AuctionPost> ownedAuctions = new HashSet<>();
 
+    public User(){}
 
     public Long getId() {
         return id;
@@ -84,14 +78,6 @@ public abstract class User {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Boolean getActive() {
@@ -126,13 +112,13 @@ public abstract class User {
         this.passwordHash = passwordHash;
     }
 
-    public Location getLocation() {
-        return location;
+    /*public Address getAddress() {
+        return address;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
-    }
+    public void setAddress(Address address) {
+        this.address = address;
+    }*/
 
     public Set<Rating> getRatings() {
         return ratings;

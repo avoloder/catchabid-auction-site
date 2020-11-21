@@ -2,7 +2,7 @@ package at.ac.ase.entities;
 
 
 public enum Category {
-    JEWLERY,
+    JEWELLERY,
     ELECTRONICS,
     CAR,
     OUTINGS_AND_EXPERIENCE,

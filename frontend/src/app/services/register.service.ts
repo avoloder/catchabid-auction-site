@@ -7,11 +7,13 @@ import { AuctionHouse } from '../models/auctionhouse';
 export class RegisterService {
     constructor(private http: HttpClient) { }
 
+    endpoint = 'http://localhost:8080';
+
     registerAuctionHouse(auctionHouse: AuctionHouse) {
-        return this.http.post('/registerAuctionHouse', auctionHouse);
+        return this.http.post(this.endpoint + '/registerHouse', auctionHouse);
     }
 
     registerUser(user: User) {
-        return this.http.post('/registerUser', user);
+        return this.http.post(this.endpoint + '/registerUser', user);
     }
 }

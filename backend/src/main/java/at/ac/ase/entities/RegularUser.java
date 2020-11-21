@@ -2,16 +2,9 @@ package at.ac.ase.entities;
 
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table
@@ -25,6 +18,16 @@ public class RegularUser extends User {
     )
     private Set<Category> preferences = new HashSet<>();
 
+    @Column
+    @NotNull
+    @Size(min = 1, max = 50)
+    private String firstName;
+
+    @Column
+    @NotNull
+    @Size(min = 1, max = 50)
+    private String lastName;
+
     @OneToMany(
         fetch = FetchType.EAGER,
         mappedBy = "user",
@@ -33,12 +36,30 @@ public class RegularUser extends User {
     )
     private Set<Bid> bids = new HashSet<>();
 
+    public RegularUser(){}
+
     public Set<Category> getPreferences() {
         return preferences;
     }
 
     public void setPreferences(Set<Category> preferences) {
         this.preferences = preferences;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     @Override
