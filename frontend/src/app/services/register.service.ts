@@ -3,17 +3,17 @@ import { HttpClient } from '@angular/common/http';
 import { User } from '../models/user';
 import { AuctionHouse } from '../models/auctionhouse';
 
+const endpoint = 'http://localhost:8080';
+
 @Injectable()
 export class RegisterService {
     constructor(private http: HttpClient) { }
 
-    endpoint = 'http://localhost:8080';
-
     registerAuctionHouse(auctionHouse: AuctionHouse) {
-        return this.http.post(this.endpoint + '/registerHouse', auctionHouse);
+        return this.http.post(endpoint + '/registerHouse', auctionHouse);
     }
 
     registerUser(user: User) {
-        return this.http.post(this.endpoint + '/registerUser', user);
+        return this.http.post(endpoint + '/registerUser', user);
     }
 }

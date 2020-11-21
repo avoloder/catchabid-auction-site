@@ -9,9 +9,12 @@ import at.ac.ase.postgres.users.UserRepository;
 import at.ac.ase.service.auth.IAuthService;
 import at.ac.ase.util.exception.TokenUtil;
 import com.nimbusds.jose.JOSEException;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import java.util.Map;
 
 /**
@@ -26,14 +29,16 @@ public class AuthService implements IAuthService {
     UserRepository userRepository;
 
     @Override
-    public String authenticate(Map<String,String> userData) {
+    public JSONObject authenticate(Map<String,String> userData) {
         String email = userData.get("email");
         String password = userData.get("password");
         AuctionHouse house = auctionHouseRepository.findByEmail(email);
         RegularUser user = userRepository.findByEmail(email);
         if(house != null || user != null) {
             try {
-                return TokenUtil.generateToken(email, password);
+                JSONObject token = new JSONObject();
+                token.appendField("token",TokenUtil.generateToken(email, password));
+                return token;
             } catch (JOSEException e) {
                 return null;
             }

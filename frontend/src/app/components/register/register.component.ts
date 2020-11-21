@@ -79,6 +79,7 @@ export class RegisterComponent implements OnInit  {
     this.registerService.registerUser(this.model)
         .subscribe(
             data => {
+                console.log(data)
                 this.openLoginModal();
             },
             error => {

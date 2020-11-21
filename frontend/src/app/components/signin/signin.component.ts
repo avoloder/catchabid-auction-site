@@ -47,9 +47,11 @@ export class SigninComponent implements OnInit {
     this.signinService.login(this.email, this.password)
         .subscribe(
             data => {
+              console.log(data)
               this.modalService.dismissAll(); 
             },
             error => {
+              console.log("greska")
               console.log(error);
             });
   }
