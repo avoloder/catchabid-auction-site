@@ -11,17 +11,17 @@ export class PasswordManagementService {
 
     requestPasswordReset(email: String) {
         console.log(email)
-        return this.http.post(this.endpoint + '/requestPasswordReset', email);
+        return this.http.post(this.endpoint + '/requestPasswordReset', {email: email});
     }
 
     sendResetPasswordToken(token: Number) {
         console.log(token)
-        return this.http.post(this.endpoint + '/sendResetPasswordToken', token);
+        return this.http.post(this.endpoint + '/sendResetPasswordToken', {passwordResetToken: token});
     }
 
     resetPassword(email: String, password:String){
         console.log(email, password)
-        return this.http.post(this.endpoint + '/resetPassworf', email);
+        return this.http.post(this.endpoint + '/resetPassworf', {email: email, password: password});
     }
 
 }

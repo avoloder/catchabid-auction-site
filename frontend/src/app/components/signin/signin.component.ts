@@ -12,7 +12,8 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 })
 export class SigninComponent implements OnInit {
 
-  model: any = {};
+  email: String;
+  password: String;
 
   constructor(
     private modalService: NgbModal,
@@ -33,7 +34,7 @@ export class SigninComponent implements OnInit {
   }
 
   login() {
-    this.signinService.login(this.model)
+    this.signinService.login(this.email, this.password)
         .subscribe(
             data => {
               this.modalService.dismissAll(); 

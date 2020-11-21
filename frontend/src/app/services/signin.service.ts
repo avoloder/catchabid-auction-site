@@ -9,7 +9,7 @@ export class SigninService {
 
     endpoint = 'http://localhost:8080';
 
-    login(user: User | AuctionHouse) {
-        return this.http.post(this.endpoint + '/login', user);
+    login(email: String, password: String) {
+        return this.http.post(this.endpoint + '/login', {email: email, passwod: password});
     }
 }
