@@ -44,14 +44,6 @@ public class AuthController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity login(@RequestBody Map<String,String> userData){
         String token = authService.authenticate(userData);
-        try {
-            boolean verified = TokenUtil.verifyToken(token);
-            System.out.println(verified);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (JOSEException e) {
-            e.printStackTrace();
-        }
         return token != null ? ResponseEntity.status(HttpStatus.OK).body(token) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
