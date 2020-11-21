@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Route } from '@angular/compiler/src/core';
-import { Router, RouterModule } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SigninComponent } from '../signin/signin.component';
 import { RegisterService } from '../../services/register.service';
@@ -17,7 +16,6 @@ export class RegisterComponent {
   address: Address = new Address();
 
   constructor(
-      private router: Router,
       private registerService: RegisterService,
       private modalService: NgbModal) { }
 

@@ -13,12 +13,14 @@ import { LayoutModule } from './components/layout/layout.module';
 import { AuctionsModule } from './components/auctions/auctions.module';
 import { AuthGuard } from './services/auth-guard.service';
 import { RegisterService } from './services/register.service';
+import { SigninService } from './services/signin.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     SigninComponent,
-    RegisterComponent
+    RegisterComponent,
+    SigninComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +34,7 @@ import { RegisterService } from './services/register.service';
     AuctionsModule,
     NgbModule
   ],
-  providers: [AuthGuard, RegisterService],
+  providers: [AuthGuard, RegisterService, SigninService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
