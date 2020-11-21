@@ -43,7 +43,10 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                                 </div>
-                                <input name="pass3"  [(ngModel)]="model.passwordHash" class="form-control" style="padding-left: 5px;" placeholder="Password" type="password" pattern="(?=.*[\d@$!%*#?.])(?=.*[a-zA-Z]).{8,20}" required>
+                                <input name="pass3" id="password1" [(ngModel)]="model.passwordHash" class="form-control" style="padding-left: 5px;" placeholder="Password" type="password" pattern="(?=.*[\d@$!%*#?.])(?=.*[a-zA-Z]).{8,20}" required>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-eye" id="togglePassword1"></i></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -53,7 +56,10 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                                 </div>
-                                <input name="pass4" class="form-control" style="padding-left: 5px;" placeholder="Confirm Password" type="password" pattern="(?=.*[\d@$!%*#?.])(?=.*[a-zA-Z]).{8,20}" required>
+                                <input name="pass4" id="confirmPassword1" class="form-control" style="padding-left: 5px;" placeholder="Confirm Password" type="password" pattern="(?=.*[\d@$!%*#?.])(?=.*[a-zA-Z]).{8,20}" required>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-eye" id="toggleConfirmPassword1"></i></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -168,7 +174,10 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                                 </div>
-                                <input id="password" name="pass" class="form-control" [(ngModel)]="model.passwordHash" style="padding-left: 5px;" placeholder="Password" type="password"  minlength="8" maxlength="20" pattern="(?=.*[\d@$!%*#?.])(?=.*[a-zA-Z]).{8,20}" required>
+                                <input id="password2" name="pass" class="form-control" [(ngModel)]="model.passwordHash" style="padding-left: 5px;" placeholder="Password" type="password"  minlength="8" maxlength="20" pattern="(?=.*[\d@$!%*#?.])(?=.*[a-zA-Z]).{8,20}" required>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-eye" id="togglePassword2"></i></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -178,7 +187,10 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                                 </div>
-                                <input id="confirmPassword" name="pass2" class="form-control" style="padding-left: 5px;" placeholder="Confirm Password" type="password" minlength="8" maxlength="20"  pattern="(?=.*[\d@$!%*#?.])(?=.*[a-zA-Z]).{8,20}" required>
+                                <input id="confirmPassword2" name="pass2" class="form-control" style="padding-left: 5px;" placeholder="Confirm Password" type="password" minlength="8" maxlength="20"  pattern="(?=.*[\d@$!%*#?.])(?=.*[a-zA-Z]).{8,20}" required>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-eye" id="toggleConfirmPassword2"></i></span>
+                                </div>
                             </div>
                         </div>
                     </div>
