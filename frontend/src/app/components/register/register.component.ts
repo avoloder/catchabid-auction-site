@@ -36,10 +36,10 @@ export class RegisterComponent {
     this.registerService.registerUser(this.model)
         .subscribe(
             data => {
-                this.openLoginModal()
+                this.openLoginModal();
             },
             error => {
-              console.log(error)
+              console.log(error);
             });
   }
 
@@ -55,10 +55,10 @@ export class RegisterComponent {
       this.registerService.registerAuctionHouse(this.model)
           .subscribe(
               data => {
-                  this.openLoginModal()
+                  this.openLoginModal();
               },
               error => {
-                console.log(error)
+                console.log(error);
               });
   }
 }
