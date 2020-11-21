@@ -10,6 +10,6 @@ export class SigninService {
     endpoint = 'http://localhost:8080';
 
     login(email: String, password: String) {
-        return this.http.post(this.endpoint + '/login', {email: email, passwod: password});
+        return this.http.post(this.endpoint + '/login', {email: email, password: password});
     }
 }
