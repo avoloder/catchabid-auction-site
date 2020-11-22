@@ -10,7 +10,7 @@
               src="assets/img/brand/catchabid-logo-blue.png"
               class="navbar-brand-img"
               alt="..."
-              style="height: 4rem;"
+              style="height: 3rem; margin-top: 10px;"
 
       />
     </a>
@@ -60,11 +60,18 @@
             Sell
           </a>
         </li>
-        <li *ngIf="!signedIn" class="nav-item dropdown" placement="bottom-right">
-          <a class="nav-link pr-0" role="button" (click)="changeLogin()">
-            Login
-          </a>
-        </li>
+
+          <li *ngIf="!signedIn" class="nav-item dropdown" placement="bottom-right">
+            <a class="nav-link" role="button" (click)="openRegisterModal()" mdbWavesEffect>
+              Register
+            </a>
+          </li>
+          <span *ngIf="!signedIn" class="btn-separator"></span>
+          <li *ngIf="!signedIn" class="nav-item dropdown" placement="bottom-right">
+            <a class="nav-link" role="button" (click)="openLoginModal()">
+              Login
+            </a>
+          </li>
       </ul>
       <!-- User -->
       <ul *ngIf="signedIn" class="navbar-nav align-items-center ml-auto ml-md-0">

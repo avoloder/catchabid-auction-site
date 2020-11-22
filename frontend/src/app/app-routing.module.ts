@@ -1,27 +1,29 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
-import { AuthGuard } from './shared/services/auth-guard.service';
-import { HomeComponent } from './home/home.component';
-import { AuctionsComponent } from './auctions/auctions.component';
-
-
+import { HomeComponent } from './components/home/home.component';
+import { AuthGuard } from './services/auth-guard.service';
+import { AuctionsComponent } from './components/auctions/auctions.component';
+import { SigninComponent } from './components/signin/signin.component';
+import { RegisterComponent } from './components/register/register.component';
 
 const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
-    canActivate: [AuthGuard],
-    canActivateChild: [AuthGuard],
     children: [
-      { path: '', component: AuctionsComponent },
+      { path: '', component: AuctionsComponent},
+      { path: 'home', component: HomeComponent },
+      { path: 'login', component: SigninComponent },
+      { path: 'register', component: RegisterComponent}
     ]
-  }
+  },
 ];
 
 
+
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

@@ -89,10 +89,8 @@
               "src/favicon.ico",
               "src/assets"
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
-            "scripts": []
+            "styles": [ "src/styles.scss", "node_modules/intl-tel-input/build/css/intlTelInput.css"],
+            "scripts": ["node_modules/intl-tel-input/build/js/intlTelInput.min.js"]
           }
         },
         "lint": {
@@ -123,5 +121,8 @@
       }
     }
   },
-  "defaultProject": "Angular"
+  "defaultProject": "Angular",
+  "cli": {
+    "analytics": "fa5bf650-f973-49e3-b618-e74d5b4d4eda"
+  }
 }

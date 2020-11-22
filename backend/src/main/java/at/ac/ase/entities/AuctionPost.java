@@ -59,10 +59,6 @@ public class AuctionPost {
         inverseJoinColumns = { @JoinColumn(name = "user_id") })
     private Set<RegularUser> subscriptions = new HashSet<>();
 
-    @OneToOne
-    @JoinColumn(name = "location_id", referencedColumnName = "id")
-    private Location location;
-
     public Long getId() {
         return id;
     }
@@ -135,14 +131,6 @@ public class AuctionPost {
         this.subscriptions = subscriptions;
     }
 
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -166,4 +154,5 @@ public class AuctionPost {
     public void setName(String name) {
         this.name = name;
     }
+
 }

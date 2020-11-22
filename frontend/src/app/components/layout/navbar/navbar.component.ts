@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {ModalDismissReasons, NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
-import { AuctionFormComponent } from 'src/app/auctions/auction-form/auction-form.component';
-import { AuctionsService } from 'src/app/auctions/auctions.service';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { SigninComponent } from '../../signin/signin.component';
+import { RegisterComponent } from '../../register/register.component';
 import { Subscription } from 'rxjs';
+import { AuctionFormComponent } from '../../auctions/auction-form/auction-form.component';
+import { AuctionsService } from '../../auctions.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,14 +14,16 @@ import { Subscription } from 'rxjs';
 export class NavbarComponent implements OnInit {
 
   public focus;
-
-  signedIn = false;
+  public activeModal;
 
   closeResult = '';
 
   auctionClosedSub: Subscription;
 
   modalRef: NgbModalRef;
+
+
+  signedIn = false;
 
   constructor(
     private modalService: NgbModal,
@@ -31,6 +35,15 @@ export class NavbarComponent implements OnInit {
   changeLogin(): void {
     this.signedIn = !this.signedIn;
   }
+
+  openLoginModal(): void {
+    this.modalService.open(SigninComponent);
+  }
+
+  openRegisterModal(): void {
+    this.modalService.open(RegisterComponent);
+  }
+
 
   createAuction(): void {
     this.modalRef = this.modalService.open(AuctionFormComponent, { size: 'lg', backdrop: 'static' });
@@ -44,13 +57,4 @@ export class NavbarComponent implements OnInit {
     this.auctionClosedSub.unsubscribe();
   }
 
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
 }

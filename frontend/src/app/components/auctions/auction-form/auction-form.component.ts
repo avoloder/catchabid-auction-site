@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {AuctionsService} from '../auctions.service';
-import {AuctionPostModel} from '../../models/auctionPost.model';
+import {AuctionsService} from '../../auctions.service';
+import {AuctionPostModel} from '../../../models/auctionPost.model';
 import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-auction-form',
   templateUrl: './auction-form.component.html',
-  styleUrls: ['./auction-form.component.css']
+  styleUrls: ['./auction-form.component.scss']
 })
 export class AuctionFormComponent implements OnInit {
 
