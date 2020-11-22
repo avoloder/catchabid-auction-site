@@ -42,19 +42,12 @@ public abstract class BaseIntegrationTest {
      * in a separate transaction
      * @param filename in "testdata"
      */
-    protected void insertTestData(String filename) {
-        ClassLoader classLoader = getClass().getClassLoader();
-
-        try (InputStream inputStream = classLoader.getResourceAsStream("testdata/" + filename)) {
+    protected void insertTestData(String filename)
+    {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("testdata/" + filename)) {
 
             String content = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
-
-            tx(status -> {
-                testEntityManager
-                        .getEntityManager()
-                        .createNativeQuery(content)
-                        .executeUpdate();
-            });
+            tx(status -> executeSql(content));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,13 +61,13 @@ public abstract class BaseIntegrationTest {
      */
     protected void cleanDatabase() {
         tx(status -> {
-            executeSql("DELETE FROM Notification");
-            executeSql("DELETE FROM Rating");
-            executeSql("DELETE FROM Bid");
-            executeSql("DELETE FROM AuctionPost");
-            executeSql("DELETE FROM AuctionHouse");
-            executeSql("DELETE FROM RegularUser");
-            executeSql("DELETE FROM Location");
+            executeJpql("DELETE FROM Notification");
+            executeJpql("DELETE FROM Rating");
+            executeJpql("DELETE FROM Bid");
+            executeJpql("DELETE FROM AuctionPost");
+            executeJpql("DELETE FROM AuctionHouse");
+            executeJpql("DELETE FROM RegularUser");
+            executeJpql("DELETE FROM Location");
         });
     }
 
@@ -99,7 +92,15 @@ public abstract class BaseIntegrationTest {
      * @param sql script to execute
      */
     protected void executeSql(String sql) {
-        getEntityManager().createQuery(sql).executeUpdate();
+        getEntityManager().createNativeQuery(sql).executeUpdate();
+    }
+
+    /**
+     * execute jpql
+     * @param jpql script to execute
+     */
+    protected void executeJpql(String jpql) {
+        getEntityManager().createQuery(jpql).executeUpdate();
     }
 
     protected EntityManager getEntityManager() {
