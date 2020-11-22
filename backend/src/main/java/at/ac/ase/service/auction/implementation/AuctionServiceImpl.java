@@ -38,9 +38,10 @@ public class AuctionServiceImpl implements AuctionService {
         auctionPost.setStartTime(auctionPostDTO.getStartTime());
         auctionPost.setEndTime(auctionPostDTO.getEndTime());
         auctionPost.setMinPrice(auctionPostDTO.getMinPrice());
+        auctionPost.setDescription(auctionPostDTO.getDescription());
         auctionPost.setCreator(
             auctionHouseService
-                .getAuctionHouseById(auctionPostDTO.getCreatorId())
+                .getAuctionHouseById(1L)
                 .orElseThrow(ObjectNotFoundException::new));
 
         auctionRepository.save(auctionPost);
