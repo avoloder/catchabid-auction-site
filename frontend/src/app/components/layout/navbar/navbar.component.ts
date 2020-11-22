@@ -5,6 +5,11 @@ import { RegisterComponent } from '../../register/register.component';
 import { Subscription } from 'rxjs';
 import { AuctionFormComponent } from '../../auctions/auction-form/auction-form.component';
 import { AuctionsService } from '../../auctions.service';
+import { Router } from '@angular/router';
+import jwt_decode from 'jwt-decode';
+import { UserService } from '../../../services/user.service';
+import { User } from '../../../models/user';
+import { AuctionHouse } from '../../../models/auctionhouse';
 
 @Component({
   selector: 'app-navbar',
@@ -22,18 +27,15 @@ export class NavbarComponent implements OnInit {
 
   modalRef: NgbModalRef;
 
-
-  signedIn = false;
+  user: User|AuctionHouse;
 
   constructor(
     private modalService: NgbModal,
-    private auctionsService: AuctionsService) { }
+    private auctionsService: AuctionsService,
+    private userService: UserService,
+    private router: Router) { }
 
   ngOnInit(): void {
-  }
-
-  changeLogin(): void {
-    this.signedIn = !this.signedIn;
   }
 
   openLoginModal(): void {
@@ -55,6 +57,22 @@ export class NavbarComponent implements OnInit {
   onAuctionFormClose(): void {
     this.modalRef.close();
     this.auctionClosedSub.unsubscribe();
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/home']);
+  }
+
+  isUserLoggedIn(){
+    if(localStorage.getItem('token') !== null){
+/*       let email = jwt_decode(localStorage.getItem('token'))['sub'];
+      let userJSON = this.userService.findByEmail(email);
+      console.log(userJSON) */
+      return true;
+    }else{
+      return false;
+    }
   }
 
 }
