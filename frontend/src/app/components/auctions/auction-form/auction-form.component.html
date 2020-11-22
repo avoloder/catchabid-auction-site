@@ -29,10 +29,9 @@
             <div class="input-group">
               <input class="form-control" placeholder="yyyy-mm-dd"
                      name="dp" ngbDatepicker #dStart="ngbDatepicker"
-                     [formControl]="startDateForm"
-                     (click)="dStart.toggle()">
+                     [formControl]="startDateForm">
               <div class="input-group-append">
-                <span class="input-group-text"><i class="fa fa-calendar"
+                <span class="input-group-text" (click)="dStart.toggle()"><i class="fa fa-calendar"
                   aria-hidden="true"></i></span>
               </div>
             </div>
@@ -50,10 +49,9 @@
             <div class="input-group">
               <input class="form-control" placeholder="yyyy-mm-dd"
                      name="dp" ngbDatepicker #dEnd="ngbDatepicker"
-                     [formControl]="endDateForm"
-                     (click)="dEnd.toggle()">
+                     [formControl]="endDateForm">
               <div class="input-group-append">
-                <span class="input-group-text"><i class="fa fa-calendar"
+                <span class="input-group-text" (click)="dEnd.toggle()"><i class="fa fa-calendar"
                   aria-hidden="true"></i></span>
               </div>
             </div>
