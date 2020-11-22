@@ -1,7 +1,10 @@
 package at.ac.ase.dto;
 
 import at.ac.ase.entities.Category;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.time.LocalDateTime;
+import java.util.Base64;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
@@ -32,8 +35,8 @@ public class AuctionCreationDTO {
     @NotNull
     private String description;
 
-    //@NotNull
-    private Byte[] image;
+    @NotNull
+    private String image;
 
     public Long getId() {
         return id;
@@ -99,11 +102,11 @@ public class AuctionCreationDTO {
         this.description = description;
     }
 
-    public Byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Byte[] image) {
+    public void setImage(String image) {
         this.image = image;
     }
 }

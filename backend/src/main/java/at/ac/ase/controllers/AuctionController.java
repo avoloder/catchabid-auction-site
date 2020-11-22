@@ -30,12 +30,11 @@ public class AuctionController {
                 .getAuctionPost(auction.getId())
                 .orElseThrow(ObjectNotFoundException::new);
         }
-        auctionHouseService
-            .getAuctionHouseById(auction.getCreatorId())
-            .orElseThrow(ObjectNotFoundException::new);
-        auctionService.createAuction(auction);
+//        auctionHouseService
+//            .getAuctionHouseById(auction.getCreatorId())
+//            .orElseThrow(ObjectNotFoundException::new);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(auctionService.createAuction(auction));
     }
 
 }

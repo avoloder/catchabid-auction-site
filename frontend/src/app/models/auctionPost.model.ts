@@ -8,10 +8,10 @@ export class AuctionPostModel {
   // location: string;
   minPrice: number;
   description: string;
-  image: File;
+  image: string;
 
   constructor(creatorId: number, name: string, category: string, startTime: Date, endTime: Date,
-              minPrice: number, description: string, image: File) {
+              minPrice: number, description: string, image: string) {
     this.creatorId = creatorId;
     this.name = name;
     this.category = category;
