@@ -10,7 +10,11 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -26,17 +30,14 @@ public class AuctionController {
 
     @PostMapping
     public ResponseEntity<Object> createAuction(
-        @RequestBody @Valid AuctionCreationDTO auction) {
-        // @CurrentSecurityContext(expression = "authentication.principal") User user
+        @RequestBody @Valid AuctionCreationDTO auction,
+        @CurrentSecurityContext(expression = "authentication.principal") User user) {
         if (auction.getId() != null) {
             auctionService
                 .getAuctionPost(auction.getId())
                 .orElseThrow(ObjectNotFoundException::new);
         }
-//        auctionHouseService
-//            .getAuctionHouseById(auction.getCreatorId())
-//            .orElseThrow(ObjectNotFoundException::new);
-        auctionService.createAuction(auction);
+        auctionService.createAuction(user, auction);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

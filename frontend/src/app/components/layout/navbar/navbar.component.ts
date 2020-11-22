@@ -6,7 +6,6 @@ import { Subscription } from 'rxjs';
 import { AuctionFormComponent } from '../../auctions/auction-form/auction-form.component';
 import { AuctionsService } from '../../auctions.service';
 import { Router } from '@angular/router';
-import jwt_decode from 'jwt-decode';
 import { UserService } from '../../../services/user.service';
 import { User } from '../../../models/user';
 import { AuctionHouse } from '../../../models/auctionhouse';

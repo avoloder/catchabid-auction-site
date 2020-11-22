@@ -26,4 +26,9 @@ public class AuctionHouseServiceImpl implements AuctionHouseService {
         String email = userData.get("email");
         return auctionHouseRepository.findByEmail(email);
     }
+
+    @Override
+    public AuctionHouse getAuctionHouseByEmail(String email) {
+        return auctionHouseRepository.findByEmail(email);
+    }
 }

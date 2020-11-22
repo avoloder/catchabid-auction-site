@@ -10,9 +10,6 @@ public class AuctionCreationDTO {
 
     private Long id;
 
-    //@NotNull
-    private Long creatorId;
-
     @NotNull
     private String name;
 
@@ -41,14 +38,6 @@ public class AuctionCreationDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getCreatorId() {
-        return creatorId;
-    }
-
-    public void setCreatorId(Long creatorId) {
-        this.creatorId = creatorId;
     }
 
     public Category getCategory() {

@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {AuctionPostModel} from '../models/auctionPost.model';
 import {Observable, Subject} from 'rxjs';
 
-const endpoint = 'http://localhost:8080';
+const api = '/api/auctions';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class AuctionsService {
   constructor(private http: HttpClient) {}
 
   saveAuction(auctionPost: AuctionPostModel): Observable<AuctionPostModel> {
-    return this.http.post<AuctionPostModel>(endpoint + '/api/auctions', auctionPost);
+    return this.http.post<AuctionPostModel>(api, auctionPost);
   }
 
 }

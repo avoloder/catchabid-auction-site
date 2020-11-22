@@ -1,7 +1,9 @@
 package at.ac.ase.service.auction.implementation;
 
 import at.ac.ase.dto.AuctionCreationDTO;
+import at.ac.ase.entities.AuctionHouse;
 import at.ac.ase.entities.AuctionPost;
+import at.ac.ase.entities.User;
 import at.ac.ase.postgres.auction.AuctionRepository;
 import at.ac.ase.service.users.AuctionHouseService;
 import at.ac.ase.service.users.UserService;
@@ -26,7 +28,7 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public AuctionPost createAuction(AuctionCreationDTO auctionPostDTO) {
+    public AuctionPost createAuction(User user, AuctionCreationDTO auctionPostDTO) {
         AuctionPost auctionPost;
         if (auctionPostDTO.getId() != null) {
             auctionPost = auctionRepository
@@ -39,10 +41,7 @@ public class AuctionServiceImpl implements AuctionService {
         auctionPost.setEndTime(auctionPostDTO.getEndTime());
         auctionPost.setMinPrice(auctionPostDTO.getMinPrice());
         auctionPost.setDescription(auctionPostDTO.getDescription());
-        auctionPost.setCreator(
-            auctionHouseService
-                .getAuctionHouseById(1L)
-                .orElseThrow(ObjectNotFoundException::new));
+        auctionPost.setCreator((AuctionHouse) user);
 
         auctionRepository.save(auctionPost);
         return auctionPost;

@@ -13,4 +13,6 @@ public interface AuctionHouseService {
 
     AuctionHouse getAuctionHouseByEmail(Map<String,String> userData);
 
+    AuctionHouse getAuctionHouseByEmail(String email);
+
 }
