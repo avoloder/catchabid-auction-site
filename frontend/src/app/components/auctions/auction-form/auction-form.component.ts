@@ -69,11 +69,11 @@ export class AuctionFormComponent implements OnInit {
   }
 
   saveAuction(): void{
-    const startDate = new Date(this.startDateForm.value.day, this.startDateForm.value.month,
-      this.startDateForm.value.year, this.startTimeForm.value.hour, this.startTimeForm.value.minute);
+    const startDate = new Date(this.startDateForm.value.year, this.startDateForm.value.month,
+      this.startDateForm.value.day, this.startTimeForm.value.hour, this.startTimeForm.value.minute);
 
-    const endDate = new Date(this.endDateForm.value.day, this.endDateForm.value.month,
-      this.endDateForm.value.year, this.endTimeForm.value.hour, this.endTimeForm.value.minute);
+    const endDate = new Date(this.endDateForm.value.year, this.endDateForm.value.month,
+      this.endDateForm.value.day, this.endTimeForm.value.hour, this.endTimeForm.value.minute);
 
     const auctionPost = new AuctionPostModel(null, this.nameForm.value, this.categoryForm.value.toUpperCase(),
       new Date(startDate), new Date(endDate), this.priceForm.value, this.descriptionForm.value, this.imageFile);
