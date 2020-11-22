@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {AuctionPostModel} from '../models/auctionPost.model';
-import {Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 
 const endpoint = 'http://localhost:8080';
 
@@ -10,6 +10,7 @@ const endpoint = 'http://localhost:8080';
 })
 export class AuctionsService {
 
+  auctionFormModalClosed: Subject<void> = new Subject<void>();
 
   constructor(private http: HttpClient) {}
 

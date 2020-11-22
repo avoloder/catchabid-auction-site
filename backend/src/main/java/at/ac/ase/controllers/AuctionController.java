@@ -3,6 +3,7 @@ package at.ac.ase.controllers;
 import at.ac.ase.dto.AuctionCreationDTO;
 import at.ac.ase.service.auction.AuctionService;
 import at.ac.ase.service.users.AuctionHouseService;
+import at.ac.ase.service.users.implementation.AuctionHouseServiceImpl;
 import at.ac.ase.util.exception.ObjectNotFoundException;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class AuctionController {
     private AuctionService auctionService;
 
     @Autowired
-    private AuctionHouseService auctionHouseService;
+    private AuctionHouseServiceImpl auctionHouseService;
 
     @PostMapping
     public ResponseEntity<Object> createAuction(

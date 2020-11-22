@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {AuctionsComponent} from '../../auctions/auctions.component';
-import {modalConfigDefaults} from 'ngx-bootstrap/modal/modal-options.class';
+import {ModalDismissReasons, NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
+import { AuctionFormComponent } from 'src/app/auctions/auction-form/auction-form.component';
+import { AuctionsService } from 'src/app/auctions/auctions.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -15,7 +16,14 @@ export class NavbarComponent implements OnInit {
   signedIn = false;
 
   closeResult = '';
-  constructor(private modalService: NgbModal) { }
+
+  auctionClosedSub: Subscription;
+
+  modalRef: NgbModalRef;
+
+  constructor(
+    private modalService: NgbModal,
+    private auctionsService: AuctionsService) { }
 
   ngOnInit(): void {
   }
@@ -25,7 +33,15 @@ export class NavbarComponent implements OnInit {
   }
 
   createAuction(): void {
-    this.modalService.open(AuctionsComponent, { size: 'lg', backdrop: 'static' });
+    this.modalRef = this.modalService.open(AuctionFormComponent, { size: 'lg', backdrop: 'static' });
+    this.auctionClosedSub = this.auctionsService.auctionFormModalClosed.subscribe(
+      () => this.onAuctionFormClose()
+    );
+  }
+
+  onAuctionFormClose(): void {
+    this.modalRef.close();
+    this.auctionClosedSub.unsubscribe();
   }
 
   private getDismissReason(reason: any): string {

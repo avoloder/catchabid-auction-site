@@ -1,3 +1,5 @@
+@import "../custom/variables";
+
 @media screen and (min-width: 768px) {
   html:not(.auth-layout) .main-content {
       margin-left: $navbar-vertical-width;

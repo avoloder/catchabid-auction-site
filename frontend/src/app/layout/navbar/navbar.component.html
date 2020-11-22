@@ -4,7 +4,7 @@
         style="background-color: #5271ff;"
 >
   <div class="container-fluid">
-    <a class="navbar-brand" style="height: 1rem;
+    <a style="height: 1rem;
       margin-bottom: 35px; margin-top: -15px;">
       <img
               src="assets/img/brand/catchabid-logo-blue.png"
@@ -41,28 +41,10 @@
         </div>
       </li>
     </ul>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <!-- Navbar links -->
-      <ul class="navbar-nav align-items-center ml-md-auto">
-        <li class="nav-item d-xl-none">
-          <!-- Sidenav toggler -->
-          <div
-                  class="pr-3 sidenav-toggler sidenav-toggler-dark"
-                  data-action="sidenav-pin"
-                  data-target="#sidenav-main"
-          >
-            <div class="sidenav-toggler-inner">
-              <i class="sidenav-toggler-line"></i>
-              <i class="sidenav-toggler-line"></i>
-              <i class="sidenav-toggler-line"></i>
-            </div>
-          </div>
-        </li>
-      </ul>
       <!-- Categories -->
 
-      <form class="navbar-search navbar-search-dark ">
-        <div class="form-group mb-0" [ngClass]="{ 'focused': focus === true }">
+      <form class="navbar-search navbar-search-dark">
+        <div id="searchForm" class="form-group mb-0" [ngClass]="{ 'focused': focus === true }">
           <div class="input-group input-group-alternative">
             <div class="input-group-prepend">
               <span class="input-group-text"><i class="fa fa-search"></i></span>
@@ -72,7 +54,7 @@
           </div>
         </div>
       </form>
-      <ul class="navbar-nav align-items-center ml-auto ml-md-0">
+      <ul class="navbar-nav align-items-center ml-auto ml-md-0 text-right">
         <li class="nav-item dropdown mr-3 ml-5" placement="bottom-right">
           <a class="nav-link pr-0" role="button" (click)="createAuction()" >
             Sell
@@ -115,8 +97,6 @@
           </div>
         </li>
       </ul>
-
-    </div>
   </div>
 
 </nav>

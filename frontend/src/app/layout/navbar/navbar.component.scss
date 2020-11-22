@@ -1,0 +1,41 @@
+.form-control {
+  background-color: transparent !important;
+  color: #443d52 !important;
+}
+
+nav {
+  color: white !important;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: white;
+}
+
+.navbar-search-dark .input-group {
+  color: white;
+  border-color: white;
+}
+
+.input-group-text {
+  background-color: transparent !important;
+}
+
+@media (max-width: 767.98px) {
+  .navbar-nav .nav-link {
+    color: white !important;
+      /* color: #172b4d !important; */
+  }
+}
+
+@media (max-width: 1200px) {
+
+  #searchForm {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1201px) {
+  #searchForm {
+    display: inline !important;
+  }
+}
