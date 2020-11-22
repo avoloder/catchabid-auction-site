@@ -9,6 +9,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class InterceptConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new TokenInterceptor()).excludePathPatterns("/registerUser", "");
+        registry.addInterceptor(new TokenInterceptor()).excludePathPatterns("/registerUser", "/login");
     }
 }

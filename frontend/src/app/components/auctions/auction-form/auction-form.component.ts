@@ -38,7 +38,9 @@ export class AuctionFormComponent implements OnInit {
   });
   categories = ['jewelry', 'electronics', 'cars', 'experience', 'travel', 'furniture', 'music', 'other'];
 
-  constructor(private auctionsService: AuctionsService, private toast: ToastrService) { }
+  constructor(
+    private auctionsService: AuctionsService,
+     private toast: ToastrService) { }
 
   ngOnInit(): void {
     console.log('opened');
