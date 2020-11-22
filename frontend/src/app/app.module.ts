@@ -1,7 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {AppComponent} from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -18,6 +18,8 @@ import { ResetPasswordComponent } from './components/signin/reset-password/reset
 import { ResetPasswordTokenComponent } from './components/signin/reset-password-token/reset-password-token.component';
 import { ForgotPasswordComponent } from './components/signin/forgot-password/forgot-password.component';
 import { PasswordManagementService } from './services/password-management.service';
+import { TokenInterceptor } from './services/token-interceptor.service';
+import { UserService } from './services/user.service';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,18 @@ import { PasswordManagementService } from './services/password-management.servic
     AuctionsModule,
     NgbModule
   ],
-  providers: [AuthGuard, RegisterService, SigninService, PasswordManagementService],
+  providers: [
+    AuthGuard, 
+    RegisterService, 
+    SigninService, 
+    UserService,
+    PasswordManagementService, 
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

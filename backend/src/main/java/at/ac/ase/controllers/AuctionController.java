@@ -1,6 +1,7 @@
 package at.ac.ase.controllers;
 
 import at.ac.ase.dto.AuctionCreationDTO;
+import at.ac.ase.entities.User;
 import at.ac.ase.service.auction.AuctionService;
 import at.ac.ase.service.users.AuctionHouseService;
 import at.ac.ase.service.users.implementation.AuctionHouseServiceImpl;
@@ -9,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -25,6 +27,7 @@ public class AuctionController {
     @PostMapping
     public ResponseEntity<Object> createAuction(
         @RequestBody @Valid AuctionCreationDTO auction) {
+        // @CurrentSecurityContext(expression = "authentication.principal") User user
         if (auction.getId() != null) {
             auctionService
                 .getAuctionPost(auction.getId())
