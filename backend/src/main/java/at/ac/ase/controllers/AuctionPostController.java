@@ -4,10 +4,7 @@ import at.ac.ase.dto.AuctionDto;
 import at.ac.ase.dto.translator.AuctionDtoTranslator;
 import at.ac.ase.service.auction.AuctionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,6 +18,7 @@ public class AuctionPostController {
     @Autowired
     private AuctionDtoTranslator auctionDtoTranslator;
 
+    @CrossOrigin
     @GetMapping("recent")
     public List<AuctionDto> getRecentAuctions(
             @RequestParam(required = false) Integer pageNumber,

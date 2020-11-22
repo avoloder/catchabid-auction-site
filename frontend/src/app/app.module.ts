@@ -13,6 +13,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SigninComponent } from './components/signin/signin.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LayoutModule } from './components/layout/layout.module';
+import {HomeModule} from "./components/home/home.module";
+import {AuctionsService} from "./services/auctionsService.service";
 import { RegisterService } from './services/register.service';
 import { SigninService } from './services/signin.service';
 import { ResetPasswordComponent } from './components/signin/reset-password/reset-password.component';
@@ -44,7 +46,8 @@ import { UserService } from './services/user.service';
     ToastrModule.forRoot(),
     LayoutModule,
     AuctionsModule,
-    NgbModule
+    NgbModule,
+    HomeModule
   ],
   providers: [
     AuthGuard,
@@ -56,7 +59,8 @@ import { UserService } from './services/user.service';
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
-    }
+    },
+    AuctionsService
   ],
   bootstrap: [AppComponent]
 })
