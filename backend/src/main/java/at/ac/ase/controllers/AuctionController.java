@@ -37,9 +37,7 @@ public class AuctionController {
                 .getAuctionPost(auction.getId())
                 .orElseThrow(ObjectNotFoundException::new);
         }
-        auctionService.createAuction(user, auction);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(auctionService.createAuction(user, auction));
     }
 
 }

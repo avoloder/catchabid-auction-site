@@ -1,4 +1,4 @@
-<form id="form" novalidate [formGroup]="form" (ngSubmit)="saveAuction()">
+<form id="form" [formGroup]="form" (ngSubmit)="saveAuction()" ngNativeValidate>
   <div class="modal-header" style="border-bottom-width: 1px">
     <h4 class="modal-title pull-left">Create an auction</h4>
     <button type="button" class="close pull-right" (click)="onModalClose()" aria-label="Close">
@@ -9,12 +9,11 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="inputName">Item name *</label>
-        <input type="text" class="form-control" id="inputName" placeholder="Item Name" [formControl]="nameForm">
-        <small class="text-danger" *ngIf="nameForm.invalid && nameForm.dirty">{{getErrorMessage()}}</small>
+        <input type="text" class="form-control" id="inputName" placeholder="Item Name" [formControl]="nameForm" required>
       </div>
       <div class="form-group col-md-6">
         <label for="inputCategory">Category *</label>
-        <select class="form-control selector mr-sm-2" id="inputCategory" [formControl]="categoryForm">
+        <select class="form-control selector mr-sm-2" id="inputCategory" [formControl]="categoryForm" required>
           <option *ngFor="let cat of categories" [value]="cat">
             {{cat}}
           </option>
@@ -29,7 +28,7 @@
             <div class="input-group">
               <input class="form-control" placeholder="yyyy-mm-dd"
                      name="dp" ngbDatepicker #dStart="ngbDatepicker"
-                     [formControl]="startDateForm">
+                     [formControl]="startDateForm" required>
               <div class="input-group-append">
                 <span class="input-group-text" (click)="dStart.toggle()"><i class="fa fa-calendar"
                   aria-hidden="true"></i></span>
@@ -49,7 +48,7 @@
             <div class="input-group">
               <input class="form-control" placeholder="yyyy-mm-dd"
                      name="dp" ngbDatepicker #dEnd="ngbDatepicker"
-                     [formControl]="endDateForm">
+                     [formControl]="endDateForm" required>
               <div class="input-group-append">
                 <span class="input-group-text" (click)="dEnd.toggle()"><i class="fa fa-calendar"
                   aria-hidden="true"></i></span>
@@ -69,7 +68,7 @@
       </div>
       <div class="form-group col-md-6">
         <label for="inputPrice">Minimal price *</label>
-        <input type="text" class="form-control" id="inputPrice" placeholder="Minimal price" [formControl]="priceForm">
+        <input type="text" class="form-control" id="inputPrice" placeholder="Minimal price" [formControl]="priceForm" min="0" required>
       </div>
     </div>
     <div class="form-row">
@@ -83,14 +82,14 @@
           <div class="form-group col-md-12">
             <label for="inputImage">Image *</label>
             <div class="custom-file" id="inputImage">
-              <input type="file" class="custom-file-input" id="customFile" (change)="inputImage($event)" [formControl]="imageForm">
+              <input type="file" class="custom-file-input" id="customFile" (change)="inputImage($event)" [formControl]="imageForm" required>
               <label class="custom-file-label" for="customFile">{{image}}</label>
             </div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group col-md-12">
-            <img src="{{imgPreview}}" alt="..." class="img-thumbnail" id="imagePreview">
+            <img [src]="imgPreview" alt="..." class="img-thumbnail" id="imagePreview">
           </div>
         </div>
       </div>
