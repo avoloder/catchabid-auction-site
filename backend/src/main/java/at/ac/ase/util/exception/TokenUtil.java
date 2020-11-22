@@ -3,13 +3,10 @@ package at.ac.ase.util.exception;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
-import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
 import javax.xml.bind.DatatypeConverter;
-import java.security.SecureRandom;
-import java.security.interfaces.RSAPublicKey;
 import java.text.ParseException;
 import java.util.Date;
 
