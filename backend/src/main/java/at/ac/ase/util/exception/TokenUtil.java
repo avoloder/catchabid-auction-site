@@ -1,5 +1,7 @@
 package at.ac.ase.util.exception;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
@@ -8,6 +10,7 @@ import com.nimbusds.jwt.SignedJWT;
 
 import javax.xml.bind.DatatypeConverter;
 import java.text.ParseException;
+import java.util.Base64;
 import java.util.Date;
 
 public class TokenUtil {
@@ -36,6 +39,16 @@ public class TokenUtil {
         SignedJWT signedJWT = SignedJWT.parse(token);
         JWSVerifier verifier = new MACVerifier(secretBytes);
         return signedJWT.verify(verifier);
+    }
+
+    public static String getEmailFromToken(String token){
+        JsonObject jsonObject = parseTokenToJSON(token);
+        return jsonObject.get("subject").getAsString();
+    }
+
+    public static JsonObject parseTokenToJSON(String token){
+        return JsonParser.parseString(new String(Base64.getDecoder().decode(token.split("\\.")[1].getBytes()))).getAsJsonObject();
+
     }
 
 }

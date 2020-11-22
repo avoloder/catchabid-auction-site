@@ -28,7 +28,7 @@ public abstract class User {
     @Column
     private Boolean active = true;
 
-    @Column
+    @Column(unique = true)
     @NotNull
     @Pattern(regexp="^[a-zA-Z0-9_.+-üäöß]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]{2,3}$",
         message="Please provide a valid email address")
