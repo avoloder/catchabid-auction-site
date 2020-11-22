@@ -10,7 +10,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import at.ac.ase.entities.AuctionPost;
+import at.ac.ase.postgres.auction.AuctionRepository;
 import at.ac.ase.service.auction.AuctionService;
+
+import java.util.List;
 
 import java.io.File;
 import java.io.IOException;
@@ -82,5 +86,23 @@ public class AuctionServiceImplementation implements AuctionService {
         else {
             return PageRequest.of(0, 50, Sort.by("startTime").ascending());
         }
+    }
+
+    @Autowired
+    private AuctionRepository auctionRepository;
+
+    @Override
+    public List<AuctionPost> getRecentAuctions(Integer pageNr, Integer auctionsPerPage) {
+        PageRequest pageRequest = null;
+
+        if (pageNr != null && auctionsPerPage != null && pageNr >= 0 && auctionsPerPage > 0)
+        {
+            pageRequest = PageRequest.of(pageNr, auctionsPerPage, Sort.by("startTime").descending());
+        }
+        else {
+            pageRequest = PageRequest.of(0, 50, Sort.by("startTime").descending());
+        }
+        Page<AuctionPost> recentAuctions = auctionRepository.findAll(pageRequest);
+        return recentAuctions.getContent();
     }
 }
