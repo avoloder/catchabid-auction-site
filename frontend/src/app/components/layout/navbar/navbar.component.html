@@ -61,22 +61,22 @@
           </a>
         </li>
 
-          <li *ngIf="!signedIn" class="nav-item dropdown" placement="bottom-right">
+          <li *ngIf="!isUserLoggedIn()" class="nav-item dropdown" placement="bottom-right">
             <a class="nav-link" role="button" (click)="openRegisterModal()" mdbWavesEffect>
               Register
             </a>
           </li>
-          <span *ngIf="!signedIn" class="btn-separator"></span>
-          <li *ngIf="!signedIn" class="nav-item dropdown" placement="bottom-right">
+          <span *ngIf="!isUserLoggedIn()" class="btn-separator"></span>
+          <li *ngIf="!isUserLoggedIn()" class="nav-item dropdown" placement="bottom-right">
             <a class="nav-link" role="button" (click)="openLoginModal()">
               Login
             </a>
           </li>
       </ul>
       <!-- User -->
-      <ul *ngIf="signedIn" class="navbar-nav align-items-center ml-auto ml-md-0">
+      <ul *ngIf="isUserLoggedIn()" class="navbar-nav align-items-center ml-auto ml-md-0">
         <li class="nav-item dropdown" ngbDropdown placement="bottom-right">
-          <a class="nav-link pr-0 dropdown-toggle" (click)="changeLogin()"
+          <a class="nav-link pr-0 dropdown-toggle"
           role="button" ngbDropdownToggle>
             John Doe
           </a>
@@ -97,7 +97,8 @@
             <div class="dropdown-divider"></div>
             <a routerLinkActive="active"
                class="dropdown-item"
-               style="color: black;">
+               style="color: black;"
+               (click)="logout()">
               <i class="ni ni-user-run"></i>
               <span>Logout</span>
             </a>

@@ -43,7 +43,7 @@ public class TokenUtil {
 
     public static String getEmailFromToken(String token){
         JsonObject jsonObject = parseTokenToJSON(token);
-        return jsonObject.get("subject").getAsString();
+        return jsonObject.get("sub").getAsString();
     }
 
     public static JsonObject parseTokenToJSON(String token){

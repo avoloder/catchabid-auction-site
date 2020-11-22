@@ -49,11 +49,12 @@ export class SigninComponent implements OnInit {
         .subscribe(
             data => {
               this.modalService.dismissAll();
-              this.router.navigate(['/home'])
+              localStorage.setItem('token', data['token'])
             },
             error => {
               console.log(error);
             });
   }
-
 }
+
+
