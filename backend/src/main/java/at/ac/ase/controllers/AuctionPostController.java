@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("auction")
+@CrossOrigin(exposedHeaders = "Access-Control-Allow-Origin")
 public class AuctionPostController {
 
     @Autowired
@@ -18,7 +19,6 @@ public class AuctionPostController {
     @Autowired
     private AuctionDtoTranslator auctionDtoTranslator;
 
-    @CrossOrigin
     @GetMapping("recent")
     public List<AuctionDto> getRecentAuctions(
             @RequestParam(required = false) Integer pageNumber,
