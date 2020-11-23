@@ -10,7 +10,7 @@ const endpoint = 'http://localhost:8080/';
 })
 export class AuctionsService {
 
-  private baseUrl:string = "localhost:8080/";
+  private baseUrl:string = "http://localhost:8080/";
 
   constructor(private http: HttpClient) {}
 
@@ -20,6 +20,6 @@ export class AuctionsService {
       .set("pageNumber",pageNumber.toString())
       .set("auctionsPerPage", pageSize.toString());
 
-    return this.http.get<AuctionModel[]>(this.baseUrl + "auction/recent", { headers, params })
+    return this.http.get<AuctionModel[]>(this.baseUrl + "auction/recent",{params});
   }
 }
