@@ -7,11 +7,13 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "postinstall": "ngcc"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "^10.2.2",
+    "@angular/cdk": "~11.0.0",
     "@angular/common": "~10.2.2",
     "@angular/compiler": "~10.2.2",
     "@angular/core": "~10.2.2",

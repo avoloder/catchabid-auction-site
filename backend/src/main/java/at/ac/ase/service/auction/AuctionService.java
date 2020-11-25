@@ -1,5 +1,6 @@
 package at.ac.ase.service.auction;
 
+import at.ac.ase.dto.AuctionPostDTO;
 import at.ac.ase.entities.AuctionPost;
 
 import java.util.List;
@@ -13,4 +14,7 @@ public interface AuctionService {
      * @return
      */
     List<AuctionPost> getRecentAuctions(Integer pageNr, Integer auctionsPerPage);
-}
+
+    List<AuctionPostDTO> getUpcomingAuctions(Integer auctionsPerPage, Integer pageNr);
+    List<AuctionPostDTO> getAllAuctions(Integer auctionsPerPage, Integer pageNr);
+ }
