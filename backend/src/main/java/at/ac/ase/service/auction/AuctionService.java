@@ -17,10 +17,10 @@ public interface AuctionService {
      * @param auctionsPerPage page size (default=50 if invalid parameter)
      * @return
      */
-    List<AuctionPost> getRecentAuctions(Integer pageNr, Integer auctionsPerPage);
+    List<AuctionPostDTO> getRecentAuctions(Integer pageNr, Integer auctionsPerPage);
+
     List<AuctionPostDTO> getUpcomingAuctions(Integer auctionsPerPage, Integer pageNr);
     List<AuctionPostDTO> getAllAuctions(Integer auctionsPerPage, Integer pageNr);
- }
 
     AuctionPost createAuction(User user, AuctionCreationDTO auctionPost);
 

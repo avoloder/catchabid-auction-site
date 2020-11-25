@@ -11,5 +11,6 @@ import java.util.List;
 @Repository
 public interface AuctionRepository extends JpaRepository<AuctionPost, Long> {
     List<AuctionPost> findAllByStartTimeGreaterThan(LocalDateTime from, Pageable pageable);
+    List<AuctionPost> findAllByStartTimeLessThan(LocalDateTime from, Pageable pageable);
 
 }
