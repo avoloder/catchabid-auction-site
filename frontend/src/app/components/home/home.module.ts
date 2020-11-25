@@ -1,13 +1,14 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HomeComponent } from './home.component';
-import { RecentAuctionsListComponent } from './recent-auctions-list/recent-auctions-list.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {HomeComponent} from './home.component';
+import {AuctionsModule} from "../auctions/auctions.module";
 
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    AuctionsModule
   ],
-  declarations: [HomeComponent, RecentAuctionsListComponent]
+  declarations: [HomeComponent]
 })
 export class HomeModule { }

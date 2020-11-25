@@ -25,6 +25,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("api/auctions")
+@CrossOrigin
 public class AuctionController {
     private static final Logger logger = LoggerFactory.getLogger(AuctionController.class);
 
