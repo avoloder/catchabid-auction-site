@@ -18,7 +18,6 @@ public class AuctionPost {
     @JoinColumn(name = "creator")
     private AuctionHouse creator;
 
-
     @Enumerated(EnumType.STRING)
     private Category category;
 

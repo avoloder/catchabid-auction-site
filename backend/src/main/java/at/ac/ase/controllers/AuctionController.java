@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/auctions")
+@RequestMapping("api/auctions")
+@CrossOrigin
 public class AuctionController {
     private static final Logger logger = LoggerFactory.getLogger(AuctionController.class);
 
     @Autowired
     private AuctionService auctionService;
 
-    @CrossOrigin
-    @GetMapping("/upcoming")
+    @GetMapping("upcoming")
     public @ResponseBody
     ResponseEntity<List<AuctionPostDTO>> getUpcomingAuctions(
             @RequestParam(required = false) Integer pageSize,
@@ -32,7 +32,7 @@ public class AuctionController {
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping("all")
     public @ResponseBody
     ResponseEntity<List<AuctionPostDTO>> getAllAuctions(@RequestParam(required = false) Integer pageSize,
                                                         @RequestParam(required = false) Integer pageNr) {
@@ -40,5 +40,11 @@ public class AuctionController {
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
+    @GetMapping("recent")
+    public List<AuctionPostDTO> getRecentAuctions(
+            @RequestParam(required = false) Integer pageNumber,
+            @RequestParam(required = false) Integer auctionsPerPage) {
 
+        return auctionService.getRecentAuctions(pageNumber, auctionsPerPage);
+    }
 }

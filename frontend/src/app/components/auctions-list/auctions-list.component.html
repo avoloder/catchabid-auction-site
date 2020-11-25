@@ -1,16 +1,14 @@
 <div>
-  <h2 style="color: #182c83;font-size: 200%;">{{products.length }} Upcoming Auctions </h2>
-
-  <div *ngFor="let product of products">
+  <div *ngFor="let auction of auctions">
     <div class="card-auctions" style="width: 18rem; display: inline-block;">
-      <img src="data:image/jpeg;base64,{{product.image}}" class="card-img-top" style="max-height: 15rem;" alt="...">
+      <img src="data:image/jpeg;base64,{{auction.image}}" class="card-img-top" style="max-height: 15rem;" alt="...">
       <div class="card-body">
-        <p class="text-subsection-card">Created by {{product.id}} </p>
-        <p class="text-main-card">{{product.auctionName}} {{product.id}}</p>
+        <p class="text-subsection-card">Created by {{auction.id}} </p>
+        <p class="text-main-card">{{auction.auctionName}} {{auction.id}}</p>
         <p></p>
         <p class="text-subsection-card">CURRENT BID </p>
-        <p class="text-main-card">{{product.highestBid}}</p>
-        <p>upcoming time {{product.startTime}}</p>
+        <p class="text-main-card">{{auction.highestBid}}</p>
+        <p>upcoming time {{auction.startTime}}</p>
         <a href="#" class="btn btn-primary">Go to details</a>
         <a href="#" class="btn btn-primary">Bid</a>
       </div>

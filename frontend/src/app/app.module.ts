@@ -10,12 +10,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LayoutModule } from './components/layout/layout.module';
 import { AuctionsModule } from './components/auctions/auctions.module';
 import { AuthGuard } from './services/auth/auth-guard.service';
-import {HomeComponent} from "./components/home/home.component";
+import {HomeModule} from "./components/home/home.module";
+import {AuctionsService} from "./services/auctionsService.service";
 
 @NgModule({
   declarations: [
-    AppComponent,
-    HomeComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -27,9 +27,10 @@ import {HomeComponent} from "./components/home/home.component";
     ToastrModule.forRoot(),
     LayoutModule,
     AuctionsModule,
-    NgbModule
+    NgbModule,
+    HomeModule
   ],
-  providers: [AuthGuard],
+  providers: [AuthGuard, AuctionsService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
