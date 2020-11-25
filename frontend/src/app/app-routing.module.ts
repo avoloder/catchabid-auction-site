@@ -1,7 +1,8 @@
-import { NgModule } from '@angular/core';
+import {ModuleWithProviders, NgModule} from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { AuthGuard } from './services/auth/auth-guard.service';
+import {AuctionsListComponent} from "./components/auctions-list/auctions-list.component";
 import { AppComponent } from './app.component';
 import { AuctionsComponent } from './components/auctions/auctions.component';
 import { SigninComponent } from './components/signin/signin.component';
@@ -12,10 +13,10 @@ const routes: Routes = [
     path: '',
     component: HomeComponent,
     children: [
-      { path: '', component: AuctionsComponent},
       { path: 'home', component: HomeComponent },
       { path: 'login', component: SigninComponent },
       { path: 'register', component: RegisterComponent}
+      { path: '', component: AuctionsListComponent },
     ]
   }
 ];
@@ -26,3 +27,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+export const routing: ModuleWithProviders<any> = RouterModule.forChild(routes)
