@@ -1,7 +1,7 @@
 package at.ac.ase.service;
 
 import at.ac.ase.basetest.BaseIntegrationTest;
-import at.ac.ase.entities.AuctionPost;
+import at.ac.ase.dto.AuctionPostDTO;
 import at.ac.ase.service.auction.AuctionService;
 import org.junit.After;
 import org.junit.Test;
@@ -32,14 +32,14 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     @Test
     @Transactional
     public void testGetRecentAuctions() {
-        List<AuctionPost> auctions;
+        List<AuctionPostDTO> auctions;
         insertTestData("multiple-auctions.sql");
 
         auctions= auctionService.getRecentAuctions(0, 5);
 
         assertThat(auctions.size(), is(5));
-        assertThat(auctions.get(0).getId(), is(10L));
-        assertThat(auctions.get(1).getId(), is(11L));
+        assertThat(auctions.get(0).getId(), is(11L));
+        assertThat(auctions.get(1).getId(), is(10L));
         assertThat(auctions.get(2).getId(), is(9L));
         assertThat(auctions.get(3).getId(), is(8L));
         assertThat(auctions.get(4).getId(), is(7L));
@@ -64,20 +64,20 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     public void testGetRecentAuctionsWithInvalidParam() {
         insertTestData("multiple-auctions.sql");
 
-        List<AuctionPost> auctions = auctionService.getRecentAuctions(0, 0);
+        List<AuctionPostDTO> auctions = auctionService.getRecentAuctions(0, 0);
         assertThat(auctions.size(), is(11));
-        assertThat(auctions.get(0).getId(), is(10L));
         assertThat(auctions.get(10).getId(), is(1L));
+        assertThat(auctions.get(0).getId(), is(11L));
 
         auctions = auctionService.getRecentAuctions(null, null);
         assertThat(auctions.size(), is(11));
-        assertThat(auctions.get(0).getId(), is(10L));
+        assertThat(auctions.get(0).getId(), is(11L));
         assertThat(auctions.get(10).getId(), is(1L));
 
         auctions = auctionService.getRecentAuctions(-1, 10);
-        assertThat(auctions.size(), is(11));
-        assertThat(auctions.get(0).getId(), is(10L));
-        assertThat(auctions.get(10).getId(), is(1L));
+        assertThat(auctions.size(), is(10));
+        assertThat(auctions.get(0).getId(), is(11L));
+        assertThat(auctions.get(9).getId(), is(2L));
     }
 }
 
