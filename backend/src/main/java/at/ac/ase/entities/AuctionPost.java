@@ -1,24 +1,10 @@
 package at.ac.ase.entities;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
-import java.time.LocalDateTime;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table
@@ -41,6 +27,13 @@ public class AuctionPost {
 
     @Column
     @NotNull
+    private String name;
+
+    @Column
+    private String description;
+
+    @Column
+    @NotNull
     private LocalDateTime startTime;
 
     @Column
@@ -57,9 +50,9 @@ public class AuctionPost {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name = "auction_subscriptions",
-        joinColumns = { @JoinColumn(name = "auction_post_id") },
-        inverseJoinColumns = { @JoinColumn(name = "user_id") })
+            name = "auction_subscriptions",
+            joinColumns = {@JoinColumn(name = "auction_post_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")})
     private Set<RegularUser> subscriptions = new HashSet<>();
 
     @OneToOne
@@ -144,5 +137,21 @@ public class AuctionPost {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

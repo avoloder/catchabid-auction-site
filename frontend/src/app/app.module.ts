@@ -10,10 +10,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LayoutModule } from './components/layout/layout.module';
 import { AuctionsModule } from './components/auctions/auctions.module';
 import { AuthGuard } from './services/auth/auth-guard.service';
+import {HomeComponent} from "./components/home/home.component";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
