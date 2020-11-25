@@ -13,13 +13,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/auctions")
+@CrossOrigin
 public class AuctionController {
     private static final Logger logger = LoggerFactory.getLogger(AuctionController.class);
 
     @Autowired
     private AuctionService auctionService;
 
-    @CrossOrigin
     @GetMapping("upcoming")
     public @ResponseBody
     ResponseEntity<List<AuctionPostDTO>> getUpcomingAuctions(

@@ -5,8 +5,6 @@ import {HttpClientModule} from '@angular/common/http';
 import {AuctionsListComponent} from '../auctions-list/auctions-list.component';
 import {AppRoutingModule} from "../../app-routing.module";
 import {BrowserModule} from "@angular/platform-browser";
-import {BackendAuctionsService} from "../auctions-list/backend-auctions.service";
-import {CoordinatesModule} from 'angular-coordinates';
 
 
 @NgModule({
@@ -15,10 +13,9 @@ import {CoordinatesModule} from 'angular-coordinates';
     CommonModule,
     HttpClientModule,
     AppRoutingModule,
-    BrowserModule,
-    CoordinatesModule
+    BrowserModule
   ],
-  providers:[BackendAuctionsService],
+  providers:[],
   exports:[AuctionsListComponent]
 })
 export class AuctionsModule {
