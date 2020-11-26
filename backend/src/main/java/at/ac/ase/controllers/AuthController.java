@@ -24,7 +24,6 @@ import java.util.Map;
  * Login controller that declares and implements REST methods and forward these requests to {@link at.ac.ase.service.auth.implementation.AuthService}
  */
 @RestController
-@CrossOrigin(exposedHeaders = "Access-Control-Allow-Origin")
 public class AuthController {
 
     @Autowired

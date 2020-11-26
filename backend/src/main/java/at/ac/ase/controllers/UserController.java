@@ -10,11 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(exposedHeaders = "Access-Control-Allow-Origin")
 public class UserController {
 
     @Autowired
@@ -24,14 +24,15 @@ public class UserController {
     AuctionHouseService auctionHouseService;
 
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
-    public ResponseEntity findUser(@RequestBody Map<String,String> userData){
-        RegularUser user = userService.getUserByEmail(userData);
-        AuctionHouse auctionHouse = auctionHouseService.getAuctionHouseByEmail(userData);
-        if(user != null){
-            return ResponseEntity.status(HttpStatus.OK).body(user);
-        } else if(auctionHouse != null){
-            return ResponseEntity.status(HttpStatus.OK).body(auctionHouse);
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity findUser(HttpServletRequest request){
+        //RegularUser user = userService.getUserByEmail(userData);
+        //AuctionHouse auctionHouse = auctionHouseService.getAuctionHouseByEmail(userData);
+        //if(user != null){
+        //    return ResponseEntity.status(HttpStatus.OK).body(user);
+        //} else if(auctionHouse != null){
+        //    return ResponseEntity.status(HttpStatus.OK).body(auctionHouse);
+        //}
+        //return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return null;
     }
 }

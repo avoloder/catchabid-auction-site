@@ -59,8 +59,9 @@ export class NavbarComponent implements OnInit {
   }
 
   logout() {
+    let userJSON = this.userService.findByEmail("kecman.bojana1@gmail.com");
     localStorage.removeItem('token');
-    this.router.navigate(['/home']);
+    //this.router.navigate(['/home']);
   }
 
   isUserLoggedIn(){

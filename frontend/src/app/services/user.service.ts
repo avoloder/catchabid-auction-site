@@ -8,6 +8,6 @@ export class UserService {
     constructor(private http: HttpClient) { }
     
     findByEmail(email: String) {
-        return this.http.post(endpoint + '/getUser', {email: email});
+        return this.http.get(endpoint + '/getUser').subscribe(x=> console.log(x));
     }
 }
