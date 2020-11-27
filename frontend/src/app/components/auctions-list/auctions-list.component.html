@@ -1,5 +1,5 @@
-<div>
-  <div *ngFor="let auction of auctions">
+<div >
+  <div *ngFor="let auction of auctions" style="display:inline-block;">
     <div class="card-auctions" style="width: 18rem; display: inline-block;">
       <img src="data:image/jpeg;base64,{{auction.image}}" class="card-img-top" style="max-height: 15rem;" alt="...">
       <div class="card-body">
@@ -14,6 +14,7 @@
       </div>
     </div>
   </div>
+  <p></p>
   <button (click)="loadMoreAuctions()" class="btn btn-primary">Load More</button>
 </div>
 
