@@ -18,7 +18,6 @@ public class AuctionPost {
 
     @ManyToOne
     @JoinColumn(name = "creator")
-    @JsonManagedReference
     private AuctionHouse creator;
 
     @Enumerated(EnumType.STRING)

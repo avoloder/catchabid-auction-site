@@ -6,9 +6,6 @@ import { Subscription } from 'rxjs';
 import { AuctionFormComponent } from '../../auctions/auction-form/auction-form.component';
 import { AuctionsService } from '../../auctions.service';
 import { Router } from '@angular/router';
-import { User } from '../../../models/user';
-import { AuctionHouse } from '../../../models/auctionhouse';
-import jwt_decode from "jwt-decode";
 
 @Component({
   selector: 'app-navbar',

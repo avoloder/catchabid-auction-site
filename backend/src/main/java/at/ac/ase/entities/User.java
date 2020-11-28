@@ -54,7 +54,6 @@ public abstract class User {
         fetch = FetchType.EAGER,
         mappedBy = "user",
         orphanRemoval = true)
-    @JsonManagedReference
     private Set<Rating> ratings = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
