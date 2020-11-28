@@ -1,12 +1,10 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
-import { AuthGuard } from './services/auth/auth-guard.service';
-import {AuctionsListComponent} from "./components/auctions-list/auctions-list.component";
-import { AppComponent } from './app.component';
 import { AuctionsComponent } from './components/auctions/auctions.component';
 import { SigninComponent } from './components/signin/signin.component';
 import { RegisterComponent } from './components/register/register.component';
+import {AuctionsListComponent} from "./components/auctions/auctions-list/auctions-list.component";
 
 const routes: Routes = [
   {
@@ -15,7 +13,7 @@ const routes: Routes = [
     children: [
       { path: 'home', component: HomeComponent },
       { path: 'login', component: SigninComponent },
-      { path: 'register', component: RegisterComponent}
+      { path: 'register', component: RegisterComponent},
       { path: '', component: AuctionsListComponent },
     ]
   }

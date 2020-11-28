@@ -6,9 +6,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {AppComponent} from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ToastrModule } from 'ngx-toastr';
-import { LayoutModule } from './layout/layout.module';
-import { AuthGuard } from './shared/services/auth-guard.service';
-import { AuctionsModule } from './auctions/auctions.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SigninComponent } from './components/signin/signin.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -23,11 +20,13 @@ import { ForgotPasswordComponent } from './components/signin/forgot-password/for
 import { PasswordManagementService } from './services/password-management.service';
 import { TokenInterceptor } from './services/token-interceptor.service';
 import { UserService } from './services/user.service';
+import {HomeComponent} from "./components/home/home.component";
+import {AuctionsModule} from "./components/auctions/auctions.module";
+import {AuthGuard} from "./services/auth-guard.service";
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
     AppComponent,
     SigninComponent,
     RegisterComponent,

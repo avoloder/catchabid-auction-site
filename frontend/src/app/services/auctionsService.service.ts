@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable, Subject} from "rxjs";
 import {AuctionPostModel} from "../models/auctionPost.model";
 
-const api = '/api/auctions';
+const api = 'api/auctions';
 
 @Injectable({
   providedIn: 'root'

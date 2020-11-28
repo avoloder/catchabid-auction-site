@@ -1,15 +1,11 @@
 package at.ac.ase.interceptor;
 
-import at.ac.ase.entities.User;
 import at.ac.ase.util.exception.TokenUtil;
 import at.ac.ase.util.exception.exceptionhandler.AuthorizationException;
 import com.nimbusds.jose.JOSEException;
-import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer.JwtConfigurer;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -35,6 +31,8 @@ public class TokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = resolveToken(request);
+        logger.info("Pre-handle request uri: " + request.getRequestURI() + ", request method: " + request.getMethod());
+        logger.trace("Request auth type: " + request.getAuthType());
         try {
             boolean isTokenValid = TokenUtil.verifyToken(token);
             if (!isTokenValid){
