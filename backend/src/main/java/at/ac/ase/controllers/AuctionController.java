@@ -1,6 +1,7 @@
 package at.ac.ase.controllers;
 
 import at.ac.ase.dto.AuctionCreationDTO;
+import at.ac.ase.entities.AuctionPost;
 import at.ac.ase.entities.User;
 import at.ac.ase.service.auction.AuctionService;
 import at.ac.ase.service.users.AuctionHouseService;
@@ -37,7 +38,8 @@ public class AuctionController {
                 .getAuctionPost(auction.getId())
                 .orElseThrow(ObjectNotFoundException::new);
         }
-        return ResponseEntity.ok(auctionService.createAuction(user, auction));
+        AuctionPost auctionPost = auctionService.toAuctionPostEntity(user, auction);
+        return ResponseEntity.ok(auctionService.createAuction(auctionPost));
     }
 
 }

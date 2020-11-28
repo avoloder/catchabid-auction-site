@@ -1,5 +1,7 @@
 package at.ac.ase.entities;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -8,6 +10,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table
+@JsonInclude(Include.NON_NULL)
 public class AuctionHouse extends User {
 
     @Column

@@ -1,5 +1,10 @@
 package at.ac.ase.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -19,6 +24,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @MappedSuperclass
+@JsonInclude(Include.NON_NULL)
 public abstract class User {
 
     @Id
@@ -45,12 +51,13 @@ public abstract class User {
     private Address address;
 
     @OneToMany(
-        fetch = FetchType.LAZY,
+        fetch = FetchType.EAGER,
         mappedBy = "user",
         orphanRemoval = true)
+    @JsonManagedReference
     private Set<Rating> ratings = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "auction_subscriptions",
         joinColumns = { @JoinColumn(name = "user_id") },
@@ -58,7 +65,7 @@ public abstract class User {
     private Set<AuctionPost> auctionSubscriptions = new HashSet<>();
 
     @OneToMany(
-        fetch = FetchType.LAZY,
+        fetch = FetchType.EAGER,
         mappedBy = "user",
         orphanRemoval = true)
     private Set<Bid> bids = new HashSet<>();
@@ -68,6 +75,7 @@ public abstract class User {
         mappedBy = "creator",
         cascade = CascadeType.ALL,
         orphanRemoval = true)
+    @JsonBackReference
     private Set<AuctionPost> ownedAuctions = new HashSet<>();
 
     public User(){}
