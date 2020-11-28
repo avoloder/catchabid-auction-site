@@ -24,15 +24,15 @@ public class UserController {
     AuctionHouseService auctionHouseService;
 
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
-    public ResponseEntity findUser(HttpServletRequest request){
-        //RegularUser user = userService.getUserByEmail(userData);
-        //AuctionHouse auctionHouse = auctionHouseService.getAuctionHouseByEmail(userData);
-        //if(user != null){
-        //    return ResponseEntity.status(HttpStatus.OK).body(user);
-        //} else if(auctionHouse != null){
-        //    return ResponseEntity.status(HttpStatus.OK).body(auctionHouse);
-        //}
-        //return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        return null;
+    public ResponseEntity findUser(@RequestParam Map<String, String> userData){
+        String email = userData.get("email");
+        RegularUser user = userService.getUserByEmail(email);
+        AuctionHouse auctionHouse = auctionHouseService.getAuctionHouseByEmail(email);
+        if(user != null){
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        } else if(auctionHouse != null){
+            return ResponseEntity.status(HttpStatus.OK).body(auctionHouse);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 }
