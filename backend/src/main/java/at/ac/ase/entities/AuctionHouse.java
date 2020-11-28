@@ -3,6 +3,7 @@ package at.ac.ase.entities;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -22,6 +23,9 @@ public class AuctionHouse extends User {
     @Size(min = 1, max = 50)
     private String name;
 
+    @Embedded
+    private Address address;
+
     public AuctionHouse(){}
 
     public String getName() {
@@ -38,5 +42,14 @@ public class AuctionHouse extends User {
     public void setTid(String tid) {
         this.tid = tid;
     }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
 
 }

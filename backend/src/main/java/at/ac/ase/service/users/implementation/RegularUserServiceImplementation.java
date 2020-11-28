@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import at.ac.ase.service.users.UserService;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -16,6 +17,11 @@ public class RegularUserServiceImplementation implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Override
+    public List<RegularUser> getAllUsers() {
+        return userRepository.findAll();
+    }
 
     @Override
     public RegularUser getUserByEmail(Map<String, String> userData) {

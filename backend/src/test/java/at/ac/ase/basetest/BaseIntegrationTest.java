@@ -67,7 +67,6 @@ public abstract class BaseIntegrationTest {
             executeJpql("DELETE FROM AuctionPost");
             executeJpql("DELETE FROM AuctionHouse");
             executeJpql("DELETE FROM RegularUser");
-            executeJpql("DELETE FROM Address");
         });
     }
 
