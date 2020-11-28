@@ -1,5 +1,6 @@
 package at.ac.ase.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class AuctionPost {
 
     @ManyToOne
     @JoinColumn(name = "creator")
+    @JsonManagedReference
     private AuctionHouse creator;
 
     @Enumerated(EnumType.STRING)
