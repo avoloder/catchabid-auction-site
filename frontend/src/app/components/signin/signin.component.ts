@@ -4,6 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SigninService } from '../../services/signin.service';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-signin',
@@ -18,7 +19,8 @@ export class SigninComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private signinService: SigninService,
-    private router: Router
+    private router: Router, 
+    private toast: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -49,10 +51,11 @@ export class SigninComponent implements OnInit {
         .subscribe(
             data => {
               this.modalService.dismissAll();
-              localStorage.setItem('token', data['token'])
+              localStorage.setItem('token', data['token']);
+
             },
             error => {
-              console.log(error);
+              this.toast.error(error.error.message);
             });
   }
 }

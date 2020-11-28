@@ -4,6 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SigninComponent } from '../signin/signin.component';
 import { RegisterService } from '../../services/register.service';
 import { Address } from 'src/app/models/address';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,8 @@ export class RegisterComponent implements OnInit  {
 
   constructor(
       private registerService: RegisterService,
-      private modalService: NgbModal) { }
+      private modalService: NgbModal,
+      private toast: ToastrService) { }
 
   ngOnInit(): void {
     const togglePassword1 = document.querySelector('#togglePassword1');
@@ -79,10 +81,12 @@ export class RegisterComponent implements OnInit  {
     this.registerService.registerUser(this.model)
         .subscribe(
             data => {
+                this.toast.success("User successfully registered")
                 this.openLoginModal();
             },
             error => {
-              console.log(error);
+              this.toast.error(error.error.message);
+            
             });
   }
 
@@ -98,10 +102,11 @@ export class RegisterComponent implements OnInit  {
       this.registerService.registerAuctionHouse(this.model)
           .subscribe(
               data => {
+                  this.toast.success("User successfully registered")
                   this.openLoginModal();
               },
               error => {
-                console.log(error);
+                this.toast.error(error.error.message);
               });
   }
 }
