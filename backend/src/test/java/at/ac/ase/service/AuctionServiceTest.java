@@ -1,7 +1,7 @@
 package at.ac.ase.service;
 
 import at.ac.ase.basetest.BaseIntegrationTest;
-import at.ac.ase.dto.AuctionPostDTO;
+import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.service.auction.AuctionService;
 import org.junit.After;
 import org.junit.Test;
@@ -32,7 +32,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     @Test
     @Transactional
     public void testGetRecentAuctions() {
-        List<AuctionPostDTO> auctions;
+        List<AuctionPostSendDTO> auctions;
         insertTestData("multiple-auctions.sql");
 
         auctions= auctionService.getRecentAuctions(0, 5);
@@ -64,7 +64,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     public void testGetRecentAuctionsWithInvalidParam() {
         insertTestData("multiple-auctions.sql");
 
-        List<AuctionPostDTO> auctions = auctionService.getRecentAuctions(0, 0);
+        List<AuctionPostSendDTO> auctions = auctionService.getRecentAuctions(0, 0);
         assertThat(auctions.size(), is(11));
         assertThat(auctions.get(10).getId(), is(1L));
         assertThat(auctions.get(0).getId(), is(11L));

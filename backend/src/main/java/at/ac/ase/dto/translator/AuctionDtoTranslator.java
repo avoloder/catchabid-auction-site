@@ -1,6 +1,6 @@
 package at.ac.ase.dto.translator;
 
-import at.ac.ase.dto.AuctionPostDTO;
+import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.entities.AuctionPost;
 import org.springframework.stereotype.Component;
 
@@ -13,35 +13,34 @@ import java.util.stream.Collectors;
 @Component
 public class AuctionDtoTranslator {
 
-    public AuctionPostDTO toDto(AuctionPost auction) {
+    public AuctionPostSendDTO toSendDto(AuctionPost auction) {
 
-        AuctionPostDTO auctionPostDTO = new AuctionPostDTO();
-        auctionPostDTO.setId(auction.getId());
-        auctionPostDTO.setAuctionName(auction.getName());
+        AuctionPostSendDTO auctionPostSendDTO = new AuctionPostSendDTO();
+        auctionPostSendDTO.setId(auction.getId());
+        auctionPostSendDTO.setAuctionName(auction.getName());
         if (auction.getCategory()!=null) {
-            auctionPostDTO.setCategory(auction.getCategory().name());
+            auctionPostSendDTO.setCategory(auction.getCategory().name());
         }
         if (auction.getCreator()!=null) {
-            auctionPostDTO.setCreatorId(auction.getCreator().getId());
-            auctionPostDTO.setCreatorName(auction.getCreator().getName());
+            auctionPostSendDTO.setCreatorId(auction.getCreator().getId());
+            auctionPostSendDTO.setCreatorName(auction.getCreator().getName());
         }
-        auctionPostDTO.setAuctionDescription(auction.getDescription());
-        auctionPostDTO.setEndTime(auction.getEndTime());
-        auctionPostDTO.setStartTime(auction.getStartTime());
+        auctionPostSendDTO.setAuctionDescription(auction.getDescription());
+        auctionPostSendDTO.setEndTime(auction.getEndTime());
+        auctionPostSendDTO.setStartTime(auction.getStartTime());
         if (auction.getHighestBid()!=null) {
-            auctionPostDTO.setHighestBid(auction.getHighestBid().getOffer());
+            auctionPostSendDTO.setHighestBid(auction.getHighestBid().getOffer());
         }
-        auctionPostDTO.setMinPrice(auction.getMinPrice());
-        auctionPostDTO.setLocation(auction.getLocation());
+        auctionPostSendDTO.setMinPrice(auction.getMinPrice());
         if (auction.getStatus()!=null) {
-            auctionPostDTO.setStatus(auction.getStatus().name());
+            auctionPostSendDTO.setStatus(auction.getStatus().name());
         }
-        auctionPostDTO.setImage(Base64.getEncoder().encodeToString(getImageBytes()));
-        return auctionPostDTO;
+        auctionPostSendDTO.setImage(Base64.getEncoder().encodeToString(getImageBytes()));
+        return auctionPostSendDTO;
     }
 
-    public List<AuctionPostDTO> toDtoList(List<AuctionPost> auctions) {
-        return auctions.stream().map(this::toDto).collect(Collectors.toList());
+    public List<AuctionPostSendDTO> toDtoList(List<AuctionPost> auctions) {
+        return auctions.stream().map(this::toSendDto).collect(Collectors.toList());
     }
 
     public byte[] getImageBytes() {

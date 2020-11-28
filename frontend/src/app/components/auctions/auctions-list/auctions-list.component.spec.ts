@@ -10,7 +10,7 @@ describe('AuctionsListComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ AuctionsListComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

@@ -1,13 +1,16 @@
 export class AuctionPostModel {
   id: number;
-  creatorId: number;
   name: string;
+  creatorName: string;
+  creatorId: number;
   category: string;
+  status: string;
+  auctionName: string;
+  description: string;
   startTime: Date;
   endTime: Date;
-  // location: string;
   minPrice: number;
-  description: string;
+  highestBid: number;
   image: string;
 
   constructor(creatorId: number, name: string, category: string, startTime: Date, endTime: Date,

@@ -2,8 +2,7 @@ package at.ac.ase.service.auction;
 
 
 import java.util.List;
-import at.ac.ase.dto.AuctionPostDTO;
-import java.util.List;
+import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.AuctionCreationDTO;
 import at.ac.ase.entities.AuctionPost;
 import at.ac.ase.entities.User;
@@ -17,10 +16,10 @@ public interface AuctionService {
      * @param auctionsPerPage page size (default=50 if invalid parameter)
      * @return
      */
-    List<AuctionPostDTO> getRecentAuctions(Integer pageNr, Integer auctionsPerPage);
+    List<AuctionPostSendDTO> getRecentAuctions(Integer pageNr, Integer auctionsPerPage);
 
-    List<AuctionPostDTO> getUpcomingAuctions(Integer auctionsPerPage, Integer pageNr);
-    List<AuctionPostDTO> getAllAuctions(Integer auctionsPerPage, Integer pageNr);
+    List<AuctionPostSendDTO> getUpcomingAuctions(Integer auctionsPerPage, Integer pageNr);
+    List<AuctionPostSendDTO> getAllAuctions(Integer auctionsPerPage, Integer pageNr);
 
     AuctionPost createAuction(User user, AuctionCreationDTO auctionPost);
 

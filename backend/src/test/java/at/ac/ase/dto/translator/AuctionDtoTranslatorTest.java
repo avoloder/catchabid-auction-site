@@ -1,6 +1,6 @@
 package at.ac.ase.dto.translator;
 
-import at.ac.ase.dto.AuctionPostDTO;
+import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.entities.*;
 import org.junit.Test;
 
@@ -18,7 +18,7 @@ public class AuctionDtoTranslatorTest {
     @Test
     public void testToDto() {
         AuctionPost entity = createAuctionPost();
-        AuctionPostDTO dto = translator.toDto(entity);
+        AuctionPostSendDTO dto = translator.toSendDto(entity);
         assertEqualValues(dto, entity);
     }
 
@@ -28,7 +28,7 @@ public class AuctionDtoTranslatorTest {
         entity.setCreator(null);
         entity.setHighestBid(null);
 
-        AuctionPostDTO dto = translator.toDto(entity);
+        AuctionPostSendDTO dto = translator.toSendDto(entity);
 
         assertNull(dto.getHighestBid());
         assertNull(dto.getHighestBid());
@@ -37,11 +37,11 @@ public class AuctionDtoTranslatorTest {
     @Test
     public void testToDtoList() {
         List<AuctionPost> auctions = Arrays.asList(createAuctionPost(), createAuctionPost());
-        List<AuctionPostDTO> AuctionPostDTOs = translator.toDtoList(auctions);
-        AuctionPostDTOs.forEach((dto) -> assertEqualValues(dto, auctions.get(0)));
+        List<AuctionPostSendDTO> auctionPostSendDTOS = translator.toDtoList(auctions);
+        auctionPostSendDTOS.forEach((dto) -> assertEqualValues(dto, auctions.get(0)));
     }
 
-    private void assertEqualValues(AuctionPostDTO dto, AuctionPost entity)
+    private void assertEqualValues(AuctionPostSendDTO dto, AuctionPost entity)
     {
         AuctionHouse auctionHouse = entity.getCreator();
         Bid bid = entity.getHighestBid();
@@ -67,7 +67,7 @@ public class AuctionDtoTranslatorTest {
         post.setEndTime(LocalDateTime.of(2020, 1, 1, 1, 0));
         post.setCreator(auctionHouse);
         post.setHighestBid(bid);
-        post.setCategory(Category.CAR);
+        post.setCategory(Category.CARS);
         post.setStatus(Status.ACTIVE);
 
         return post;

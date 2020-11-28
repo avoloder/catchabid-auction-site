@@ -1,10 +1,10 @@
 package at.ac.ase.dto;
 
-import at.ac.ase.entities.Location;
+import at.ac.ase.entities.Address;
 
 import java.time.LocalDateTime;
 
-public class AuctionPostDTO {
+public class AuctionPostSendDTO {
     private Long id;
 
     private String creatorName;
@@ -27,7 +27,7 @@ public class AuctionPostDTO {
 
     private Double highestBid;
 
-    private Location location;
+    private Address location;
 
     private String image;
 
@@ -111,11 +111,11 @@ public class AuctionPostDTO {
         this.highestBid = highestBid;
     }
 
-    public Location getLocation() {
+    public Address getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(Address location) {
         this.location = location;
     }
 
