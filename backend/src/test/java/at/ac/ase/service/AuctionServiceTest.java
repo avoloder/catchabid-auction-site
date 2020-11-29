@@ -1,21 +1,27 @@
 package at.ac.ase.service;
 
 import at.ac.ase.basetest.BaseIntegrationTest;
+import at.ac.ase.dto.AuctionPostSendDTO;
+import at.ac.ase.service.auction.AuctionService;
+import org.junit.After;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import at.ac.ase.entities.AuctionHouse;
 import at.ac.ase.entities.AuctionPost;
 import at.ac.ase.entities.Category;
 import at.ac.ase.entities.Status;
-import at.ac.ase.service.auction.AuctionService;
 import at.ac.ase.service.users.AuctionHouseService;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.After;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNotNull;
 
 public class AuctionServiceTest extends BaseIntegrationTest {
 
@@ -31,8 +37,59 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void whenFindByName_thenReturnProduct() {
+    public void testServiceNotNull() {
         assertNotNull(auctionService);
+    }
+
+    @Test
+    @Transactional
+    public void testGetRecentAuctions() {
+        List<AuctionPostSendDTO> auctions;
+        insertTestData("multiple-auctions.sql");
+
+        auctions= auctionService.getRecentAuctions(0, 5);
+
+        assertThat(auctions.size(), is(5));
+        assertThat(auctions.get(0).getId(), is(11L));
+        assertThat(auctions.get(1).getId(), is(10L));
+        assertThat(auctions.get(2).getId(), is(9L));
+        assertThat(auctions.get(3).getId(), is(8L));
+        assertThat(auctions.get(4).getId(), is(7L));
+
+        auctions= auctionService.getRecentAuctions(1, 5);
+
+        assertThat(auctions.size(), is(5));
+        assertThat(auctions.get(0).getId(), is(6L));
+        assertThat(auctions.get(1).getId(), is(5L));
+        assertThat(auctions.get(2).getId(), is(4L));
+        assertThat(auctions.get(3).getId(), is(3L));
+        assertThat(auctions.get(4).getId(), is(2L));
+
+        auctions= auctionService.getRecentAuctions(2, 5);
+
+        assertThat(auctions.size(), is(1));
+        assertThat(auctions.get(0).getId(), is(1L));
+    }
+
+    @Test
+    @Transactional
+    public void testGetRecentAuctionsWithInvalidParam() {
+        insertTestData("multiple-auctions.sql");
+
+        List<AuctionPostSendDTO> auctions = auctionService.getRecentAuctions(0, 0);
+        assertThat(auctions.size(), is(11));
+        assertThat(auctions.get(10).getId(), is(1L));
+        assertThat(auctions.get(0).getId(), is(11L));
+
+        auctions = auctionService.getRecentAuctions(null, null);
+        assertThat(auctions.size(), is(11));
+        assertThat(auctions.get(0).getId(), is(11L));
+        assertThat(auctions.get(10).getId(), is(1L));
+
+        auctions = auctionService.getRecentAuctions(-1, 10);
+        assertThat(auctions.size(), is(10));
+        assertThat(auctions.get(0).getId(), is(11L));
+        assertThat(auctions.get(9).getId(), is(2L));
     }
 
     @Test
@@ -63,6 +120,5 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         auctionPosts = auctionService.getAllAuctions();
         assertThat(auctionPosts.size(), is(2));
     }
-
 }
 

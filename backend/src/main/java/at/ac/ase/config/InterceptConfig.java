@@ -17,6 +17,6 @@ public class  InterceptConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(
-            new TokenInterceptor(tokenUtil)).excludePathPatterns("/registerUser", "/registerHouse","/error", "/login");
+            new TokenInterceptor(tokenUtil)).excludePathPatterns("/registerUser", "/registerHouse","/error", "/login", "/api/auctions/upcoming","/api/auctions/recent");
     }
 }

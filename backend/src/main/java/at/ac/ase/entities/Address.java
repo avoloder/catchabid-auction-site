@@ -6,20 +6,26 @@ import javax.persistence.*;
 public class Address {
 
     @Column
-    private String city;
+    private String country;
 
     @Column
-    private String country;
+    private String city;
 
     @Column
     private String street;
 
     @Column
-    private int houseNr;
+    private Integer houseNr;
 
     public Address() {
     }
 
+    public Address(String country, String city, String street, Integer houseNr) {
+        this.country = country;
+        this.city = city;
+        this.street = street;
+        this.houseNr = houseNr;
+    }
 
     public String getStreet() {
         return street;
@@ -45,11 +51,11 @@ public class Address {
         this.country = country;
     }
 
-    public int getHouseNr() {
+    public Integer getHouseNr() {
         return houseNr;
     }
 
-    public void setHouseNr(int houseNr) {
+    public void setHouseNr(Integer houseNr) {
         this.houseNr = houseNr;
     }
 }

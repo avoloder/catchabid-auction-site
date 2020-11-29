@@ -4,8 +4,8 @@ import { SigninComponent } from '../../signin/signin.component';
 import { RegisterComponent } from '../../register/register.component';
 import { Subscription } from 'rxjs';
 import { AuctionFormComponent } from '../../auctions/auction-form/auction-form.component';
-import { AuctionsService } from '../../auctions.service';
 import { Router } from '@angular/router';
+import {AuctionsService} from '../../../services/auctionsService.service';
 
 @Component({
   selector: 'app-navbar',

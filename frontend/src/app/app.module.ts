@@ -10,8 +10,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SigninComponent } from './components/signin/signin.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LayoutModule } from './components/layout/layout.module';
-import { AuctionsModule } from './components/auctions/auctions.module';
-import { AuthGuard } from './services/auth-guard.service';
+import {HomeModule} from "./components/home/home.module";
+import {AuctionsService} from "./services/auctionsService.service";
 import { RegisterService } from './services/register.service';
 import { SigninService } from './services/signin.service';
 import { ResetPasswordComponent } from './components/signin/reset-password/reset-password.component';
@@ -20,9 +20,13 @@ import { ForgotPasswordComponent } from './components/signin/forgot-password/for
 import { PasswordManagementService } from './services/password-management.service';
 import { TokenInterceptor } from './services/token-interceptor.service';
 import { UserService } from './services/user.service';
+import {HomeComponent} from "./components/home/home.component";
+import {AuctionsModule} from "./components/auctions/auctions.module";
+import {AuthGuard} from "./services/auth-guard.service";
 
 @NgModule({
   declarations: [
+    AppComponent,
     AppComponent,
     SigninComponent,
     RegisterComponent,
@@ -41,19 +45,21 @@ import { UserService } from './services/user.service';
     ToastrModule.forRoot(),
     LayoutModule,
     AuctionsModule,
-    NgbModule
+    NgbModule,
+    HomeModule
   ],
   providers: [
-    AuthGuard, 
-    RegisterService, 
-    SigninService, 
+    AuthGuard,
+    RegisterService,
+    SigninService,
     UserService,
-    PasswordManagementService, 
+    PasswordManagementService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
-    }
+    },
+    AuctionsService
   ],
   bootstrap: [AppComponent]
 })
