@@ -1,5 +1,7 @@
 package at.ac.ase.entities;
 
+import at.ac.ase.util.exception.TokenUtil;
+
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
@@ -8,7 +10,7 @@ import java.util.Date;
 @Table(name = "PasswordResetToken")
 public class PasswordResetToken {
 
-    private static final int EXPIRATION = 60 * 24;
+    private static final int EXPIRATION = 10;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +37,7 @@ public class PasswordResetToken {
         this.token = token;
         this.user = user;
         this.auctionHouse = auctionHouse;
-        this.expiryDate = calculateExpiryDate(EXPIRATION);
+        this.expiryDate = TokenUtil.calculateExpiryDate(EXPIRATION);
     }
 
     public Long getId() {
@@ -78,10 +80,5 @@ public class PasswordResetToken {
         this.expiryDate = expiryDate;
     }
 
-    private Date calculateExpiryDate(final int expiryTimeInMinutes) {
-        final Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(new Date().getTime());
-        cal.add(Calendar.MINUTE, expiryTimeInMinutes);
-        return new Date(cal.getTime().getTime());
-    }
+
 }

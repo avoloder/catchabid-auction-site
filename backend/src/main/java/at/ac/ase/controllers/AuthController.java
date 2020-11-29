@@ -7,7 +7,9 @@ import at.ac.ase.service.passwordtoken.implementation.PasswordTokenService;
 import at.ac.ase.service.users.AuctionHouseService;
 import at.ac.ase.service.users.UserService;
 import at.ac.ase.util.exception.TokenUtil;
+import at.ac.ase.util.exception.exceptionhandler.ResetTokenNotFound;
 import at.ac.ase.util.exception.exceptionhandler.UserAlreadyExistsException;
+import at.ac.ase.util.exception.exceptionhandler.UserNotFoundException;
 import com.nimbusds.jose.JOSEException;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
@@ -53,7 +55,6 @@ public class AuthController {
             AuctionHouse user = registerService.registerHouse(auctionHouse);
             return user != null ? ResponseEntity.status(HttpStatus.OK).body(user) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (DataAccessException e){
-            System.out.println(e.getLocalizedMessage());
             throw new UserAlreadyExistsException();
         }
     }
@@ -66,18 +67,17 @@ public class AuthController {
 
     @RequestMapping(value = "/requestPasswordReset", method = RequestMethod.POST)
     public ResponseEntity requestPasswordReset(@RequestBody String email){
-        boolean emailSent;
         RegularUser user = userService.getUserByEmail(email);
         AuctionHouse auctionHouse = auctionHouseService.getAuctionHouseByEmail(email);
         if(user == null && auctionHouse == null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            throw new UserNotFoundException();
         }
         if(user != null) {
-            emailSent = authService.sendPasswordResetToken(user);
+            authService.sendPasswordResetToken(user);
         }else{
-            emailSent = authService.sendPasswordResetToken(auctionHouse);
+            authService.sendPasswordResetToken(auctionHouse);
         }
-        return emailSent ? ResponseEntity.status(HttpStatus.OK).build() : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @RequestMapping(value = "/sendResetPasswordToken", method = RequestMethod.POST)
@@ -86,7 +86,7 @@ public class AuthController {
         String email = tokenData.get("email");
         PasswordResetToken resetToken = tokenService.getPasswordResetTokenByToken(email, token);
         if(resetToken == null){
-           return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+           throw new ResetTokenNotFound();
         }
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -98,7 +98,7 @@ public class AuthController {
         RegularUser user = userService.getUserByEmail(email);
         AuctionHouse auctionHouse = auctionHouseService.getAuctionHouseByEmail(email);
         if(user == null && auctionHouse == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new UserNotFoundException();
         }
         if(user != null) {
             userService.changePassword(email, password);

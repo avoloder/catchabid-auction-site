@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ResetPasswordTokenComponent } from '../reset-password-token/reset-password-token.component';
 import { PasswordManagementService } from '../../../services/password-management.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-reset-password',
@@ -17,7 +18,8 @@ export class ResetPasswordComponent implements OnInit {
 
   constructor(
     private modalService: NgbModal,
-    private passwordManagementService: PasswordManagementService
+    private passwordManagementService: PasswordManagementService,
+    private toast: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -47,10 +49,11 @@ export class ResetPasswordComponent implements OnInit {
     this.passwordManagementService.resetPassword(this.email, this.password)
     .subscribe(
       data => {
+        this.toast.success("Password successfully changed");
         this.modalService.dismissAll();
       },
       error => {
-        console.log(error);
+        this.toast.error(error.error.message);
       });
   }
 }

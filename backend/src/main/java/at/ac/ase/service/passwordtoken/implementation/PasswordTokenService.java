@@ -7,6 +7,7 @@ import at.ac.ase.postgres.token.PasswordTokenRepository;
 import at.ac.ase.postgres.users.AuctionHouseRepository;
 import at.ac.ase.postgres.users.UserRepository;
 import at.ac.ase.service.passwordtoken.IPasswordTokenService;
+import at.ac.ase.util.exception.exceptionhandler.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -30,14 +31,8 @@ public class PasswordTokenService implements IPasswordTokenService {
         RegularUser user = userRepository.findByEmail(email);
         AuctionHouse auctionHouse = auctionHouseRepository.findByEmail(email);
         if(user == null && auctionHouse == null){
-            System.out.println("nema");
-            throw new UsernameNotFoundException("not found");
+            throw new UserNotFoundException();
         }
-        PasswordResetToken t =  passwordTokenRepository.findByToken(user, auctionHouse, token);
-        if(t == null){
-            System.out.println("nema ga");
-        }
-        System.out.println(t);
-        return t;
+        return passwordTokenRepository.findByToken(user, auctionHouse, token);
     }
 }

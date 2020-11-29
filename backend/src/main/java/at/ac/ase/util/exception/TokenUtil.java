@@ -11,15 +11,11 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import javax.swing.text.html.Option;
 import javax.xml.bind.DatatypeConverter;
 import java.text.ParseException;
-import java.util.Base64;
-import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,19 +32,20 @@ public class TokenUtil {
     @Autowired
     private AuctionHouseService auctionHouseService;
 
-    static String key = "B&E)H@McQfTjWnZr4u7x!A%D*F-JaNdR";
-    static String base64Key = DatatypeConverter.printBase64Binary(key.getBytes());
-    static byte[] secretBytes = DatatypeConverter.parseBase64Binary(base64Key);
+    static String KEY = "B&E)H@McQfTjWnZr4u7x!A%D*F-JaNdR";
+    static String BASE_64_KEY = DatatypeConverter.printBase64Binary(KEY.getBytes());
+    static byte[] SECRET_BYTES = DatatypeConverter.parseBase64Binary(BASE_64_KEY);
+    static final int EXPIRATION = 60;
 
     public static String generateToken(String email, String password) throws JOSEException {
-        JWSSigner signer = new MACSigner(secretBytes);
+        JWSSigner signer = new MACSigner(SECRET_BYTES);
 
         // Prepare JWT with claims set
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 .subject(email)
                 .issuer("CatchaBid")
                 .claim("password", password)
-                .expirationTime(new Date(new Date().getTime() + 60 * 1000))
+                .expirationTime(calculateExpiryDate(EXPIRATION))
                 .build();
 
         SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
@@ -58,7 +55,7 @@ public class TokenUtil {
 
     public static boolean verifyToken(String token) throws ParseException, JOSEException {
         SignedJWT signedJWT = SignedJWT.parse(token);
-        JWSVerifier verifier = new MACVerifier(secretBytes);
+        JWSVerifier verifier = new MACVerifier(SECRET_BYTES);
         return signedJWT.verify(verifier);
     }
 
@@ -84,6 +81,13 @@ public class TokenUtil {
             user = auctionHouseService.getAuctionHouseByEmail(userEmail);
         }
         return new UsernamePasswordAuthenticationToken(user, token, roles);
+    }
+
+    public static Date calculateExpiryDate(final int expiryTimeInMinutes) {
+        final Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(new Date().getTime());
+        cal.add(Calendar.MINUTE, expiryTimeInMinutes);
+        return new Date(cal.getTime().getTime());
     }
 
 

@@ -11,6 +11,7 @@ import at.ac.ase.postgres.users.UserRepository;
 import at.ac.ase.service.auth.IAuthService;
 import at.ac.ase.util.exception.TokenUtil;
 import at.ac.ase.util.exception.exceptionhandler.AuthorizationException;
+import at.ac.ase.util.exception.exceptionhandler.EmailNotSentException;
 import at.ac.ase.util.exception.exceptionhandler.TokenGenerationException;
 import at.ac.ase.util.exception.exceptionhandler.UserNotFoundException;
 import com.nimbusds.jose.JOSEException;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.transaction.Transactional;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
@@ -83,15 +85,18 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public boolean sendPasswordResetToken(User user) {
+    @Transactional
+    public void sendPasswordResetToken(User user) {
         PasswordResetToken token;
         int resetToken = 100000 + new Random().nextInt(900000);
         if(user instanceof RegularUser) {
             RegularUser regularUser = (RegularUser) user;
             token = new PasswordResetToken(resetToken, regularUser, null);
+            passwordTokenRepository.deleteTokenByUserId(regularUser, null);
         }else{
             AuctionHouse auctionHouse = (AuctionHouse)user;
             token = new PasswordResetToken(resetToken, null, auctionHouse);
+            passwordTokenRepository.deleteTokenByUserId(null, auctionHouse);
         }
         passwordTokenRepository.save(token);
         try {
@@ -101,9 +106,8 @@ public class AuthService implements IAuthService {
             message.setSubject("Reset Password Token");
             message.setText("Your reset password token is " + resetToken);
             emailSender.send(message);
-            return true;
         }catch (MailException e){
-            return false;
+            throw new EmailNotSentException();
         }
     }
 
