@@ -16,10 +16,10 @@ public class Address {
     private Long id;
 
     @Column
-    private String city;
+    private String country;
 
     @Column
-    private String country;
+    private String city;
 
     @Column
     private String street;
@@ -28,6 +28,13 @@ public class Address {
     private int houseNr;
 
     public Address() {
+    }
+
+    public Address(String country, String city, String street, int houseNr) {
+        this.country = country;
+        this.city = city;
+        this.street = street;
+        this.houseNr = houseNr;
     }
 
     public Long getId() {

@@ -1,5 +1,7 @@
 package at.ac.ase.entities;
 
+import org.hibernate.annotations.Type;
+
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -17,7 +19,7 @@ public class AuctionPost {
 
     @ManyToOne
     @JoinColumn(name = "creator")
-    private AuctionHouse creator;
+    private User creator;
 
     @Enumerated(EnumType.STRING)
     private Category category;
@@ -42,11 +44,15 @@ public class AuctionPost {
 
     @Column
     @Lob
+    @Type(type = "org.hibernate.type.ImageType")
     private byte[] image;
 
     @NotNull
     @Column
     private String name;
+
+    @ManyToOne
+    private Address address;
 
     @OneToOne
     @JoinColumn(name = "bid_id", referencedColumnName = "id")
@@ -67,11 +73,11 @@ public class AuctionPost {
         this.id = id;
     }
 
-    public AuctionHouse getCreator() {
+    public User getCreator() {
         return creator;
     }
 
-    public void setCreator(AuctionHouse creator) {
+    public void setCreator(User creator) {
         this.creator = creator;
     }
 
@@ -155,4 +161,11 @@ public class AuctionPost {
         this.name = name;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 }
