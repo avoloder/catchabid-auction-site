@@ -3,7 +3,8 @@ import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from '
 import {AuctionPostModel} from '../../../models/auctionPost.model';
 import {ToastrService} from 'ngx-toastr';
 import {NgbDate, NgbModule, NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {AuctionsService} from '../../../services/auctionsService.service';
+import {Observable, Subject} from "rxjs";
+import {AuctionsService} from '../../../services/auction.service';
 
 @Component({
   selector: 'app-auction-form',
@@ -45,7 +46,7 @@ export class AuctionFormComponent implements OnInit {
     description: this.descriptionForm,
     image: this.imageForm
   });
-  categories = ['jewelry', 'electronics', 'cars', 'experience', 'travel', 'furniture', 'music', 'other'];
+  categories: any;
   currentDate = new Date();
   minStartDate = {
     year: this.currentDate.getFullYear(),
@@ -63,7 +64,10 @@ export class AuctionFormComponent implements OnInit {
   constructor(private auctionsService: AuctionsService, private toast: ToastrService, private modalService: NgbModal) { }
 
   ngOnInit(): void {
+    console.log("ammar");
     this.imgPreview = 'assets/img/placeholder-image-300x225.png';
+    this.auctionsService.getCategories().subscribe(x => this.categories = x);
+    console.log(this.categories);
   }
 
   inputImage($event: Event): void {

@@ -75,5 +75,10 @@ public class AuctionController {
         return ResponseEntity.ok(auctionService.createAuction(auctionPost));
     }
 
+    @RequestMapping(value = "/getCategories", method = RequestMethod.GET)
+    public ResponseEntity getCategories(){
+        return ResponseEntity.status(HttpStatus.OK).body(this.auctionService.getCategories());
+    }
+
 
 }

@@ -11,7 +11,16 @@ import java.util.Optional;
 
 public interface UserService {
 
+    /**
+     * Method which retrieves all users from the database
+     * @return list of regular users
+     */
     List<RegularUser> getAllUsers();
 
+    /**
+     * Method which retrieves a single user based on his/her email
+     * @param email of the user to be retrieved
+     * @return regular user if found
+     */
     RegularUser getUserByEmail(String email);
 }

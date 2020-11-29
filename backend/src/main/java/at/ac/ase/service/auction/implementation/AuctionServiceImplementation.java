@@ -63,6 +63,12 @@ public class AuctionServiceImplementation implements AuctionService {
         return auctionPost;
     }
 
+    @Override
+    public Category[] getCategories() {
+        Category [] categories = Category.values();
+        return categories;
+    }
+
     @Autowired
     private AuctionDtoTranslator auctionDtoTranslator;
 
