@@ -35,20 +35,11 @@ public class AuctionDtoTranslator {
         if (auction.getStatus()!=null) {
             auctionPostSendDTO.setStatus(auction.getStatus().name());
         }
-        auctionPostSendDTO.setImage(Base64.getEncoder().encodeToString(getImageBytes()));
+        auctionPostSendDTO.setImage(Base64.getEncoder().encodeToString(auction.getImage()));
         return auctionPostSendDTO;
     }
 
     public List<AuctionPostSendDTO> toDtoList(List<AuctionPost> auctions) {
         return auctions.stream().map(this::toSendDto).collect(Collectors.toList());
-    }
-
-    public byte[] getImageBytes() {
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("catchabid-logo.png")) {
-            return inputStream.readAllBytes();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new byte[10];
     }
 }
