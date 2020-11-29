@@ -62,8 +62,11 @@ public class AuctionServiceImpl implements AuctionService {
         auctionPost.setDescription(auctionPostDTO.getDescription());
         auctionPost.setCreator(user);
         auctionPost.setImage(Base64.getDecoder().decode(auctionPostDTO.getImage()));
-        auctionPost.setAddress(addressRepository.save(new Address(auctionPostDTO.getCountry(), auctionPostDTO.getCity(),
-                auctionPostDTO.getAddress(), auctionPostDTO.getHouseNr())));
+        if (auctionPostDTO.getCountry() != null && auctionPostDTO.getCity() != null &&
+                auctionPostDTO.getAddress() != null && auctionPostDTO.getHouseNr() != null) {
+            auctionPost.setAddress(addressRepository.save(new Address(auctionPostDTO.getCountry(), auctionPostDTO.getCity(),
+                    auctionPostDTO.getAddress(), auctionPostDTO.getHouseNr())));
+        }
         return auctionPost;
     }
 }
