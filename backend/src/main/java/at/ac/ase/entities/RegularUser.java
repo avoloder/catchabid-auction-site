@@ -28,6 +28,9 @@ public class RegularUser extends User {
     @Size(min = 1, max = 50)
     private String lastName;
 
+    @Embedded
+    private Address address;
+
     @OneToMany(
         fetch = FetchType.EAGER,
         mappedBy = "user",
@@ -61,6 +64,15 @@ public class RegularUser extends User {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
 
     @Override
     public Set<Bid> getBids() {

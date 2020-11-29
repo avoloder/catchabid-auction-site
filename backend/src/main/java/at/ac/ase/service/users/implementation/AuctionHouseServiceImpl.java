@@ -5,6 +5,7 @@ import at.ac.ase.entities.RegularUser;
 import at.ac.ase.postgres.users.AuctionHouseRepository;
 import at.ac.ase.service.users.AuctionHouseService;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,11 @@ public class AuctionHouseServiceImpl implements AuctionHouseService {
     @Override
     public Optional<AuctionHouse> getAuctionHouseById(Long id) {
         return auctionHouseRepository.findById(id);
+    }
+
+    @Override
+    public List<AuctionHouse> getAllHouses(){
+        return auctionHouseRepository.findAll();
     }
 
     @Override

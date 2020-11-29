@@ -1,24 +1,19 @@
 package at.ac.ase.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @MappedSuperclass
+@JsonInclude(Include.NON_NULL)
 public abstract class User {
 
     @Id
@@ -40,17 +35,14 @@ public abstract class User {
     @Column
     private String passwordHash;
 
-    @OneToOne
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
-    private Address address;
 
     @OneToMany(
-        fetch = FetchType.LAZY,
+        fetch = FetchType.EAGER,
         mappedBy = "user",
         orphanRemoval = true)
     private Set<Rating> ratings = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "auction_subscriptions",
         joinColumns = { @JoinColumn(name = "user_id") },
@@ -58,7 +50,7 @@ public abstract class User {
     private Set<AuctionPost> auctionSubscriptions = new HashSet<>();
 
     @OneToMany(
-        fetch = FetchType.LAZY,
+        fetch = FetchType.EAGER,
         mappedBy = "user",
         orphanRemoval = true)
     private Set<Bid> bids = new HashSet<>();
@@ -68,6 +60,7 @@ public abstract class User {
         mappedBy = "creator",
         cascade = CascadeType.ALL,
         orphanRemoval = true)
+    @JsonBackReference
     private Set<AuctionPost> ownedAuctions = new HashSet<>();
 
     public User(){}
@@ -110,14 +103,6 @@ public abstract class User {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
     }
 
     public Set<Rating> getRatings() {
