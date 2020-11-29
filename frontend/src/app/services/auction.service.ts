@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable, Subject} from "rxjs";
 import {AuctionPostModel} from "../models/auctionPost.model";
+import 'rxjs/add/operator/map'
 
 const api = 'api/auctions';
 
@@ -37,5 +38,9 @@ export class AuctionsService {
 
   saveAuction(auctionPost: AuctionPostModel): Observable<AuctionPostModel> {
     return this.http.post<AuctionPostModel>(api, auctionPost);
+  }
+
+  getCategories() : Observable<Object> {
+    return this.http.get(this.REST_API_SERVER + api + "/getCategories");
   }
 }

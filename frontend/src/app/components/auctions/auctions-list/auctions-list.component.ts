@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {AuctionsService} from "../../../services/auctionsService.service";
+import {AuctionsService} from "../../../services/auction.service";
 import {AuctionPostModel} from "../../../models/auctionPost.model";
 
 

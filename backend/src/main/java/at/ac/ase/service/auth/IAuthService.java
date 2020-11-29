@@ -9,5 +9,10 @@ import java.util.Map;
 
 public interface IAuthService {
 
+    /**
+     * Method which authenticates an user or an auction house based on a sent email and password
+     * @param userData map containing user data - email and password
+     * @return newly generated token
+     */
     public JSONObject authenticate(Map<String,String> userData);
 }

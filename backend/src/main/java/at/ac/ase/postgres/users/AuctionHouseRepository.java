@@ -7,5 +7,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AuctionHouseRepository extends JpaRepository<AuctionHouse, Long> {
+    /**
+     * Method which retrieves a single auction house on its email
+     * @param email of the auction house to be retrieved
+     * @return auction house if found
+     */
     AuctionHouse findByEmail(String email);
 }

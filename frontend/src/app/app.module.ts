@@ -11,7 +11,7 @@ import { SigninComponent } from './components/signin/signin.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LayoutModule } from './components/layout/layout.module';
 import {HomeModule} from "./components/home/home.module";
-import {AuctionsService} from "./services/auctionsService.service";
+import {AuctionsService} from "./services/auction.service";
 import { RegisterService } from './services/register.service';
 import { SigninService } from './services/signin.service';
 import { ResetPasswordComponent } from './components/signin/reset-password/reset-password.component';

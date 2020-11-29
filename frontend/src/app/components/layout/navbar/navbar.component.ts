@@ -5,7 +5,7 @@ import { RegisterComponent } from '../../register/register.component';
 import { Subscription } from 'rxjs';
 import { AuctionFormComponent } from '../../auctions/auction-form/auction-form.component';
 import { Router } from '@angular/router';
-import {AuctionsService} from '../../../services/auctionsService.service';
+import {AuctionsService} from '../../../services/auction.service';
 
 @Component({
   selector: 'app-navbar',
