@@ -1,6 +1,6 @@
 package at.ac.ase.example;
 
-import at.ac.ase.postgres.auction.AuctionRepository;
+import at.ac.ase.repository.auction.AuctionRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

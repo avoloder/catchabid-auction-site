@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table
+@Table(name = "AuctionHouse")
 @JsonInclude(Include.NON_NULL)
 public class AuctionHouse extends User {
 

@@ -1,7 +1,7 @@
 package at.ac.ase.interceptor;
 
-import at.ac.ase.util.exception.TokenUtil;
-import at.ac.ase.util.exception.exceptionhandler.AuthorizationException;
+import at.ac.ase.util.TokenUtil;
+import at.ac.ase.util.exceptions.AuthorizationException;
 import com.nimbusds.jose.JOSEException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

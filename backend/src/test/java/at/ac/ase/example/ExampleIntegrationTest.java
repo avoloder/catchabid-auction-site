@@ -2,8 +2,8 @@ package at.ac.ase.example;
 
 import at.ac.ase.basetest.BaseIntegrationTest;
 import at.ac.ase.entities.AuctionPost;
-import at.ac.ase.postgres.auction.AuctionRepository;
-import at.ac.ase.postgres.users.UserRepository;
+import at.ac.ase.repository.auction.AuctionRepository;
+import at.ac.ase.repository.user.UserRepository;
 import org.junit.After;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -10,15 +10,17 @@ export class PasswordManagementService {
     endpoint = 'http://localhost:8080';
 
     requestPasswordReset(email: String) {
-        return this.http.post(this.endpoint + '/requestPasswordReset', {email: email});
+        return this.http.post(this.endpoint + '/requestPasswordReset', email);
     }
 
-    sendResetPasswordToken(token: Number) {
-        return this.http.post(this.endpoint + '/sendResetPasswordToken', {passwordResetToken: token});
+    sendResetPasswordToken(email: String, token: Number) {
+        console.log(email)
+        console.log(token)
+        return this.http.post(this.endpoint + '/sendResetPasswordToken', {email: email, token: token});
     }
 
     resetPassword(email: String, password:String){
-        return this.http.post(this.endpoint + '/resetPassworf', {email: email, password: password});
+        return this.http.post(this.endpoint + '/resetPassword', {email: email, password: password});
     }
 
 }

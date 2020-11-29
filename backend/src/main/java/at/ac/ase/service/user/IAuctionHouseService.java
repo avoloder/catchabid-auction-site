@@ -1,14 +1,11 @@
-package at.ac.ase.service.users;
+package at.ac.ase.service.user;
 
 import at.ac.ase.entities.AuctionHouse;
-import at.ac.ase.entities.RegularUser;
 
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-public interface AuctionHouseService {
+public interface IAuctionHouseService {
 
     /**
      * Method which retrieves an auction house based on its id
@@ -29,5 +26,7 @@ public interface AuctionHouseService {
      * @return auction house if found
      */
     AuctionHouse getAuctionHouseByEmail(String email);
+
+    void changePassword(String email, String password);
 
 }

@@ -1,16 +1,16 @@
 package at.ac.ase.controllers;
 
-import at.ac.ase.AuctionApplication;
-import at.ac.ase.entities.Address;
 import at.ac.ase.entities.AuctionHouse;
 import at.ac.ase.entities.RegularUser;
-import at.ac.ase.entities.User;
+import at.ac.ase.entities.*;
 import at.ac.ase.service.auth.IAuthService;
 import at.ac.ase.service.auth.IRegisterService;
-import at.ac.ase.util.exception.TokenUtil;
-import at.ac.ase.util.exception.exceptionhandler.UserAlreadyExistsException;
-import com.nimbusds.jose.JOSEException;
-import net.minidev.json.JSONArray;
+import at.ac.ase.service.passwordtoken.implementation.PasswordTokenService;
+import at.ac.ase.service.user.IAuctionHouseService;
+import at.ac.ase.service.user.IRegularUserService;
+import at.ac.ase.util.exceptions.ResetTokenNotFound;
+import at.ac.ase.util.exceptions.UserAlreadyExistsException;
+import at.ac.ase.util.exceptions.UserNotFoundException;
 import net.minidev.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.json.JsonObject;
-import java.text.ParseException;
 import java.util.Map;
 
 /**
@@ -37,6 +35,12 @@ public class AuthController {
     private IAuthService authService;
     @Autowired
     private IRegisterService registerService;
+    @Autowired
+    private IRegularUserService IRegularUserService;
+    @Autowired
+    private IAuctionHouseService IAuctionHouseService;
+    @Autowired
+    private PasswordTokenService tokenService;
 
     @RequestMapping(value = "/registerUser", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity register(@RequestBody RegularUser regularUser){
@@ -67,5 +71,46 @@ public class AuthController {
         return token != null ? ResponseEntity.status(HttpStatus.OK).body(token) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @RequestMapping(value = "/requestPasswordReset", method = RequestMethod.POST)
+    public ResponseEntity requestPasswordReset(@RequestBody String email){
+        RegularUser user = IRegularUserService.getUserByEmail(email);
+        AuctionHouse auctionHouse = IAuctionHouseService.getAuctionHouseByEmail(email);
+        if(user == null && auctionHouse == null){
+            throw new UserNotFoundException();
+        }
+        if(user != null) {
+            authService.sendPasswordResetToken(user);
+        }else{
+            authService.sendPasswordResetToken(auctionHouse);
+        }
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
+    @RequestMapping(value = "/sendResetPasswordToken", method = RequestMethod.POST)
+    public ResponseEntity sendResetPasswordToken(@RequestBody Map<String, String> tokenData){
+        int token = Integer.parseInt(tokenData.get("token"));
+        String email = tokenData.get("email");
+        PasswordResetToken resetToken = tokenService.getPasswordResetTokenByToken(email, token);
+        if(resetToken == null){
+           throw new ResetTokenNotFound();
+        }
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
+    public ResponseEntity resetPassword(@RequestBody Map<String, String> userData ){
+        String email = userData.get("email");
+        String password = userData.get("password");
+        RegularUser user = IRegularUserService.getUserByEmail(email);
+        AuctionHouse auctionHouse = IAuctionHouseService.getAuctionHouseByEmail(email);
+        if(user == null && auctionHouse == null){
+            throw new UserNotFoundException();
+        }
+        if(user != null) {
+            IRegularUserService.changePassword(email, password);
+        }else{
+            IAuctionHouseService.changePassword(email, password);
+        }
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

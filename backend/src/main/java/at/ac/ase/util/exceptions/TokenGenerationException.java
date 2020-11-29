@@ -1,4 +1,4 @@
-package at.ac.ase.util.exception.exceptionhandler;
+package at.ac.ase.util.exceptions;
 
 import org.apache.coyote.http2.Http2Protocol;
 import org.springframework.http.HttpStatus;

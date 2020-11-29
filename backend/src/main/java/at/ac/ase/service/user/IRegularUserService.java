@@ -1,15 +1,10 @@
-package at.ac.ase.service.users;
+package at.ac.ase.service.user;
 
-import at.ac.ase.entities.AuctionHouse;
 import at.ac.ase.entities.RegularUser;
 
-import at.ac.ase.entities.User;
-
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
-public interface UserService {
+public interface IRegularUserService {
 
     /**
      * Method which retrieves all users from the database
@@ -23,4 +18,6 @@ public interface UserService {
      * @return regular user if found
      */
     RegularUser getUserByEmail(String email);
+
+    void changePassword(String email, String password);
 }

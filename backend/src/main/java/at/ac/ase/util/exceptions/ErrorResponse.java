@@ -1,4 +1,4 @@
-package at.ac.ase.util.exception.exceptionhandler;
+package at.ac.ase.util.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;

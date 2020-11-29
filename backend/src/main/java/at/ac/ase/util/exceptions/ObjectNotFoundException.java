@@ -1,4 +1,4 @@
-package at.ac.ase.util.exception;
+package at.ac.ase.util.exceptions;
 
 import org.springframework.lang.NonNull;
 

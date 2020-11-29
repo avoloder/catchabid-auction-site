@@ -1,8 +1,8 @@
 package at.ac.ase.service.auction.implementation;
 
 import org.springframework.stereotype.Service;
-import at.ac.ase.service.auction.BidService;
+import at.ac.ase.service.auction.IBidService;
 
 @Service
-public class BidServiceImplementation implements BidService {
+public class BidService implements IBidService {
 }

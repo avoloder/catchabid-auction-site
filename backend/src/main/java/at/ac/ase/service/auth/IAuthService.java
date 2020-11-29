@@ -15,4 +15,6 @@ public interface IAuthService {
      * @return newly generated token
      */
     public JSONObject authenticate(Map<String,String> userData);
+
+    public void sendPasswordResetToken(User user);
 }

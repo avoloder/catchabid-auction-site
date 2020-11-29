@@ -2,7 +2,7 @@ package at.ac.ase.service;
 
 import at.ac.ase.basetest.BaseIntegrationTest;
 import at.ac.ase.dto.AuctionPostSendDTO;
-import at.ac.ase.service.auction.AuctionService;
+import at.ac.ase.service.auction.IAuctionService;
 import org.junit.After;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +17,17 @@ import at.ac.ase.entities.AuctionHouse;
 import at.ac.ase.entities.AuctionPost;
 import at.ac.ase.entities.Category;
 import at.ac.ase.entities.Status;
-import at.ac.ase.service.users.AuctionHouseService;
+import at.ac.ase.service.user.IAuctionHouseService;
 import java.time.LocalDateTime;
-import java.util.List;
-import org.junit.After;
 
 
 public class AuctionServiceTest extends BaseIntegrationTest {
 
     @Autowired
-    AuctionService auctionService;
+    IAuctionService IAuctionService;
 
     @Autowired
-    AuctionHouseService auctionHouseService;
+    IAuctionHouseService IAuctionHouseService;
 
     @After
     public void cleanup() {
@@ -38,7 +36,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
 
     @Test
     public void testServiceNotNull() {
-        assertNotNull(auctionService);
+        assertNotNull(IAuctionService);
     }
 
     @Test
@@ -47,7 +45,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         List<AuctionPostSendDTO> auctions;
         insertTestData("multiple-auctions.sql");
 
-        auctions= auctionService.getRecentAuctions(0, 5);
+        auctions= IAuctionService.getRecentAuctions(0, 5);
 
         assertThat(auctions.size(), is(5));
         assertThat(auctions.get(0).getId(), is(11L));
@@ -56,7 +54,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         assertThat(auctions.get(3).getId(), is(8L));
         assertThat(auctions.get(4).getId(), is(7L));
 
-        auctions= auctionService.getRecentAuctions(1, 5);
+        auctions= IAuctionService.getRecentAuctions(1, 5);
 
         assertThat(auctions.size(), is(5));
         assertThat(auctions.get(0).getId(), is(6L));
@@ -65,7 +63,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         assertThat(auctions.get(3).getId(), is(3L));
         assertThat(auctions.get(4).getId(), is(2L));
 
-        auctions= auctionService.getRecentAuctions(2, 5);
+        auctions= IAuctionService.getRecentAuctions(2, 5);
 
         assertThat(auctions.size(), is(1));
         assertThat(auctions.get(0).getId(), is(1L));
@@ -76,17 +74,17 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     public void testGetRecentAuctionsWithInvalidParam() {
         insertTestData("multiple-auctions.sql");
 
-        List<AuctionPostSendDTO> auctions = auctionService.getRecentAuctions(0, 0);
+        List<AuctionPostSendDTO> auctions = IAuctionService.getRecentAuctions(0, 0);
         assertThat(auctions.size(), is(11));
         assertThat(auctions.get(10).getId(), is(1L));
         assertThat(auctions.get(0).getId(), is(11L));
 
-        auctions = auctionService.getRecentAuctions(null, null);
+        auctions = IAuctionService.getRecentAuctions(null, null);
         assertThat(auctions.size(), is(11));
         assertThat(auctions.get(0).getId(), is(11L));
         assertThat(auctions.get(10).getId(), is(1L));
 
-        auctions = auctionService.getRecentAuctions(-1, 10);
+        auctions = IAuctionService.getRecentAuctions(-1, 10);
         assertThat(auctions.size(), is(10));
         assertThat(auctions.get(0).getId(), is(11L));
         assertThat(auctions.get(9).getId(), is(2L));
@@ -98,9 +96,9 @@ public class AuctionServiceTest extends BaseIntegrationTest {
 
         AuctionPost auctionPost = new AuctionPost();
 
-        AuctionHouse auctionHouse = auctionHouseService.getAuctionHouseByEmail("test@test.com");
+        AuctionHouse auctionHouse = IAuctionHouseService.getAuctionHouseByEmail("test@test.com");
 
-        List<AuctionPost> auctionPosts = auctionService.getAllAuctions();
+        List<AuctionPost> auctionPosts = IAuctionService.getAllAuctions();
 
         assertNotNull(auctionHouse);
         assertThat(auctionPosts.size(), is(1));
@@ -115,9 +113,9 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         auctionPost.setCategory(Category.CARS);
         auctionPost.setStatus(Status.ACTIVE);
 
-        auctionService.createAuction(auctionPost);
+        IAuctionService.createAuction(auctionPost);
 
-        auctionPosts = auctionService.getAllAuctions();
+        auctionPosts = IAuctionService.getAllAuctions();
         assertThat(auctionPosts.size(), is(2));
     }
 }

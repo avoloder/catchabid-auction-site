@@ -10,7 +10,7 @@ import at.ac.ase.entities.User;
 import java.util.List;
 import java.util.Optional;
 
-public interface AuctionService {
+public interface IAuctionService {
 
     /**
      * Returns recent pagable auction posts ordered by start_time descending

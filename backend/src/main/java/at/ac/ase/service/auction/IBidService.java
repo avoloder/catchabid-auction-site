@@ -1,4 +1,4 @@
 package at.ac.ase.service.auction;
 
-public interface BidService {
+public interface IBidService {
 }
