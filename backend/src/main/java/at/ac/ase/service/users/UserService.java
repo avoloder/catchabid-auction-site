@@ -13,7 +13,5 @@ public interface UserService {
 
     List<RegularUser> getAllUsers();
 
-    RegularUser getUserByEmail(Map<String,String> userData);
-
     RegularUser getUserByEmail(String email);
 }

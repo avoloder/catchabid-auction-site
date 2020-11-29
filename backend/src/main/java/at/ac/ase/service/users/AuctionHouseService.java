@@ -14,8 +14,6 @@ public interface AuctionHouseService {
 
     List<AuctionHouse> getAllHouses();
 
-    AuctionHouse getAuctionHouseByEmail(Map<String,String> userData);
-
     AuctionHouse getAuctionHouseByEmail(String email);
 
 }

@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 
 public class RegisterServiceTest extends BaseIntegrationTest {
@@ -71,5 +70,17 @@ public class RegisterServiceTest extends BaseIntegrationTest {
 
         registerService.registerHouse(house);
         assertEquals(1, auctionHouseService.getAllHouses().size());
+    }
+
+    @Test
+    public void test_userAlreadyRegisteredThrowsException(){
+        RegularUser user = new RegularUser();
+        user.setFirstName("firstName");
+        user.setLastName("lastName");
+        user.setPasswordHash("testPassword");
+        user.setEmail("test@gmail.com");
+        registerService.registerUser(user);
+        assertEquals(1, userService.getAllUsers().size());
+        registerService.registerUser(user);
     }
 }
