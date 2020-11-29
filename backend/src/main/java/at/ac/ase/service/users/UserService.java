@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface UserService {
 
-    RegularUser getUserByEmail(Map<String,String> userData);
-
     RegularUser getUserByEmail(String email);
+
+    void changePassword(String email, String password);
 }

@@ -42,9 +42,12 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   resetPassword(){
+    this.email = "kecman.bojana1@gmail.com"
     this.passwordManagementService.resetPassword(this.email, this.password)
     .subscribe(
       data => {
+        console.log("sacuvao se")
+        this.modalService.dismissAll();
       },
       error => {
         console.log(error);

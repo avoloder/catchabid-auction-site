@@ -10,4 +10,6 @@ import java.util.Map;
 public interface IAuthService {
 
     public JSONObject authenticate(Map<String,String> userData);
+
+    public boolean sendPasswordResetToken(User user);
 }

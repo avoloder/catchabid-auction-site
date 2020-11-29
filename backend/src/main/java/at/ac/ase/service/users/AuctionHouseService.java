@@ -11,8 +11,8 @@ public interface AuctionHouseService {
 
     Optional<AuctionHouse> getAuctionHouseById(Long id);
 
-    AuctionHouse getAuctionHouseByEmail(Map<String,String> userData);
-
     AuctionHouse getAuctionHouseByEmail(String email);
+
+    void changePassword(String email, String password);
 
 }

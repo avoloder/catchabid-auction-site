@@ -1,10 +1,8 @@
 package at.ac.ase.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -54,7 +52,7 @@ public abstract class User {
         fetch = FetchType.EAGER,
         mappedBy = "user",
         orphanRemoval = true)
-    @JsonManagedReference
+
     private Set<Rating> ratings = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -75,6 +73,7 @@ public abstract class User {
         mappedBy = "creator",
         cascade = CascadeType.ALL,
         orphanRemoval = true)
+
     @JsonBackReference
     private Set<AuctionPost> ownedAuctions = new HashSet<>();
 

@@ -10,15 +10,16 @@ export class PasswordManagementService {
     endpoint = 'http://localhost:8080';
 
     requestPasswordReset(email: String) {
-        return this.http.post(this.endpoint + '/requestPasswordReset', {email: email});
+        return this.http.post(this.endpoint + '/requestPasswordReset', email);
     }
 
     sendResetPasswordToken(token: Number) {
-        return this.http.post(this.endpoint + '/sendResetPasswordToken', {passwordResetToken: token});
+        return this.http.post(this.endpoint + '/sendResetPasswordToken', token);
     }
 
     resetPassword(email: String, password:String){
-        return this.http.post(this.endpoint + '/resetPassworf', {email: email, password: password});
+        console.log("usla sam tu")
+        return this.http.post(this.endpoint + '/resetPassword', {email: email, password: password});
     }
 
 }

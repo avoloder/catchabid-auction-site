@@ -8,7 +8,10 @@ import at.ac.ase.service.users.AuctionHouseService;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AuctionHouseServiceImpl implements AuctionHouseService {
@@ -16,19 +19,24 @@ public class AuctionHouseServiceImpl implements AuctionHouseService {
     @Autowired
     private AuctionHouseRepository auctionHouseRepository;
 
+    @Lazy
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public Optional<AuctionHouse> getAuctionHouseById(Long id) {
         return auctionHouseRepository.findById(id);
     }
 
     @Override
-    public AuctionHouse getAuctionHouseByEmail(Map<String, String> userData) {
-        String email = userData.get("email");
+    public AuctionHouse getAuctionHouseByEmail(String email) {
         return auctionHouseRepository.findByEmail(email);
     }
 
     @Override
-    public AuctionHouse getAuctionHouseByEmail(String email) {
-        return auctionHouseRepository.findByEmail(email);
+    @Transactional
+    public void changePassword(String email, String password) {
+        String passwordHash = passwordEncoder.encode(password);
+        auctionHouseRepository.changePassword(email, passwordHash);
     }
 }

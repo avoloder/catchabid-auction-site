@@ -43,7 +43,7 @@ public class RegisterService implements IRegisterService {
     public AuctionHouse registerHouse(AuctionHouse ahouse) {
         addressRepository.save(ahouse.getAddress());
         ahouse.setPasswordHash(passwordEncoder.encode(ahouse.getPasswordHash()));
-        return (AuctionHouse) auctionHouseRepository.save(ahouse);
+        return auctionHouseRepository.save(ahouse);
     }
 
 }

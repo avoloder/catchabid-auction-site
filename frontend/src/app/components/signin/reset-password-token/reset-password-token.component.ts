@@ -24,6 +24,7 @@ export class ResetPasswordTokenComponent implements OnInit {
     this.passwordManagementService.sendResetPasswordToken(this.token)
     .subscribe(
       data => {
+        this.openResetPasswordModal();
       },
       error => {
         console.log(error);
@@ -32,7 +33,6 @@ export class ResetPasswordTokenComponent implements OnInit {
   }
 
   openResetPasswordModal(){
-    this.sendResetPasswordToken()
     this.modalService.dismissAll();
     this.modalService.open(ResetPasswordComponent);
   }

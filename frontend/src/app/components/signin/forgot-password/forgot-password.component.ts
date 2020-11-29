@@ -24,6 +24,7 @@ export class ForgotPasswordComponent implements OnInit {
     this.passwordManagementService.requestPasswordReset(this.email)
     .subscribe(
       data => {
+        this.openResetPasswordTokenModal();
       },
       error => {
         console.log(error);
@@ -31,7 +32,6 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   openResetPasswordTokenModal(){
-    this.requestPasswordReset();
     this.modalService.dismissAll();
     this.modalService.open(ResetPasswordTokenComponent);
   }
