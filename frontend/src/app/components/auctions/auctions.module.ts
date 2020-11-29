@@ -4,6 +4,8 @@ import {AuctionsComponent} from './auctions.component';
 import {HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from "../../app-routing.module";
 import {BrowserModule} from "@angular/platform-browser";
+import {AuctionCountdownComponent} from "./auction-countdown/auction-countdown.component";
+import {CountdownModule} from "ngx-countdown";
 import {AuctionsListComponent} from "./auctions-list/auctions-list.component";
 import {AuctionFormComponent} from "./auction-form/auction-form.component";
 import {ReactiveFormsModule} from "@angular/forms";
@@ -11,17 +13,27 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 
 @NgModule({
-  declarations: [AuctionsListComponent, AuctionsComponent, AuctionFormComponent],
+  declarations: [
+    AuctionsListComponent,
+    AuctionsComponent,
+    AuctionCountdownComponent,
+    AuctionFormComponent
+  ],
   imports: [
     CommonModule,
     HttpClientModule,
     AppRoutingModule,
     BrowserModule,
+    CountdownModule,
+    BrowserModule,
     ReactiveFormsModule,
     NgbModule
   ],
   providers:[],
-  exports:[AuctionsListComponent]
+  exports:[
+    AuctionsListComponent,
+    AuctionCountdownComponent
+  ]
 })
 export class AuctionsModule {
 }

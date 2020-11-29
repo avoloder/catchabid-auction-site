@@ -9,6 +9,10 @@
         <p class="text-subsection-card">CURRENT PRICE </p>
         <p class="text-main-card">{{auction.highestBid}}</p>
         <p>upcoming time {{auction.startTime}}</p>
+        <p>
+          <app-auction-countdown *ngIf="auctionsGroup=='RECENT'"   [countdownType]="'ending-countdown'"   [endDate]="auction.endTime"  ></app-auction-countdown>
+          <app-auction-countdown *ngIf="auctionsGroup=='UPCOMING'" [countdownType]="'starting-countdown'" [endDate]="auction.startTime"></app-auction-countdown>
+        </p>
         <a href="#" class="btn btn-primary">Go to details</a>
         <a href="#" class="btn btn-primary">Bid</a>
       </div>
