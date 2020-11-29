@@ -8,7 +8,9 @@ import at.ac.ase.service.users.AuctionHouseService;
 import at.ac.ase.util.exception.ObjectNotFoundException;
 
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import at.ac.ase.service.auction.AuctionService;
@@ -25,19 +27,32 @@ public class AuctionServiceImpl implements AuctionService {
     @Autowired
     private AuctionHouseService auctionHouseService;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
     public Optional<AuctionPost> getAuctionPost(Long id) {
         return auctionRepository.findById(id);
     }
 
     @Override
-    public AuctionPost createAuction(User user, AuctionCreationDTO auctionPostDTO) {
-        AuctionPost auctionPost;
+    public List<AuctionPost> getAllAuctions() {
+        return auctionRepository.findAll();
+    }
+
+    @Override
+    public AuctionPost createAuction(AuctionPost auctionPost) {
+        return auctionRepository.save(auctionPost);
+    }
+
+    @Override
+    public AuctionPost toAuctionPostEntity(User user, AuctionCreationDTO auctionPostDTO) {
+        AuctionPost auctionPost = modelMapper.map(auctionPostDTO, AuctionPost.class);
         if (auctionPostDTO.getId() != null) {
             auctionPost = auctionRepository
-                .findById(auctionPostDTO.getId()).orElseThrow(ObjectNotFoundException::new);
+                .findById(auctionPost.getId()).orElseThrow(ObjectNotFoundException::new);
         } else {
-            auctionPost = new AuctionPost();
+            auctionPost.setStatus(Status.UPCOMING);
         }
         auctionPost.setName(auctionPostDTO.getName());
         auctionPost.setCategory(auctionPostDTO.getCategory());
@@ -47,10 +62,8 @@ public class AuctionServiceImpl implements AuctionService {
         auctionPost.setDescription(auctionPostDTO.getDescription());
         auctionPost.setCreator(user);
         auctionPost.setImage(Base64.getDecoder().decode(auctionPostDTO.getImage()));
-        auctionPost.setStatus(Status.UPCOMING);
         auctionPost.setAddress(addressRepository.save(new Address(auctionPostDTO.getCountry(), auctionPostDTO.getCity(),
                 auctionPostDTO.getAddress(), auctionPostDTO.getHouseNr())));
-
-        return auctionRepository.save(auctionPost);
+        return auctionPost;
     }
 }

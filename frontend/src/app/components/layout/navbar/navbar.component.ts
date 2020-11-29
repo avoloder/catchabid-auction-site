@@ -6,9 +6,6 @@ import { Subscription } from 'rxjs';
 import { AuctionFormComponent } from '../../auctions/auction-form/auction-form.component';
 import { AuctionsService } from '../../auctions.service';
 import { Router } from '@angular/router';
-import { UserService } from '../../../services/user.service';
-import { User } from '../../../models/user';
-import { AuctionHouse } from '../../../models/auctionhouse';
 
 @Component({
   selector: 'app-navbar',
@@ -26,15 +23,15 @@ export class NavbarComponent implements OnInit {
 
   modalRef: NgbModalRef;
 
-  user: User|AuctionHouse;
+  userName: any;
 
   constructor(
     private modalService: NgbModal,
     private auctionsService: AuctionsService,
-    private userService: UserService,
     private router: Router) { }
 
   ngOnInit(): void {
+    console.log("on init");
   }
 
   openLoginModal(): void {
@@ -59,16 +56,13 @@ export class NavbarComponent implements OnInit {
   }
 
   logout() {
-    let userJSON = this.userService.findByEmail("kecman.bojana1@gmail.com");
     localStorage.removeItem('token');
-    //this.router.navigate(['/home']);
+    this.userName = null;
   }
 
   isUserLoggedIn(){
     if(localStorage.getItem('token') !== null){
-/*       let email = jwt_decode(localStorage.getItem('token'))['sub'];
-      let userJSON = this.userService.findByEmail(email);
-      console.log(userJSON) */
+      this.userName = localStorage.getItem('userName');
       return true;
     }else{
       return false;

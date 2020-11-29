@@ -1,5 +1,8 @@
 package at.ac.ase.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -9,6 +12,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class User {
 
     @Id
@@ -35,12 +39,12 @@ public abstract class User {
     private Address address;
 
     @OneToMany(
-        fetch = FetchType.LAZY,
+        fetch = FetchType.EAGER,
         mappedBy = "user",
         orphanRemoval = true)
     private Set<Rating> ratings = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "auction_subscriptions",
         joinColumns = { @JoinColumn(name = "user_id") },
@@ -48,7 +52,7 @@ public abstract class User {
     private Set<AuctionPost> auctionSubscriptions = new HashSet<>();
 
     @OneToMany(
-        fetch = FetchType.LAZY,
+        fetch = FetchType.EAGER,
         mappedBy = "user",
         orphanRemoval = true)
     private Set<Bid> bids = new HashSet<>();
@@ -58,6 +62,7 @@ public abstract class User {
         mappedBy = "creator",
         cascade = CascadeType.ALL,
         orphanRemoval = true)
+    @JsonBackReference
     private Set<AuctionPost> ownedAuctions = new HashSet<>();
 
     public User(){}
