@@ -16,7 +16,7 @@ export class AuctionsListComponent implements OnInit {
   @Input() auctionsGroup : string;
 
   private pageNumber: number = 0;
-  private pageSize: number = 9;
+  private pageSize: number = 10;
 
   get dataService(): AuctionsService {
     return this._dataService;

@@ -20,9 +20,9 @@ import { ForgotPasswordComponent } from './components/signin/forgot-password/for
 import { PasswordManagementService } from './services/password-management.service';
 import { TokenInterceptor } from './services/token-interceptor.service';
 import { UserService } from './services/user.service';
-import {HomeComponent} from "./components/home/home.component";
 import {AuctionsModule} from "./components/auctions/auctions.module";
 import {AuthGuard} from "./services/auth-guard.service";
+import {CountdownModule} from "ngx-countdown";
 
 @NgModule({
   declarations: [
@@ -46,7 +46,8 @@ import {AuthGuard} from "./services/auth-guard.service";
     LayoutModule,
     AuctionsModule,
     NgbModule,
-    HomeModule
+    HomeModule,
+    CountdownModule
   ],
   providers: [
     AuthGuard,
