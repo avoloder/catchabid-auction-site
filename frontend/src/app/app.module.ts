@@ -44,11 +44,11 @@ import { UserService } from './services/user.service';
     NgbModule
   ],
   providers: [
-    AuthGuard, 
-    RegisterService, 
-    SigninService, 
+    AuthGuard,
+    RegisterService,
+    SigninService,
     UserService,
-    PasswordManagementService, 
+    PasswordManagementService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

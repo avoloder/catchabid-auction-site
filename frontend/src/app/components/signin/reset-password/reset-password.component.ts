@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ResetPasswordTokenComponent } from '../reset-password-token/reset-password-token.component';
 import { PasswordManagementService } from '../../../services/password-management.service';
@@ -10,8 +10,10 @@ import { PasswordManagementService } from '../../../services/password-management
 })
 export class ResetPasswordComponent implements OnInit {
 
-  email: String;
   password: String;
+
+  @Input() 
+  public email: String;
 
   constructor(
     private modalService: NgbModal,
@@ -42,11 +44,9 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   resetPassword(){
-    this.email = "kecman.bojana1@gmail.com"
     this.passwordManagementService.resetPassword(this.email, this.password)
     .subscribe(
       data => {
-        console.log("sacuvao se")
         this.modalService.dismissAll();
       },
       error => {

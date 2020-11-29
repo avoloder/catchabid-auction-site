@@ -13,12 +13,13 @@ export class PasswordManagementService {
         return this.http.post(this.endpoint + '/requestPasswordReset', email);
     }
 
-    sendResetPasswordToken(token: Number) {
-        return this.http.post(this.endpoint + '/sendResetPasswordToken', token);
+    sendResetPasswordToken(email: String, token: Number) {
+        console.log(email)
+        console.log(token)
+        return this.http.post(this.endpoint + '/sendResetPasswordToken', {email: email, token: token});
     }
 
     resetPassword(email: String, password:String){
-        console.log("usla sam tu")
         return this.http.post(this.endpoint + '/resetPassword', {email: email, password: password});
     }
 

@@ -6,8 +6,13 @@ import at.ac.ase.service.auth.IRegisterService;
 import at.ac.ase.service.passwordtoken.implementation.PasswordTokenService;
 import at.ac.ase.service.users.AuctionHouseService;
 import at.ac.ase.service.users.UserService;
+import at.ac.ase.util.exception.TokenUtil;
+import at.ac.ase.util.exception.exceptionhandler.UserAlreadyExistsException;
+import com.nimbusds.jose.JOSEException;
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,16 +37,25 @@ public class AuthController {
     @Autowired
     private PasswordTokenService tokenService;
 
-    @RequestMapping(value = "/registerUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/registerUser", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity register(@RequestBody RegularUser regularUser){
-        RegularUser user = registerService.registerUser(regularUser);
-        return user != null ? ResponseEntity.status(HttpStatus.OK).body(user) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        try {
+            RegularUser user = registerService.registerUser(regularUser);
+            return user != null ? ResponseEntity.status(HttpStatus.OK).body(user) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (DataAccessException e){
+            throw new UserAlreadyExistsException();
+        }
     }
 
     @RequestMapping(value = "/registerHouse", method = RequestMethod.POST)
     public ResponseEntity register(@RequestBody AuctionHouse auctionHouse){
-        AuctionHouse user = registerService.registerHouse(auctionHouse);
-        return user != null ? ResponseEntity.status(HttpStatus.OK).body(user) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        try {
+            AuctionHouse user = registerService.registerHouse(auctionHouse);
+            return user != null ? ResponseEntity.status(HttpStatus.OK).body(user) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (DataAccessException e){
+            System.out.println(e.getLocalizedMessage());
+            throw new UserAlreadyExistsException();
+        }
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -67,8 +81,10 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/sendResetPasswordToken", method = RequestMethod.POST)
-    public ResponseEntity sendResetPasswordToken(@RequestBody int token){
-        PasswordResetToken resetToken = tokenService.getPasswordResetTokenByToken(token);
+    public ResponseEntity sendResetPasswordToken(@RequestBody Map<String, String> tokenData){
+        int token = Integer.parseInt(tokenData.get("token"));
+        String email = tokenData.get("email");
+        PasswordResetToken resetToken = tokenService.getPasswordResetTokenByToken(email, token);
         if(resetToken == null){
            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -91,9 +107,4 @@ public class AuthController {
         }
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-
-
-
-
-
 }

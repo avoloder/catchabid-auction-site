@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ResetPasswordComponent } from '../reset-password/reset-password.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PasswordManagementService } from '../../../services/password-management.service';
@@ -12,6 +12,9 @@ export class ResetPasswordTokenComponent implements OnInit {
 
   token: Number;
 
+  @Input() 
+  public email: String;
+
   constructor(
     private modalService: NgbModal,
     private passwordManagementService: PasswordManagementService
@@ -21,7 +24,7 @@ export class ResetPasswordTokenComponent implements OnInit {
   }
 
   sendResetPasswordToken(){
-    this.passwordManagementService.sendResetPasswordToken(this.token)
+    this.passwordManagementService.sendResetPasswordToken(this.email, this.token)
     .subscribe(
       data => {
         this.openResetPasswordModal();
@@ -34,7 +37,8 @@ export class ResetPasswordTokenComponent implements OnInit {
 
   openResetPasswordModal(){
     this.modalService.dismissAll();
-    this.modalService.open(ResetPasswordComponent);
+    const modal = this.modalService.open(ResetPasswordComponent);
+    modal.componentInstance.email = this.email;
   }
 
 

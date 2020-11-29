@@ -1,32 +1,22 @@
 package at.ac.ase.entities;
 
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@MappedSuperclass
-@JsonInclude(Include.NON_NULL)
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     @Column
@@ -52,7 +42,6 @@ public abstract class User {
         fetch = FetchType.EAGER,
         mappedBy = "user",
         orphanRemoval = true)
-
     private Set<Rating> ratings = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)

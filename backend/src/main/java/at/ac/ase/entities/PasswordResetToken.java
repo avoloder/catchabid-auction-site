@@ -5,7 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 @Entity
-@Table
+@Table(name = "PasswordResetToken")
 public class PasswordResetToken {
 
     private static final int EXPIRATION = 60 * 24;

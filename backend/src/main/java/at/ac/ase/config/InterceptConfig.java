@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class InterceptConfig implements WebMvcConfigurer {
+public class  InterceptConfig implements WebMvcConfigurer {
 
     private TokenUtil tokenUtil;
 

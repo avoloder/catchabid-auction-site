@@ -33,7 +33,8 @@ export class ForgotPasswordComponent implements OnInit {
 
   openResetPasswordTokenModal(){
     this.modalService.dismissAll();
-    this.modalService.open(ResetPasswordTokenComponent);
+    const modal = this.modalService.open(ResetPasswordTokenComponent);
+    modal.componentInstance.email = this.email;
   }
 
 }

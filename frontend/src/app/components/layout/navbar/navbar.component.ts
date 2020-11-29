@@ -6,9 +6,6 @@ import { Subscription } from 'rxjs';
 import { AuctionFormComponent } from '../../auctions/auction-form/auction-form.component';
 import { AuctionsService } from '../../auctions.service';
 import { Router } from '@angular/router';
-import { User } from '../../../models/user';
-import { AuctionHouse } from '../../../models/auctionhouse';
-import jwt_decode from "jwt-decode";
 
 @Component({
   selector: 'app-navbar',
@@ -34,6 +31,7 @@ export class NavbarComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
+    console.log("on init");
   }
 
   openLoginModal(): void {
@@ -59,6 +57,7 @@ export class NavbarComponent implements OnInit {
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('userName');
     this.userName = null;
   }
 
