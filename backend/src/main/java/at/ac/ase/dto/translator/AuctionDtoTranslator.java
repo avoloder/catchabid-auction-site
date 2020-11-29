@@ -1,7 +1,9 @@
 package at.ac.ase.dto.translator;
 
 import at.ac.ase.dto.AuctionPostSendDTO;
+import at.ac.ase.entities.AuctionHouse;
 import at.ac.ase.entities.AuctionPost;
+import at.ac.ase.entities.RegularUser;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -23,7 +25,12 @@ public class AuctionDtoTranslator {
         }
         if (auction.getCreator()!=null) {
             auctionPostSendDTO.setCreatorId(auction.getCreator().getId());
-            auctionPostSendDTO.setCreatorName(auction.getCreator().getName());
+            if (auction.getCreator() instanceof AuctionHouse) {
+                auctionPostSendDTO.setCreatorName(((AuctionHouse) auction.getCreator()).getName());
+            } else {
+                auctionPostSendDTO.setCreatorName(((RegularUser) auction.getCreator()).getFirstName() + " " +
+                        ((RegularUser) auction.getCreator()).getLastName());
+            }
         }
         auctionPostSendDTO.setAuctionDescription(auction.getDescription());
         auctionPostSendDTO.setEndTime(auction.getEndTime());

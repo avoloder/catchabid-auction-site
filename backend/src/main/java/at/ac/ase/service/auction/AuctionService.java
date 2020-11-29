@@ -20,9 +20,9 @@ public interface AuctionService {
     List<AuctionPostSendDTO> getRecentAuctions(Integer pageNr, Integer auctionsPerPage);
 
     List<AuctionPostSendDTO> getUpcomingAuctions(Integer auctionsPerPage, Integer pageNr);
+
     List<AuctionPostSendDTO> getAllAuctions(Integer auctionsPerPage, Integer pageNr);
 
-    AuctionPost createAuction(User user, AuctionCreationDTO auctionPost);
     List<AuctionPost> getAllAuctions();
 
     AuctionPost createAuction(AuctionPost auctionPost);

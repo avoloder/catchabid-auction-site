@@ -5,10 +5,6 @@ import javax.persistence.*;
 @Embeddable
 public class Address {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column
     private String country;
 
@@ -19,12 +15,12 @@ public class Address {
     private String street;
 
     @Column
-    private int houseNr;
+    private Integer houseNr;
 
     public Address() {
     }
 
-    public Address(String country, String city, String street, int houseNr) {
+    public Address(String country, String city, String street, Integer houseNr) {
         this.country = country;
         this.city = city;
         this.street = street;
@@ -55,11 +51,11 @@ public class Address {
         this.country = country;
     }
 
-    public int getHouseNr() {
+    public Integer getHouseNr() {
         return houseNr;
     }
 
-    public void setHouseNr(int houseNr) {
+    public void setHouseNr(Integer houseNr) {
         this.houseNr = houseNr;
     }
 }

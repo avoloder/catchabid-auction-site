@@ -3,14 +3,12 @@ package at.ac.ase.service.auction.implementation;
 import at.ac.ase.dto.AuctionCreationDTO;
 import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.translator.AuctionDtoTranslator;
-import at.ac.ase.entities.AuctionHouse;
-import at.ac.ase.entities.AuctionPost;
-import at.ac.ase.entities.Status;
-import at.ac.ase.entities.User;
+import at.ac.ase.entities.*;
 import at.ac.ase.postgres.auction.AuctionRepository;
 import at.ac.ase.service.auction.AuctionService;
 import at.ac.ase.service.users.AuctionHouseService;
 import at.ac.ase.util.exception.ObjectNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,19 +28,27 @@ public class AuctionServiceImplementation implements AuctionService {
     @Autowired
     private AuctionHouseService auctionHouseService;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
     public Optional<AuctionPost> getAuctionPost(Long id) {
         return auctionRepository.findById(id);
     }
 
     @Override
-    public AuctionPost createAuction(User user, AuctionCreationDTO auctionPostDTO) {
-        AuctionPost auctionPost;
+    public AuctionPost createAuction(AuctionPost auctionPost) {
+        return auctionRepository.save(auctionPost);
+    }
+
+    @Override
+    public AuctionPost toAuctionPostEntity(User user, AuctionCreationDTO auctionPostDTO) {
+        AuctionPost auctionPost = modelMapper.map(auctionPostDTO, AuctionPost.class);
         if (auctionPostDTO.getId() != null) {
             auctionPost = auctionRepository
-                    .findById(auctionPostDTO.getId()).orElseThrow(ObjectNotFoundException::new);
+                    .findById(auctionPost.getId()).orElseThrow(ObjectNotFoundException::new);
         } else {
-            auctionPost = new AuctionPost();
+            auctionPost.setStatus(Status.UPCOMING);
         }
         auctionPost.setName(auctionPostDTO.getName());
         auctionPost.setCategory(auctionPostDTO.getCategory());
@@ -50,12 +56,13 @@ public class AuctionServiceImplementation implements AuctionService {
         auctionPost.setEndTime(auctionPostDTO.getEndTime());
         auctionPost.setMinPrice(auctionPostDTO.getMinPrice());
         auctionPost.setDescription(auctionPostDTO.getDescription());
-        auctionPost.setCreator((AuctionHouse) user);
+        auctionPost.setCreator(user);
         auctionPost.setImage(Base64.getDecoder().decode(auctionPostDTO.getImage()));
-        auctionPost.setStatus(Status.UPCOMING);
-
-        return auctionRepository.save(auctionPost);
+        auctionPost.setAddress(new Address(auctionPostDTO.getCountry(), auctionPostDTO.getCity(),
+                auctionPostDTO.getAddress(), auctionPostDTO.getHouseNr()));
+        return auctionPost;
     }
+
     @Autowired
     private AuctionDtoTranslator auctionDtoTranslator;
 
@@ -70,6 +77,11 @@ public class AuctionServiceImplementation implements AuctionService {
     public List<AuctionPostSendDTO> getUpcomingAuctions(Integer auctionsPerPage, Integer pageNr) {
         return convertAuctionsToDTO(auctionRepository.findAllByStartTimeGreaterThan(LocalDateTime.now(),
                 getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").ascending())));
+    }
+
+    @Override
+    public List<AuctionPost> getAllAuctions() {
+        return auctionRepository.findAll();
     }
 
     @Override

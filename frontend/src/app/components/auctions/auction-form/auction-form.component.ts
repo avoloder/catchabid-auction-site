@@ -1,9 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
-import {AuctionsService} from '../../auctions.service';
 import {AuctionPostModel} from '../../../models/auctionPost.model';
 import {ToastrService} from 'ngx-toastr';
 import {NgbDate, NgbModule, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {AuctionsService} from '../../../services/auctionsService.service';
 
 @Component({
   selector: 'app-auction-form',

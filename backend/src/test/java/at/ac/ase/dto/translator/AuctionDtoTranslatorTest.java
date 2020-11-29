@@ -43,7 +43,7 @@ public class AuctionDtoTranslatorTest {
 
     private void assertEqualValues(AuctionPostSendDTO dto, AuctionPost entity)
     {
-        AuctionHouse auctionHouse = entity.getCreator();
+        AuctionHouse auctionHouse = (AuctionHouse) entity.getCreator();
         Bid bid = entity.getHighestBid();
 
         assertEquals(dto.getCreatorName(), auctionHouse.getName());

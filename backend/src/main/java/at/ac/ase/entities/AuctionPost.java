@@ -51,7 +51,7 @@ public class AuctionPost {
     @Column
     private String name;
 
-    @ManyToOne
+    @Embedded
     private Address address;
 
     @OneToOne
