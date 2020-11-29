@@ -25,6 +25,14 @@ public class AuctionCreationDTO {
     @NotNull
     private LocalDateTime endTime;
 
+    private String country;
+
+    private String city;
+
+    private String address;
+
+    private Integer houseNr;
+
     @NotNull
     @DecimalMin("0.1")
     private Double minPrice;
@@ -65,6 +73,38 @@ public class AuctionCreationDTO {
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Integer getHouseNr() {
+        return houseNr;
+    }
+
+    public void setHouseNr(Integer houseNr) {
+        this.houseNr = houseNr;
     }
 
     public Double getMinPrice() {

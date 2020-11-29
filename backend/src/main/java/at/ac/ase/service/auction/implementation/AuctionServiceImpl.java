@@ -1,10 +1,8 @@
 package at.ac.ase.service.auction.implementation;
 
 import at.ac.ase.dto.AuctionCreationDTO;
-import at.ac.ase.entities.AuctionHouse;
-import at.ac.ase.entities.AuctionPost;
-import at.ac.ase.entities.User;
-import at.ac.ase.entities.Status;
+import at.ac.ase.entities.*;
+import at.ac.ase.postgres.address.AddressRepository;
 import at.ac.ase.postgres.auction.AuctionRepository;
 import at.ac.ase.service.users.AuctionHouseService;
 import at.ac.ase.util.exception.ObjectNotFoundException;
@@ -22,6 +20,9 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Autowired
     private AuctionRepository auctionRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
     @Autowired
     private AuctionHouseService auctionHouseService;
@@ -59,8 +60,13 @@ public class AuctionServiceImpl implements AuctionService {
         auctionPost.setEndTime(auctionPostDTO.getEndTime());
         auctionPost.setMinPrice(auctionPostDTO.getMinPrice());
         auctionPost.setDescription(auctionPostDTO.getDescription());
-        auctionPost.setCreator((AuctionHouse) user);
+        auctionPost.setCreator(user);
         auctionPost.setImage(Base64.getDecoder().decode(auctionPostDTO.getImage()));
+        if (auctionPostDTO.getCountry() != null && auctionPostDTO.getCity() != null &&
+                auctionPostDTO.getAddress() != null && auctionPostDTO.getHouseNr() != null) {
+            auctionPost.setAddress(addressRepository.save(new Address(auctionPostDTO.getCountry(), auctionPostDTO.getCity(),
+                    auctionPostDTO.getAddress(), auctionPostDTO.getHouseNr())));
+        }
         return auctionPost;
     }
 }
