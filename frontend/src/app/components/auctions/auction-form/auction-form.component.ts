@@ -54,11 +54,6 @@ export class AuctionFormComponent implements OnInit {
     day: this.currentDate.getDate()
   };
   minEndDate = this.minStartDate;
-  maxEndDate = {
-    year: this.currentDate.getFullYear(),
-    month: this.currentDate.getMonth() + 1,
-    day: this.currentDate.getDate() + 1
-  };
   buttonDisable = false;
 
   constructor(private auctionsService: AuctionsService, private toast: ToastrService, private modalService: NgbModal) { }
@@ -88,14 +83,25 @@ export class AuctionFormComponent implements OnInit {
     };
   }
 
+  dateFormToValue(formDateValue: any, formTimeValue?: any): Date {
+    if (formTimeValue) {
+      return new Date(formDateValue.year, formDateValue.month - 1,
+        formDateValue.day, formTimeValue.hour, formTimeValue.minute);
+    } else {
+      return new Date(formDateValue.year, formDateValue.month - 1,
+        formDateValue.day);
+    }
+  }
+
   saveAuction(): void{
+    console.log('star tDate');
+    console.log(this.startDateForm.value);
+    console.log('endDate');
+    console.log(this.endDateForm.value);
     if (!this.form.invalid) {
-      const startDate = new Date(this.startDateForm.value.year, this.startDateForm.value.month - 1,
-        this.startDateForm.value.day, this.startTimeForm.value.hour, this.startTimeForm.value.minute);
+      const startDate = this.dateFormToValue(this.startDateForm.value, this.startTimeForm.value);
 
-      const endDate = new Date(this.endDateForm.value.year, this.endDateForm.value.month - 1,
-        this.endDateForm.value.day, this.endTimeForm.value.hour, this.endTimeForm.value.minute);
-
+      const endDate = this.dateFormToValue(this.endDateForm.value, this.endTimeForm.value);
       const now = new Date();
       now.setMinutes(now.getMinutes() + 15);
       if (startDate.getTime() < now.getTime()) {
@@ -129,10 +135,5 @@ export class AuctionFormComponent implements OnInit {
 
   setMaxEndDate(): void {
     this.minEndDate = this.startDateForm.value;
-    this.maxEndDate = {
-      year: this.startDateForm.value.year,
-      month: this.startDateForm.value.month,
-      day: this.startDateForm.value.day + 1
-    };
   }
 }

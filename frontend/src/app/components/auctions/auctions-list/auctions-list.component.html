@@ -14,8 +14,8 @@
           <p class="price-new text-lg lh-100 font-weight-500"
              *ngIf="auction.highestBid!=undefined">{{auction.highestBid}}€</p>
           <br>
-          <div class="row" style="width: 100%;">
-              <div class="col-sm-8">
+          <div class="row">
+              <div class="col-sm-6">
                   <app-auction-countdown class="text-medium-left font-weight-200 color-grey-subtext float-left" style="padding-top:5px;" *ngIf="auctionsGroup=='RECENT'"
                                  [countdownType]="'ending-countdown'"
                                  [endDate]="auction.endTime"></app-auction-countdown>
@@ -23,7 +23,7 @@
                                  [countdownType]="'starting-countdown'"
                                  [endDate]="auction.startTime"></app-auction-countdown>
               </div>
-              <div class="col-sm-4" style="padding: 0;">
+              <div class="col-sm-6">
                   <a href="#" *ngIf="auctionsGroup=='RECENT'" class="btn btn-primary card-button">Bid</a>
                   <a href="#" *ngIf="auctionsGroup=='UPCOMING'" class="btn btn-primary card-button">Subscribe</a>
               </div>
