@@ -34,10 +34,10 @@ public class AuctionController {
     public @ResponseBody
     ResponseEntity<List<AuctionPostSendDTO>> getUpcomingAuctions(
             @RequestParam(required = false) Integer pageSize,
-            @RequestParam(required = false) Integer pageNr) {
+            @RequestParam(required = false) Integer pageNumber) {
 
-        logger.info("Upcoming auctions requested for page size "+pageSize+" and age number requested " + pageNr);
-            List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctions(pageSize, pageNr);
+        logger.info("Upcoming auctions requested for page size "+pageSize+" and page number requested " + pageNumber);
+            List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctions(pageSize, pageNumber);
             logger.info("Size of payload for upcoming auctions:" + posts.size());
             logger.debug("Upcoming auctions sent to frontend for pageNr " + posts.size() +" : "+ posts);
             return new ResponseEntity<>(posts, HttpStatus.OK);

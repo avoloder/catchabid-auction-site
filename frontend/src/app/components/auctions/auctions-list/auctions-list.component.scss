@@ -1,13 +1,53 @@
-.text-subsection-card{
-  font-weight: bold;
-  color: grey;
-  line-height:1;
-  font-size: 130%;
+.card-button{
+  float:right;
+  border-radius:10px;
+  padding-left:15px;
+  padding-right:15px;
+  }
+.col-item {
+  border: 1px solid #E1E1E1;
+  background: #FFF;
+  margin-bottom:12px;
 }
-.text-main-card{
-  font-weight: bold;
-  color: blue;
-  line-height:1;
-  font-size: 150%;
+.col-item .info {
+  padding: 8px;
+  margin-top: 1px;
+  display:inline-block;
+}
+.col-item .photo {
+  overflow: hidden;
+}
+.col-item .photo .options {
+  display:none;
+}
+.col-item .photo img {
+  margin: 0 auto;
+  width: 100%;
 }
 
+.col-item .photo .img-responsive:hover{
+  filter: brightness(90%);
+}
+
+.col-item .info br {
+  line-height: 1.5;
+}
+
+.minor-data{
+  color:grey;
+  font-weight: bold;
+  line-height:1.5;
+  font-size: 120%;
+  margin: 0;
+  float:left;
+}
+.col-item .info .price-new {
+  font-size:16px;
+  float:left;
+}
+
+.color-grey-subtext{
+   color: grey !important;
+}
+.auction-card{
+width: 18rem;}
