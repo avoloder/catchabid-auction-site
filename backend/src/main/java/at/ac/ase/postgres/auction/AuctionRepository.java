@@ -20,10 +20,11 @@ public interface AuctionRepository extends JpaRepository<AuctionPost, Long> {
 
     /**
      *
-     * @param from
+     * @param fromStartTime
+     * @param untilEndTime
      * @param pageable
      * @return
      */
-    List<AuctionPost> findAllByStartTimeLessThan(LocalDateTime from, Pageable pageable);
+    List<AuctionPost> findAllByStartTimeLessThanAndEndTimeGreaterThan(LocalDateTime fromStartTime, LocalDateTime untilEndTime, Pageable pageable);
 
 }
