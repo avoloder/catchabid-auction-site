@@ -7,23 +7,27 @@
           </a>
         </div>
         <div class="info">
-          <p class="text-lg lh-120 font-weight-500 color-grey-subtext">Created by {{auction.creatorName}} </p>
-          <p class="text-xl lh-150 font-weight-500">{{auction.auctionName}}</p>
-          <p class="text-lg lh-120 font-weight-500 color-grey-subtext">CURRENT PRICE </p>
-          <p class="price-new text-lg lh-100 font-weight-500" *ngIf="auction.highestBid==undefined">{{auction.minPrice}}
-            €</p>
+          <p class="text-medium lh-100 font-weight-500 color-grey-subtext" style="margin: 0;">Created by {{auction.creatorName}} </p>
+          <p class="text-lg lh-150 font-weight-500">{{auction.auctionName}}</p>
+          <p class="text-medium lh-120 font-weight-500 color-grey-subtext" style="margin-bottom: 5px;">CURRENT PRICE</p>
+          <p class="price-new text-medium lh-100 font-weight-500" *ngIf="auction.highestBid==undefined">{{auction.minPrice}}€</p>
           <p class="price-new text-lg lh-100 font-weight-500"
              *ngIf="auction.highestBid!=undefined">{{auction.highestBid}}€</p>
           <br>
-          <app-auction-countdown class="text-lg-left font-weight-200 color-grey-subtext float-left" *ngIf="auctionsGroup=='RECENT'"
+          <div class="row" style="width: 100%;">
+              <div class="col-sm-8">
+                  <app-auction-countdown class="text-medium-left font-weight-200 color-grey-subtext float-left" style="padding-top:5px;" *ngIf="auctionsGroup=='RECENT'"
                                  [countdownType]="'ending-countdown'"
                                  [endDate]="auction.endTime"></app-auction-countdown>
-          <app-auction-countdown class="text-lg-left font-weight-200 color-grey-subtext float-left" *ngIf="auctionsGroup=='UPCOMING'"
+                  <app-auction-countdown class="text-lg-left font-weight-200 color-grey-subtext float-left" style="padding-top:5px;" *ngIf="auctionsGroup=='UPCOMING'"
                                  [countdownType]="'starting-countdown'"
                                  [endDate]="auction.startTime"></app-auction-countdown>
-
-          <a href="#" *ngIf="auctionsGroup=='RECENT'" class="btn btn-primary card-button">Bid</a>
-          <a href="#" *ngIf="auctionsGroup=='UPCOMING'" class="btn btn-primary card-button">Subscribe</a>
+              </div>
+              <div class="col-sm-4" style="padding: 0;">
+                  <a href="#" *ngIf="auctionsGroup=='RECENT'" class="btn btn-primary card-button">Bid</a>
+                  <a href="#" *ngIf="auctionsGroup=='UPCOMING'" class="btn btn-primary card-button">Subscribe</a>
+              </div>
+          </div>
         </div>
       </article>
     </div>
@@ -34,7 +38,7 @@
     </div>
   </div>
   <p></p>
-  <button (click)="loadMoreAuctions()" class="btn btn-primary">Load More</button>
+  <button (click)="loadMoreAuctions()" class="btn btn-primary" style="background-color: #5271ff;">Load More</button>
 </div>
 
 

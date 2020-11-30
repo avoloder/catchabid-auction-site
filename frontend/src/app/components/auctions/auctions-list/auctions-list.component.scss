@@ -1,8 +1,10 @@
 .card-button{
   float:right;
   border-radius:10px;
-  padding-left:15px;
-  padding-right:15px;
+  background-color: #5271ff;
+  padding-left: 0;
+  padding-right: 0;
+  width: 100%;
   }
 .col-item {
   border: 1px solid #E1E1E1;
@@ -10,6 +12,7 @@
   margin-bottom:12px;
 }
 .col-item .info {
+  width: 100%;
   padding: 8px;
   margin-top: 1px;
   display:inline-block;

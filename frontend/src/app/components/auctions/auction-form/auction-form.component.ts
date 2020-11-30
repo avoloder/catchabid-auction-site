@@ -64,7 +64,6 @@ export class AuctionFormComponent implements OnInit {
   constructor(private auctionsService: AuctionsService, private toast: ToastrService, private modalService: NgbModal) { }
 
   ngOnInit(): void {
-    console.log("ammar");
     this.imgPreview = 'assets/img/placeholder-image-300x225.png';
     this.auctionsService.getCategories().subscribe(x => this.categories = x);
     console.log(this.categories);
