@@ -23,4 +23,5 @@ public interface UserService {
      * @return regular user if found
      */
     RegularUser getUserByEmail(String email);
+
 }

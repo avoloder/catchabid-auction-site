@@ -6,8 +6,6 @@ import at.ac.ase.entities.AuctionPost;
 import at.ac.ase.entities.RegularUser;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
