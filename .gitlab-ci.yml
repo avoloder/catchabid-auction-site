@@ -52,11 +52,12 @@ deploy-backend:
 
 deploy-frontend:
   image: node:lts
-  stage: build
+  stage: deploy
   script:
     - cd frontend && npm start
+    - cd frontend && npm install && npm install -g angular-cli
+    - npm start
   tags: [runner]
   only:
     - dev
     - master
-
