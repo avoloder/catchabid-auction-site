@@ -26,7 +26,7 @@ public class AuctionService implements IAuctionService {
     private AuctionRepository auctionRepository;
 
     @Autowired
-    private IAuctionHouseService IAuctionHouseService;
+    private IAuctionHouseService auctionHouseService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -74,8 +74,8 @@ public class AuctionService implements IAuctionService {
 
     @Override
     public List<AuctionPostSendDTO> getRecentAuctions(Integer pageNr, Integer auctionsPerPage) {
-        List<AuctionPost> recentAuctions = auctionRepository.findAllByStartTimeLessThan(LocalDateTime.now(),
-                getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").descending()));
+        List<AuctionPost> recentAuctions = auctionRepository.findAllByStartTimeLessThanAndEndTimeGreaterThan(
+                LocalDateTime.now(), LocalDateTime.now(), getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").descending()));
         return auctionDtoTranslator.toDtoList(recentAuctions);
     }
 

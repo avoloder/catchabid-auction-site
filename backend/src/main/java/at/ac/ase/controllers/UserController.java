@@ -19,17 +19,17 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    IRegularUserService IRegularUserService;
+    IRegularUserService regularUserService;
 
     @Autowired
-    IAuctionHouseService IAuctionHouseService;
+    IAuctionHouseService auctionHouseService;
 
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
     public ResponseEntity findUser(@RequestParam Map<String, String> userData){
         logger.info("Retrieving user with the email " + userData.get("email"));
         String email = userData.get("email");
-        RegularUser user = IRegularUserService.getUserByEmail(email);
-        AuctionHouse auctionHouse = IAuctionHouseService.getAuctionHouseByEmail(email);
+        RegularUser user = regularUserService.getUserByEmail(email);
+        AuctionHouse auctionHouse = auctionHouseService.getAuctionHouseByEmail(email);
         if(user != null){
             return ResponseEntity.status(HttpStatus.OK).body(user);
         } else if(auctionHouse != null){

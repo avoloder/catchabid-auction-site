@@ -24,10 +24,10 @@ import java.time.LocalDateTime;
 public class AuctionServiceTest extends BaseIntegrationTest {
 
     @Autowired
-    IAuctionService IAuctionService;
+    IAuctionService auctionService;
 
     @Autowired
-    IAuctionHouseService IAuctionHouseService;
+    IAuctionHouseService auctionHouseService;
 
     @After
     public void cleanup() {
@@ -36,7 +36,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
 
     @Test
     public void testServiceNotNull() {
-        assertNotNull(IAuctionService);
+        assertNotNull(auctionService);
     }
 
     @Test
@@ -45,7 +45,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         List<AuctionPostSendDTO> auctions;
         insertTestData("multiple-auctions.sql");
 
-        auctions= IAuctionService.getRecentAuctions(0, 5);
+        auctions= auctionService.getRecentAuctions(0, 5);
 
         assertThat(auctions.size(), is(5));
         assertThat(auctions.get(0).getId(), is(11L));
@@ -54,7 +54,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         assertThat(auctions.get(3).getId(), is(8L));
         assertThat(auctions.get(4).getId(), is(7L));
 
-        auctions= IAuctionService.getRecentAuctions(1, 5);
+        auctions= auctionService.getRecentAuctions(1, 5);
 
         assertThat(auctions.size(), is(5));
         assertThat(auctions.get(0).getId(), is(6L));
@@ -63,7 +63,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         assertThat(auctions.get(3).getId(), is(3L));
         assertThat(auctions.get(4).getId(), is(2L));
 
-        auctions= IAuctionService.getRecentAuctions(2, 5);
+        auctions= auctionService.getRecentAuctions(2, 5);
 
         assertThat(auctions.size(), is(1));
         assertThat(auctions.get(0).getId(), is(1L));
@@ -74,17 +74,17 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     public void testGetRecentAuctionsWithInvalidParam() {
         insertTestData("multiple-auctions.sql");
 
-        List<AuctionPostSendDTO> auctions = IAuctionService.getRecentAuctions(0, 0);
+        List<AuctionPostSendDTO> auctions = auctionService.getRecentAuctions(0, 0);
         assertThat(auctions.size(), is(11));
         assertThat(auctions.get(10).getId(), is(1L));
         assertThat(auctions.get(0).getId(), is(11L));
 
-        auctions = IAuctionService.getRecentAuctions(null, null);
+        auctions = auctionService.getRecentAuctions(null, null);
         assertThat(auctions.size(), is(11));
         assertThat(auctions.get(0).getId(), is(11L));
         assertThat(auctions.get(10).getId(), is(1L));
 
-        auctions = IAuctionService.getRecentAuctions(-1, 10);
+        auctions = auctionService.getRecentAuctions(-1, 10);
         assertThat(auctions.size(), is(10));
         assertThat(auctions.get(0).getId(), is(11L));
         assertThat(auctions.get(9).getId(), is(2L));
@@ -96,9 +96,9 @@ public class AuctionServiceTest extends BaseIntegrationTest {
 
         AuctionPost auctionPost = new AuctionPost();
 
-        AuctionHouse auctionHouse = IAuctionHouseService.getAuctionHouseByEmail("test@test.com");
+        AuctionHouse auctionHouse = auctionHouseService.getAuctionHouseByEmail("test@test.com");
 
-        List<AuctionPost> auctionPosts = IAuctionService.getAllAuctions();
+        List<AuctionPost> auctionPosts = auctionService.getAllAuctions();
 
         assertNotNull(auctionHouse);
         assertThat(auctionPosts.size(), is(1));
@@ -113,9 +113,9 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         auctionPost.setCategory(Category.CARS);
         auctionPost.setStatus(Status.ACTIVE);
 
-        IAuctionService.createAuction(auctionPost);
+        auctionService.createAuction(auctionPost);
 
-        auctionPosts = IAuctionService.getAllAuctions();
+        auctionPosts = auctionService.getAllAuctions();
         assertThat(auctionPosts.size(), is(2));
     }
 }

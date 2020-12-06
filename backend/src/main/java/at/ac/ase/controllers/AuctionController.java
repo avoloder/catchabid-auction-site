@@ -25,7 +25,7 @@ import java.util.List;
 public class AuctionController {
     private static final Logger logger = LoggerFactory.getLogger(AuctionController.class);
     @Autowired
-    private IAuctionService IAuctionService;
+    private IAuctionService auctionService;
     @Autowired
     private AuctionHouseService auctionHouseService;
 
@@ -34,11 +34,11 @@ public class AuctionController {
     public @ResponseBody
     ResponseEntity<List<AuctionPostSendDTO>> getUpcomingAuctions(
             @RequestParam(required = false) Integer pageSize,
-            @RequestParam(required = false) Integer pageNr) {
+            @RequestParam(required = false) Integer pageNumber) {
 
-        logger.info("Upcoming auctions requested for page size "+pageSize+" and age number requested " + pageNr);
-            List<AuctionPostSendDTO> posts = IAuctionService.getUpcomingAuctions(pageSize, pageNr);
-            logger.info("Size of payload for upcoming auctions:" + posts.size());
+        logger.info("Upcoming auctions requested for page size "+pageSize+" and age number requested " + pageNumber);
+            List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctions(pageSize, pageNumber);
+         logger.info("Size of payload for upcoming auctions:" + posts.size());
             logger.debug("Upcoming auctions sent to frontend for pageNr " + posts.size() +" : "+ posts);
             return new ResponseEntity<>(posts, HttpStatus.OK);
     }
@@ -48,7 +48,7 @@ public class AuctionController {
     ResponseEntity<List<AuctionPostSendDTO>> getAllAuctions(@RequestParam(required = false) Integer pageSize,
                                                             @RequestParam(required = false) Integer pageNr) {
         logger.info("All auctions requested for page size "+pageSize +" and age number requested" + pageNr);
-        List<AuctionPostSendDTO> posts = IAuctionService.getUpcomingAuctions(pageSize,pageNr);
+        List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctions(pageSize,pageNr);
         logger.info("Size of payload for all auctions: " + posts.size());
         logger.debug("All auctions sent to frontend for pageNr "+posts.size()+" : "+ posts);
         return new ResponseEntity<>(posts, HttpStatus.OK);
@@ -59,7 +59,7 @@ public class AuctionController {
             @RequestParam(required = false) Integer pageNumber,
             @RequestParam(required = false) Integer auctionsPerPage) {
         logger.info("Recent auctions requested for page size "+auctionsPerPage+"and age number requested " + pageNumber);
-        return IAuctionService.getRecentAuctions(pageNumber, auctionsPerPage);
+        return auctionService.getRecentAuctions(pageNumber, auctionsPerPage);
     }
 
     @PostMapping
@@ -67,17 +67,17 @@ public class AuctionController {
             @RequestBody @Valid AuctionCreationDTO auction,
             @CurrentSecurityContext(expression = "authentication.principal") User user) {
         if (auction.getId() != null) {
-            IAuctionService
+            auctionService
                     .getAuctionPost(auction.getId())
                     .orElseThrow(ObjectNotFoundException::new);
         }
-        AuctionPost auctionPost = IAuctionService.toAuctionPostEntity(user, auction);
-        return ResponseEntity.ok(IAuctionService.createAuction(auctionPost));
+        AuctionPost auctionPost = auctionService.toAuctionPostEntity(user, auction);
+        return ResponseEntity.ok(auctionService.createAuction(auctionPost));
     }
 
     @RequestMapping(value = "/getCategories", method = RequestMethod.GET)
     public ResponseEntity getCategories(){
-        return ResponseEntity.status(HttpStatus.OK).body(this.IAuctionService.getCategories());
+        return ResponseEntity.status(HttpStatus.OK).body(this.auctionService.getCategories());
     }
 
 

@@ -42,7 +42,9 @@ public class AuctionDtoTranslator {
         if (auction.getStatus()!=null) {
             auctionPostSendDTO.setStatus(auction.getStatus().name());
         }
-        auctionPostSendDTO.setImage(Base64.getEncoder().encodeToString(auction.getImage()));
+        if (auction.getImage() != null) {
+            auctionPostSendDTO.setImage(Base64.getEncoder().encodeToString(auction.getImage()));
+        }
         return auctionPostSendDTO;
     }
 

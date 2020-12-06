@@ -29,7 +29,7 @@ public class TokenUtil {
     private IRegularUserService IRegularUserService;
 
     @Autowired
-    private IAuctionHouseService IAuctionHouseService;
+    private IAuctionHouseService auctionHouseService;
 
     static String KEY = "B&E)H@McQfTjWnZr4u7x!A%D*F-JaNdR";
     static String BASE_64_KEY = DatatypeConverter.printBase64Binary(KEY.getBytes());
@@ -77,7 +77,7 @@ public class TokenUtil {
         String userEmail = getEmailFromToken(token);
         User user = IRegularUserService.getUserByEmail(userEmail);
         if (Objects.isNull(user)) {
-            user = IAuctionHouseService.getAuctionHouseByEmail(userEmail);
+            user = auctionHouseService.getAuctionHouseByEmail(userEmail);
         }
         return new UsernamePasswordAuthenticationToken(user, token, roles);
     }

@@ -21,10 +21,10 @@ public class RegisterServiceTest extends BaseIntegrationTest {
     RegisterService registerService;
 
     @Autowired
-    IRegularUserService IRegularUserService;
+    IRegularUserService regularUserService;
 
     @Autowired
-    IAuctionHouseService IAuctionHouseService;
+    IAuctionHouseService auctionHouseService;
 
     @Autowired
     PasswordEncoder encoder;
@@ -36,7 +36,7 @@ public class RegisterServiceTest extends BaseIntegrationTest {
 
     @Test
     public void test_registerUser() {
-        assertEquals(0, IRegularUserService.getAllUsers().size());
+        assertEquals(0, regularUserService.getAllUsers().size());
         RegularUser user = new RegularUser();
         user.setFirstName("firstName");
         user.setLastName("lastName");
@@ -50,13 +50,13 @@ public class RegisterServiceTest extends BaseIntegrationTest {
         user.setAddress(address);
 
         registerService.registerUser(user);
-        assertEquals(1, IRegularUserService.getAllUsers().size());
+        assertEquals(1, regularUserService.getAllUsers().size());
 
     }
 
     @Test
     public void test_registerHouse() {
-        assertEquals(0, IAuctionHouseService.getAllHouses().size());
+        assertEquals(0, auctionHouseService.getAllHouses().size());
         AuctionHouse house = new AuctionHouse();
         house.setName("Auction House");
         house.setEmail("house@gmail.com");
@@ -69,7 +69,7 @@ public class RegisterServiceTest extends BaseIntegrationTest {
         house.setAddress(address);
 
         registerService.registerHouse(house);
-        assertEquals(1, IAuctionHouseService.getAllHouses().size());
+        assertEquals(1, auctionHouseService.getAllHouses().size());
     }
 
     @Test
@@ -80,7 +80,7 @@ public class RegisterServiceTest extends BaseIntegrationTest {
         user.setPasswordHash("testPassword");
         user.setEmail("test@gmail.com");
         registerService.registerUser(user);
-        assertEquals(1, IRegularUserService.getAllUsers().size());
+        assertEquals(1, regularUserService.getAllUsers().size());
         registerService.registerUser(user);
     }
 }

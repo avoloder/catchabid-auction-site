@@ -36,9 +36,9 @@ public class AuthController {
     @Autowired
     private IRegisterService registerService;
     @Autowired
-    private IRegularUserService IRegularUserService;
+    private IRegularUserService regularUserService;
     @Autowired
-    private IAuctionHouseService IAuctionHouseService;
+    private IAuctionHouseService auctionHouseService;
     @Autowired
     private PasswordTokenService tokenService;
 
@@ -73,8 +73,8 @@ public class AuthController {
 
     @RequestMapping(value = "/requestPasswordReset", method = RequestMethod.POST)
     public ResponseEntity requestPasswordReset(@RequestBody String email){
-        RegularUser user = IRegularUserService.getUserByEmail(email);
-        AuctionHouse auctionHouse = IAuctionHouseService.getAuctionHouseByEmail(email);
+        RegularUser user = regularUserService.getUserByEmail(email);
+        AuctionHouse auctionHouse = auctionHouseService.getAuctionHouseByEmail(email);
         if(user == null && auctionHouse == null){
             throw new UserNotFoundException();
         }
@@ -101,15 +101,15 @@ public class AuthController {
     public ResponseEntity resetPassword(@RequestBody Map<String, String> userData ){
         String email = userData.get("email");
         String password = userData.get("password");
-        RegularUser user = IRegularUserService.getUserByEmail(email);
-        AuctionHouse auctionHouse = IAuctionHouseService.getAuctionHouseByEmail(email);
+        RegularUser user = regularUserService.getUserByEmail(email);
+        AuctionHouse auctionHouse = auctionHouseService.getAuctionHouseByEmail(email);
         if(user == null && auctionHouse == null){
             throw new UserNotFoundException();
         }
         if(user != null) {
-            IRegularUserService.changePassword(email, password);
+            regularUserService.changePassword(email, password);
         }else{
-            IAuctionHouseService.changePassword(email, password);
+            auctionHouseService.changePassword(email, password);
         }
         return ResponseEntity.status(HttpStatus.OK).build();
     }

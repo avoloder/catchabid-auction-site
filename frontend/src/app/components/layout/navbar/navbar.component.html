@@ -56,7 +56,7 @@
       </form>
       <ul class="navbar-nav align-items-center ml-auto ml-md-0 text-right">
         <li class="nav-item dropdown mr-3 ml-5" placement="bottom-right">
-          <a class="nav-link pr-0" role="button" (click)="createAuction()" >
+          <a class="nav-link pr-0" role="button" (click)="isUserLoggedIn() ? createAuction() : openLoginModal()" >
             Sell
           </a>
         </li>
