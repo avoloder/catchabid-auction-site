@@ -2,23 +2,24 @@ package at.ac.ase.service;
 
 import at.ac.ase.basetest.BaseIntegrationTest;
 import at.ac.ase.dto.AuctionPostSendDTO;
+import at.ac.ase.entities.AuctionHouse;
+import at.ac.ase.entities.AuctionPost;
+import at.ac.ase.entities.Category;
+import at.ac.ase.entities.Status;
 import at.ac.ase.service.auction.IAuctionService;
+import at.ac.ase.service.user.IAuctionHouseService;
 import org.junit.After;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import at.ac.ase.entities.AuctionHouse;
-import at.ac.ase.entities.AuctionPost;
-import at.ac.ase.entities.Category;
-import at.ac.ase.entities.Status;
-import at.ac.ase.service.user.IAuctionHouseService;
-import java.time.LocalDateTime;
+import static org.junit.Assert.*;
 
 
 public class AuctionServiceTest extends BaseIntegrationTest {
@@ -45,7 +46,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         List<AuctionPostSendDTO> auctions;
         insertTestData("multiple-auctions.sql");
 
-        auctions= auctionService.getRecentAuctions(0, 5);
+        auctions = auctionService.getRecentAuctions(0, 5);
 
         assertThat(auctions.size(), is(5));
         assertThat(auctions.get(0).getId(), is(11L));
@@ -54,7 +55,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         assertThat(auctions.get(3).getId(), is(8L));
         assertThat(auctions.get(4).getId(), is(7L));
 
-        auctions= auctionService.getRecentAuctions(1, 5);
+        auctions = auctionService.getRecentAuctions(1, 5);
 
         assertThat(auctions.size(), is(5));
         assertThat(auctions.get(0).getId(), is(6L));
@@ -63,7 +64,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         assertThat(auctions.get(3).getId(), is(3L));
         assertThat(auctions.get(4).getId(), is(2L));
 
-        auctions= auctionService.getRecentAuctions(2, 5);
+        auctions = auctionService.getRecentAuctions(2, 5);
 
         assertThat(auctions.size(), is(1));
         assertThat(auctions.get(0).getId(), is(1L));
@@ -117,6 +118,43 @@ public class AuctionServiceTest extends BaseIntegrationTest {
 
         auctionPosts = auctionService.getAllAuctions();
         assertThat(auctionPosts.size(), is(2));
+    }
+
+    @Test
+    public void testGetUpcomingAuctions() {
+        insertTestData("auctions.sql");
+        AuctionPost postRecent = createAuction("test@test.com");
+        auctionService.createAuction(postRecent);
+        AuctionPost postUpcoming = createAuction("test1@test.com");
+        postUpcoming.setStartTime(LocalDateTime.now().plusMinutes(15));
+        postUpcoming.setId(2l);
+        auctionService.createAuction(postUpcoming);
+        List<AuctionPostSendDTO> upcoming = auctionService.getUpcomingAuctions(0, 0);
+        assertEquals(1, upcoming.size());
+        assertEquals(postUpcoming.getId(), upcoming.get(0).getId());
+    }
+
+    private AuctionPost createAuction(String email) {
+        AuctionPost auctionPost = new AuctionPost();
+        auctionPost.setEndTime(LocalDateTime.now());
+        auctionPost.setStartTime(LocalDateTime.now().minusMinutes(55));
+        auctionPost.setName("TestAuction");
+        auctionPost.setDescription("TestDesc");
+        auctionPost.setMinPrice(10.0);
+        auctionPost.setCreator(auctionHouseService.getAuctionHouseByEmail(email));
+        auctionPost.setCategory(Category.CARS);
+        auctionPost.setStatus(Status.ACTIVE);
+        auctionPost.setImage(getImageBytes());
+        return auctionPost;
+    }
+
+    public byte[] getImageBytes() {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("catchabid-logo.png")) {
+            return inputStream.readAllBytes();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new byte[10];
     }
 }
 
