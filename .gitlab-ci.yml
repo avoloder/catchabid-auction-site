@@ -1,0 +1,54 @@
+image: maven:3-jdk-11
+
+variables:
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
+
+stages:
+  - build
+  - test
+  - deploy
+
+build-backend:
+  stage: build
+  script:
+    - cd backend && mvn clean install -DskipTests
+  only:
+    - dev
+    - master
+
+build-frontend:
+  image: node:lts
+  stage: build
+  script:
+    - cd frontend && npm install && npx ng build
+  only:
+    - dev
+    - master
+
+test-backend:
+  stage: test
+  script:
+    - cd backend && mvn test
+  only:
+    - dev
+    - master
+
+deploy-backend:
+  stage: deploy
+  script:
+    - cd backend && mvn clean install -DskipTests
+    - mvn $MAVEN_CLI_OPTS  org.springframework.boot:spring-boot-maven-plugin:run
+
+  only:
+    - dev
+    - master
+
+deploy-frontend:
+  image: node:lts
+  stage: build
+  script:
+    - cd frontend && npm start
+  only:
+    - dev
+    - master
+
