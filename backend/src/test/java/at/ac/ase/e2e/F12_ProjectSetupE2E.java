@@ -2,12 +2,14 @@ package at.ac.ase.e2e;
 
 import at.ac.ase.basetest.BaseE2E;
 import at.ac.ase.e2e.pages.CatchabidBasePage;
-import at.ac.ase.postgres.auction.AuctionRepository;
+import at.ac.ase.repository.auction.AuctionRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 public class F12_ProjectSetupE2E extends BaseE2E {
 
