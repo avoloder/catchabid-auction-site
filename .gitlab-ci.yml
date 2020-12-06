@@ -50,7 +50,7 @@ deploy-frontend:
   image: node:lts
   stage: deploy
   script:
-    - cd frontend && npm start
+    - cd frontend && npm install && npm start
   tags: [runner]
   only:
     - dev
