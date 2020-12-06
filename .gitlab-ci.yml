@@ -12,6 +12,7 @@ build-backend:
   stage: build
   script:
     - cd backend && mvn clean install -DskipTests
+  tags: runner
   only:
     - dev
     - master
@@ -21,6 +22,7 @@ build-frontend:
   stage: build
   script:
     - cd frontend && npm install && npx ng build
+  tags: runner
   only:
     - dev
     - master
@@ -29,6 +31,7 @@ test-backend:
   stage: test
   script:
     - cd backend && mvn test
+  tags: runner
   only:
     - dev
     - master
@@ -38,7 +41,7 @@ deploy-backend:
   script:
     - cd backend && mvn clean install -DskipTests
     - mvn $MAVEN_CLI_OPTS  org.springframework.boot:spring-boot-maven-plugin:run
-
+  tags: runner
   only:
     - dev
     - master
@@ -48,6 +51,7 @@ deploy-frontend:
   stage: build
   script:
     - cd frontend && npm start
+  tags: runner
   only:
     - dev
     - master
