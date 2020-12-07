@@ -30,6 +30,8 @@ public class AuctionService implements IAuctionService {
 
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private AuctionDtoTranslator auctionDtoTranslator;
 
     @Override
     public Optional<AuctionPost> getAuctionPost(Long id) {
@@ -65,12 +67,9 @@ public class AuctionService implements IAuctionService {
 
     @Override
     public Category[] getCategories() {
-        Category [] categories = Category.values();
+        Category[] categories = Category.values();
         return categories;
     }
-
-    @Autowired
-    private AuctionDtoTranslator auctionDtoTranslator;
 
     @Override
     public List<AuctionPostSendDTO> getRecentAuctions(Integer pageNr, Integer auctionsPerPage) {
@@ -80,9 +79,19 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
+    public List<AuctionPostSendDTO> getRecentAuctionsForUser(Integer pageNr, Integer auctionsPerPage, Long userId) {
+        return new ArrayList<>();
+    }
+
+    @Override
     public List<AuctionPostSendDTO> getUpcomingAuctions(Integer auctionsPerPage, Integer pageNr) {
         return convertAuctionsToDTO(auctionRepository.findAllByStartTimeGreaterThan(LocalDateTime.now(),
                 getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").ascending())));
+    }
+
+    @Override
+    public List<AuctionPostSendDTO> getUpcomingAuctionsForUser(Integer auctionsPerPage, Integer pageNr, Long userId) {
+        return new ArrayList<>();
     }
 
     @Override

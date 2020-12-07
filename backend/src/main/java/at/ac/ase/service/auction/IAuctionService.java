@@ -21,12 +21,30 @@ public interface IAuctionService {
     List<AuctionPostSendDTO> getRecentAuctions(Integer pageNr, Integer auctionsPerPage);
 
     /**
-     *
-     * @param auctionsPerPage
-     * @param pageNr
+     * Returns recent pagable auction posts ordered by start_time descending based on user preferences
+     * @param pageNr page number starting at 0. (default=0 if invalid parameter)
+     * @param auctionsPerPage page size (default=50 if invalid parameter)
+     * @param userId of the user
+     * @return
+     */
+    List<AuctionPostSendDTO> getRecentAuctionsForUser(Integer pageNr, Integer auctionsPerPage,Long userId);
+
+    /**
+     * Get upcomming auctions ordered by start-time ascending
+     * @param auctionsPerPage page size (default=50 if invalid parameter)
+     * @param pageNr page number starting at 0. (default=0 if invalid parameter)
      * @return
      */
     List<AuctionPostSendDTO> getUpcomingAuctions(Integer auctionsPerPage, Integer pageNr);
+
+    /**
+     * Get upcomming auctions ordered by start-time ascending, based on user preferences
+     * @param auctionsPerPage page size (default=50 if invalid parameter)
+     * @param pageNr page number starting at 0. (default=0 if invalid parameter)
+     * @param userId id of user whose preferences we should follow
+     * @return
+     */
+    List<AuctionPostSendDTO> getUpcomingAuctionsForUser(Integer auctionsPerPage, Integer pageNr,Long userId);
 
     /**
      *
