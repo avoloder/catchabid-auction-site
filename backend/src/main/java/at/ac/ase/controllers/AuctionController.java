@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -40,12 +41,12 @@ public class AuctionController {
         if (user != null) {
             List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctions(pageSize, pageNumber);
             logger.info("Size of payload for upcoming auctions:" + posts.size());
-            logger.debug("Upcoming auctions sent to frontend for pageNr " + posts.size() + " : " + posts);
+            logger.debug("Ids of Auctions in payload: " + posts.stream().map(AuctionPostSendDTO::getId).collect(Collectors.toList()));
             return new ResponseEntity<>(posts, HttpStatus.OK);
         } else {
             List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctionsForUser(pageSize, pageNumber, user);
             logger.info("Size of payload for upcoming auctions:" + posts.size());
-            logger.debug("Upcoming auctions sent to frontend for pageNr " + posts.size() + " : " + posts);
+            logger.debug("Ids of Auctions in payload: " + posts.stream().map(AuctionPostSendDTO::getId).collect(Collectors.toList()));
             return new ResponseEntity<>(posts, HttpStatus.OK);
         }
     }
@@ -57,7 +58,7 @@ public class AuctionController {
         logger.info("All auctions requested for page size " + pageSize + " and age number requested" + pageNr);
         List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctions(pageSize, pageNr);
         logger.info("Size of payload for all auctions: " + posts.size());
-        logger.debug("All auctions sent to frontend for pageNr " + posts.size() + " : " + posts);
+        logger.debug("Ids of Auctions in payload: " + posts.stream().map(AuctionPostSendDTO::getId).collect(Collectors.toList()));
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
@@ -71,8 +72,10 @@ public class AuctionController {
         if (user != null) {
             return auctionService.getRecentAuctions(pageNumber, auctionsPerPage);
         } else {
-            return auctionService.getRecentAuctionsForUser(pageNumber, auctionsPerPage,user);
-
+            List<AuctionPostSendDTO> posts = auctionService.getRecentAuctionsForUser(pageNumber, auctionsPerPage, user);
+            logger.info("Size of payload of recent auctions for userId" + user + " is " + posts.size());
+            logger.debug("Ids of Auctions in payload: " + posts.stream().map(AuctionPostSendDTO::getId).collect(Collectors.toList()));
+            return posts;
         }
     }
 
@@ -89,7 +92,7 @@ public class AuctionController {
         return ResponseEntity.ok(auctionService.createAuction(auctionPost));
     }
 
-    @RequestMapping(value = "/getCategories", method = RequestMethod.GET)
+    @GetMapping("getCategories")
     public ResponseEntity getCategories() {
         return ResponseEntity.status(HttpStatus.OK).body(this.auctionService.getCategories());
     }

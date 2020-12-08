@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RegularUserService implements IRegularUserService {
@@ -35,5 +36,10 @@ public class RegularUserService implements IRegularUserService {
     public void changePassword(String email, String password) {
         String passwordHash = encoder.encode(password);
         userRepository.changePassword(email, passwordHash);
+    }
+
+    @Override
+    public Optional<RegularUser> getUserById(Long id) {
+        return userRepository.findById(id);
     }
 }
