@@ -4,10 +4,10 @@ import at.ac.ase.dto.AuctionCreationDTO;
 import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.translator.AuctionDtoTranslator;
 import at.ac.ase.entities.*;
-import at.ac.ase.postgres.auction.AuctionRepository;
-import at.ac.ase.service.auction.AuctionService;
-import at.ac.ase.service.users.AuctionHouseService;
-import at.ac.ase.util.exception.ObjectNotFoundException;
+import at.ac.ase.repository.auction.AuctionRepository;
+import at.ac.ase.service.auction.IAuctionService;
+import at.ac.ase.service.user.IAuctionHouseService;
+import at.ac.ase.util.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,13 +20,13 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
-public class AuctionServiceImplementation implements AuctionService {
+public class AuctionService implements IAuctionService {
 
     @Autowired
     private AuctionRepository auctionRepository;
 
     @Autowired
-    private AuctionHouseService auctionHouseService;
+    private IAuctionHouseService auctionHouseService;
 
     @Autowired
     private ModelMapper modelMapper;

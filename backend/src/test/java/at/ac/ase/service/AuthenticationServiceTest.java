@@ -5,8 +5,8 @@ import at.ac.ase.entities.RegularUser;
 import at.ac.ase.service.auth.IAuthService;
 import at.ac.ase.service.auth.IRegisterService;
 
-import at.ac.ase.util.exception.exceptionhandler.AuthorizationException;
-import at.ac.ase.util.exception.exceptionhandler.UserNotFoundException;
+import at.ac.ase.util.exceptions.AuthorizationException;
+import at.ac.ase.util.exceptions.UserNotFoundException;
 import net.minidev.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;

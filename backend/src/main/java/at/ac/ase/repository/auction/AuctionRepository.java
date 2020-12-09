@@ -1,4 +1,4 @@
-package at.ac.ase.postgres.auction;
+package at.ac.ase.repository.auction;
 
 import at.ac.ase.entities.AuctionPost;
 import org.springframework.data.domain.Pageable;

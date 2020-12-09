@@ -1,6 +1,5 @@
-package at.ac.ase.util.exception.exceptionhandler;
+package at.ac.ase.util.exceptions;
 
-import at.ac.ase.util.exception.ObjectNotFoundException;
 import java.time.Instant;
 import java.util.Date;
 import org.springframework.http.HttpStatus;

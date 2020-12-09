@@ -1,7 +1,7 @@
 package at.ac.ase.example;
 
 import at.ac.ase.entities.AuctionPost;
-import at.ac.ase.postgres.auction.AuctionRepository;
+import at.ac.ase.repository.auction.AuctionRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

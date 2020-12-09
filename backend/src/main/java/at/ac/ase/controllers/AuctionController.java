@@ -4,9 +4,9 @@ import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.AuctionCreationDTO;
 import at.ac.ase.entities.AuctionPost;
 import at.ac.ase.entities.User;
-import at.ac.ase.service.auction.AuctionService;
-import at.ac.ase.service.users.implementation.AuctionHouseServiceImpl;
-import at.ac.ase.util.exception.ObjectNotFoundException;
+import at.ac.ase.service.auction.IAuctionService;
+import at.ac.ase.service.user.implementation.AuctionHouseService;
+import at.ac.ase.util.exceptions.ObjectNotFoundException;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +25,9 @@ import java.util.List;
 public class AuctionController {
     private static final Logger logger = LoggerFactory.getLogger(AuctionController.class);
     @Autowired
-    private AuctionService auctionService;
+    private IAuctionService auctionService;
     @Autowired
-    private AuctionHouseServiceImpl auctionHouseService;
+    private AuctionHouseService auctionHouseService;
 
 
     @GetMapping("upcoming")
@@ -36,9 +36,9 @@ public class AuctionController {
             @RequestParam(required = false) Integer pageSize,
             @RequestParam(required = false) Integer pageNumber) {
 
-        logger.info("Upcoming auctions requested for page size "+pageSize+" and page number requested " + pageNumber);
+        logger.info("Upcoming auctions requested for page size "+pageSize+" and age number requested " + pageNumber);
             List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctions(pageSize, pageNumber);
-            logger.info("Size of payload for upcoming auctions:" + posts.size());
+         logger.info("Size of payload for upcoming auctions:" + posts.size());
             logger.debug("Upcoming auctions sent to frontend for pageNr " + posts.size() +" : "+ posts);
             return new ResponseEntity<>(posts, HttpStatus.OK);
     }

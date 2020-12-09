@@ -5,8 +5,8 @@ import at.ac.ase.entities.Address;
 import at.ac.ase.entities.AuctionHouse;
 import at.ac.ase.entities.RegularUser;
 import at.ac.ase.service.auth.implementation.RegisterService;
-import at.ac.ase.service.users.AuctionHouseService;
-import at.ac.ase.service.users.UserService;
+import at.ac.ase.service.user.IAuctionHouseService;
+import at.ac.ase.service.user.IRegularUserService;
 import org.junit.After;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +21,10 @@ public class RegisterServiceTest extends BaseIntegrationTest {
     RegisterService registerService;
 
     @Autowired
-    UserService userService;
+    IRegularUserService regularUserService;
 
     @Autowired
-    AuctionHouseService auctionHouseService;
+    IAuctionHouseService auctionHouseService;
 
     @Autowired
     PasswordEncoder encoder;
@@ -36,7 +36,7 @@ public class RegisterServiceTest extends BaseIntegrationTest {
 
     @Test
     public void test_registerUser() {
-        assertEquals(0, userService.getAllUsers().size());
+        assertEquals(0, regularUserService.getAllUsers().size());
         RegularUser user = new RegularUser();
         user.setFirstName("firstName");
         user.setLastName("lastName");
@@ -50,7 +50,7 @@ public class RegisterServiceTest extends BaseIntegrationTest {
         user.setAddress(address);
 
         registerService.registerUser(user);
-        assertEquals(1, userService.getAllUsers().size());
+        assertEquals(1, regularUserService.getAllUsers().size());
 
     }
 
@@ -80,7 +80,7 @@ public class RegisterServiceTest extends BaseIntegrationTest {
         user.setPasswordHash("testPassword");
         user.setEmail("test@gmail.com");
         registerService.registerUser(user);
-        assertEquals(1, userService.getAllUsers().size());
+        assertEquals(1, regularUserService.getAllUsers().size());
         registerService.registerUser(user);
     }
 }

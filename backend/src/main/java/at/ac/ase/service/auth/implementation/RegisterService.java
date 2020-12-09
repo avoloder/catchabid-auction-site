@@ -2,8 +2,8 @@ package at.ac.ase.service.auth.implementation;
 
 import at.ac.ase.entities.AuctionHouse;
 import at.ac.ase.entities.RegularUser;
-import at.ac.ase.postgres.users.AuctionHouseRepository;
-import at.ac.ase.postgres.users.UserRepository;
+import at.ac.ase.repository.user.AuctionHouseRepository;
+import at.ac.ase.repository.user.UserRepository;
 import at.ac.ase.service.auth.IRegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,7 +34,7 @@ public class RegisterService implements IRegisterService {
     @Override
     public AuctionHouse registerHouse(AuctionHouse ahouse) {
         ahouse.setPasswordHash(passwordEncoder.encode(ahouse.getPasswordHash()));
-        return (AuctionHouse) auctionHouseRepository.save(ahouse);
+        return auctionHouseRepository.save(ahouse);
     }
 
 }

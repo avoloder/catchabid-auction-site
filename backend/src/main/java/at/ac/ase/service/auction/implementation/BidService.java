@@ -8,10 +8,10 @@ import at.ac.ase.entities.User;
 import at.ac.ase.postgres.auction.BidRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import at.ac.ase.service.auction.BidService;
+import at.ac.ase.service.auction.IBidService;
 
 @Service
-public class BidServiceImplementation implements BidService {
+public class BidService implements IBidService {
 
     @Autowired
     private BidDtoTranslator bidDtoTranslator;
@@ -32,4 +32,5 @@ public class BidServiceImplementation implements BidService {
         return bidRepository.save(bid);
 
     }
+
 }

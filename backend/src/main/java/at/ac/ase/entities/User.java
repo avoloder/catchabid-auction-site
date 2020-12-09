@@ -59,6 +59,7 @@ public abstract class User {
         mappedBy = "creator",
         cascade = CascadeType.ALL,
         orphanRemoval = true)
+
     @JsonBackReference
     private Set<AuctionPost> ownedAuctions = new HashSet<>();
 

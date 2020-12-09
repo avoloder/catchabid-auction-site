@@ -1,4 +1,4 @@
-package at.ac.ase.util.exception.exceptionhandler;
+package at.ac.ase.util.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
