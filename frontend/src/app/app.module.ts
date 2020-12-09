@@ -23,6 +23,7 @@ import { UserService } from './services/user.service';
 import {AuctionsModule} from "./components/auctions/auctions.module";
 import {AuthGuard} from "./services/auth-guard.service";
 import {CountdownModule} from "ngx-countdown";
+import { BidsModule } from './components/bids/bids.module';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,7 @@ import {CountdownModule} from "ngx-countdown";
     SigninComponent,
     ResetPasswordComponent,
     ResetPasswordTokenComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,7 +48,8 @@ import {CountdownModule} from "ngx-countdown";
     AuctionsModule,
     NgbModule,
     HomeModule,
-    CountdownModule
+    CountdownModule,
+    BidsModule
   ],
   providers: [
     AuthGuard,

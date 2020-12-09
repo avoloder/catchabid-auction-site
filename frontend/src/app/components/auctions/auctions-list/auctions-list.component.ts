@@ -1,6 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AuctionsService} from "../../../services/auction.service";
 import {AuctionPostModel} from "../../../models/auctionPost.model";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { BidsComponent } from '../../bids/bids.component';
+import { BidsService } from 'src/app/services/bids.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -10,7 +14,14 @@ import {AuctionPostModel} from "../../../models/auctionPost.model";
 })
 export class AuctionsListComponent implements OnInit {
 
-  constructor(private _dataService: AuctionsService) {
+  modalRef: NgbModalRef;
+
+  bidModalClosedSub: Subscription;
+
+  constructor(
+    private _dataService: AuctionsService,
+    private bidsService: BidsService,
+    private modalService: NgbModal) {
   }
 
   @Input() auctionsGroup : string;
@@ -53,4 +64,19 @@ export class AuctionsListComponent implements OnInit {
     }
     this.pageNumber++;
   }
+
+  openBidModal(auction: AuctionPostModel): void {
+    this.modalRef = this.modalService.open(BidsComponent);
+    this.modalRef.componentInstance.auction = auction;
+
+    this.bidModalClosedSub = this.bidsService.bidModalClosed.subscribe(
+      () => this.onBidModalClose()
+    );
+  }
+
+  onBidModalClose(): void {
+    this.modalRef.close();
+    this.bidModalClosedSub.unsubscribe();
+  }
+
 }

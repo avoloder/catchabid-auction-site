@@ -25,7 +25,6 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
     AppRoutingModule,
     BrowserModule,
     CountdownModule,
-    BrowserModule,
     ReactiveFormsModule,
     NgbModule
   ],

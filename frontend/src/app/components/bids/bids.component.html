@@ -1,0 +1,31 @@
+<form id="form" [formGroup]="bidsForm" (ngSubmit)="onBidSave()" ngNativeValidate>
+  <div class="modal-header" style="border-bottom-width: 1px">
+    <h4 class="modal-title pull-left">Place a bid</h4>
+    <button type="button" class="close pull-right" (click)="onModalClose()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-12">
+        <p>What would be your offer for the auction {{ auction.auctionName }}?</p>
+        <p *ngIf="auction.highestBid">Please not that the current higheset offer is {{ auction.highestBid }}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <input
+        type="number"
+        class="form-controll"
+        id="offer-input"
+        placeholder="Offer"
+        formControlName="offer">
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary">
+          Place a bid</button>
+  </div>
+</form>

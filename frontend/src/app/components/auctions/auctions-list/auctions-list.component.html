@@ -24,8 +24,8 @@
                                  [endDate]="auction.startTime"></app-auction-countdown>
               </div>
               <div class="col-sm-6">
-                  <a href="#" *ngIf="auctionsGroup=='RECENT'" class="btn btn-primary card-button">Bid</a>
-                  <a href="#" *ngIf="auctionsGroup=='UPCOMING'" class="btn btn-primary card-button">Subscribe</a>
+                  <a *ngIf="auctionsGroup=='RECENT'" (click)="openBidModal(auction)" class="btn btn-primary card-button">Bid</a>
+                  <a *ngIf="auctionsGroup=='UPCOMING'" (click)="openBidModal(auction)" class="btn btn-primary card-button">Subscribe</a>
               </div>
           </div>
         </div>

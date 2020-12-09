@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable, Subject} from "rxjs";
 import {AuctionPostModel} from "../models/auctionPost.model";
-import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/map';
 
 const api = 'api/auctions';
 
