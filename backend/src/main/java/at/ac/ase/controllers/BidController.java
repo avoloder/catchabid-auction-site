@@ -3,7 +3,7 @@ package at.ac.ase.controllers;
 import at.ac.ase.dto.BidDTO;
 import at.ac.ase.entities.Bid;
 import at.ac.ase.entities.User;
-import at.ac.ase.service.auction.BidService;
+import at.ac.ase.service.auction.IBidService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class BidController {
 
 
     @Autowired
-    private BidService bidService;
+    private IBidService bidService;
 
 
     @PostMapping
