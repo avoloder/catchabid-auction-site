@@ -1,5 +1,7 @@
 .carousel-inner img {
     width: 100%;
+    object-fit: cover;
+    object-position: 10% 0;
   }
 
 .card-button{
@@ -11,4 +13,5 @@
     padding-right: 0;
     height: 40px;
     width: 290px;
+    max-width: 98%;
 }
