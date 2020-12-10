@@ -1,4 +1,4 @@
-package at.ac.ase.postgres.auction;
+package at.ac.ase.repository.bid;
 
 import at.ac.ase.entities.Bid;
 import org.springframework.data.jpa.repository.JpaRepository;

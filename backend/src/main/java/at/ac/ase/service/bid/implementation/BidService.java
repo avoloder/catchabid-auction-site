@@ -1,14 +1,15 @@
-package at.ac.ase.service.auction.implementation;
+package at.ac.ase.service.bid.implementation;
 
 import at.ac.ase.dto.BidDTO;
 import at.ac.ase.dto.translator.BidDtoTranslator;
 import at.ac.ase.entities.Bid;
 import at.ac.ase.entities.RegularUser;
 import at.ac.ase.entities.User;
-import at.ac.ase.postgres.auction.BidRepository;
+import at.ac.ase.redis.service.IHighestBidService;
+import at.ac.ase.repository.bid.BidRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import at.ac.ase.service.auction.IBidService;
+import at.ac.ase.service.bid.IBidService;
 
 @Service
 public class BidService implements IBidService {
@@ -19,6 +20,9 @@ public class BidService implements IBidService {
     @Autowired
     private BidRepository bidRepository;
 
+    @Autowired
+    private IHighestBidService highestBidService;
+
 
     @Override
     public Bid toBid(BidDTO bidDTO, User user) {
@@ -28,9 +32,15 @@ public class BidService implements IBidService {
     }
 
     @Override
-    public Bid placeBid(Bid bid) {
-        return bidRepository.save(bid);
+    public BidDTO toBidDTO(Bid bid) {
+        return bidDtoTranslator.toBidDTO(bid);
+    }
 
+    @Override
+    public Bid placeBid(Bid bid) {
+        highestBidService.updateHighestBid(bid);
+        bid.getAuction().setHighestBid(bid);
+        return bidRepository.save(bid);
     }
 
 }

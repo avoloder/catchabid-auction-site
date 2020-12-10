@@ -24,8 +24,18 @@ public class BidDtoTranslator {
             .orElseThrow(ObjectNotFoundException::new);
         bid.setAuction(auction);
 
-
         return bid;
+    }
+
+    public BidDTO toBidDTO(Bid bid) {
+        if (bid == null) {
+            return null;
+        }
+        BidDTO bidDTO = new BidDTO();
+        bidDTO.setAuctionId(bid.getAuction() != null ? bid.getAuction().getId() : null);
+        bidDTO.setOffer(bid.getOffer());
+
+        return bidDTO;
     }
 
 }

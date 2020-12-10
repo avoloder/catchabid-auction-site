@@ -1,4 +1,4 @@
-package at.ac.ase.service.auction;
+package at.ac.ase.service.bid;
 
 import at.ac.ase.dto.BidDTO;
 import at.ac.ase.entities.Bid;
@@ -15,10 +15,19 @@ public interface IBidService {
     Bid toBid(BidDTO bidDTO, User user);
 
     /**
+     * Method to transform a {@link Bid} object to a {@link BidDTO}
+     *
+     * @param bid {@link Bid} object to be transformed
+     * @return converted {@link BidDTO}
+     */
+    BidDTO toBidDTO(Bid bid);
+
+    /**
      * Method to place a {@link Bid} for and auction.
      *
      * @param bid {@link Bid} object to be stored.
      */
     Bid placeBid(Bid bid);
+
 
 }
