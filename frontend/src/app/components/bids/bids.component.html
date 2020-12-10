@@ -8,8 +8,10 @@
   <div class="modal-body">
     <div class="row">
       <div class="col-12">
-        <p>What would be your offer for the auction {{ auction.auctionName }}?</p>
-        <p *ngIf="auction.highestBid">Please not that the current higheset offer is {{ auction.highestBid }}</p>
+        <p>What would be your offer for the auction
+          <span style="font-weight: bold;">{{ auction.auctionName }}</span>?</p>
+        <p *ngIf="auction.highestBid">Please not that the current higheset offer is
+          <span style="font-weight: bold;">{{ auction.highestBid }}€</span>.</p>
       </div>
     </div>
     <div class="row">
@@ -20,6 +22,10 @@
         id="offer-input"
         placeholder="Offer"
         formControlName="offer">
+        <div class="invalid-feedback d-block"
+        *ngIf="invalidOffer">Please provide an offer higher than the currently highest one.</div>
+        <div class="invalid-feedback d-block"
+        *ngIf="newCurrentBidValue">It seems that your offer has already been exceeded. New current offer is: {{ newCurrentBidValue }}.</div>
       </div>
     </div>
 

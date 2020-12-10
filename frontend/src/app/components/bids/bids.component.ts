@@ -4,6 +4,7 @@ import { AuctionPostModel } from 'src/app/models/auctionPost.model';
 import { BidsService } from 'src/app/services/bids.service';
 import { Bid } from 'src/app/models/bid.model';
 import { ToastrService } from 'ngx-toastr';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-bids',
@@ -13,6 +14,10 @@ import { ToastrService } from 'ngx-toastr';
 export class BidsComponent implements OnInit {
 
   bidsForm: FormGroup;
+
+  invalidOffer = false;
+
+  newCurrentBidValue: string;
 
   @Input()
   auction: AuctionPostModel;
@@ -34,6 +39,11 @@ export class BidsComponent implements OnInit {
   }
 
   onBidSave(): void {
+    this.invalidOffer = false;
+    if (this.bidsForm.get('offer').value <= this.auction.highestBid) {
+      this.invalidOffer = true;
+      return;
+    }
     const newBid: Bid = {
       offer: this.bidsForm.get('offer').value,
       auctionId: this.auction.id
@@ -45,7 +55,17 @@ export class BidsComponent implements OnInit {
   saveBid(bid: Bid): void {
     this.bidsService.saveBid(bid).subscribe(
       () => this.toastr.success('Bid successfully placed'),
-      (error) => console.log(error),
+      (error) => {
+        if (error.status === 409) {
+          this.toastr.warning(error.error.message);
+          this.newCurrentBidValue = error.error.message.substring(
+            error.error.message.lastIndexOf(':') + 1);
+          console.log(this.newCurrentBidValue);
+        } else {
+          this.toastr.error('Error placing bid.');
+        }
+        console.log(error);
+      },
       () => this.onModalClose()
     );
   }
