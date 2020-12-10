@@ -39,9 +39,8 @@ export class BidsComponent implements OnInit {
   }
 
   onBidSave(): void {
-    this.invalidOffer = false;
-    if (this.bidsForm.get('offer').value <= this.auction.highestBid) {
-      this.invalidOffer = true;
+    this.invalidOffer = !this.isOfferValid(this.bidsForm.get('offer').value);
+    if (this.invalidOffer) {
       return;
     }
     const newBid: Bid = {
@@ -68,6 +67,13 @@ export class BidsComponent implements OnInit {
       },
       () => this.onModalClose()
     );
+  }
+
+  private isOfferValid(offer: number): boolean {
+    if ((this.auction.highestBid && (offer <= this.auction.highestBid)) || offer <= this.auction.minPrice) {
+      return false;
+    }
+    return true;
   }
 
   onModalClose(): void {

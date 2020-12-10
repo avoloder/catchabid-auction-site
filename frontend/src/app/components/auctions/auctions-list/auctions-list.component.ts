@@ -77,6 +77,12 @@ export class AuctionsListComponent implements OnInit {
   onBidModalClose(): void {
     this.modalRef.close();
     this.bidModalClosedSub.unsubscribe();
+    /**
+     * Refresh auctions after placing a bid
+     */
+    this.pageNumber--; // decrement the pageNumber, so it doesn't load more auctions
+    this.auctions = [];
+    this.loadMoreAuctions();
   }
 
 }
