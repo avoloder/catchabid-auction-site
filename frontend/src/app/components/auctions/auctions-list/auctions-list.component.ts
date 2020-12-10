@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AuctionsService} from "../../../services/auction.service";
 import {AuctionPostModel} from "../../../models/auctionPost.model";
+declare var $: any;
 
 
 @Component({
@@ -26,7 +27,12 @@ export class AuctionsListComponent implements OnInit {
   auctions: Array<AuctionPostModel> = [];
 
   ngOnInit() {
+   
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
     this.loadMoreAuctions();
+
   }
 
   public loadMoreAuctions () {
