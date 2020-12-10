@@ -1,90 +1,86 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">Navbar</a>
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #5271ff;">
+  <a class="navbar-brand" style="height: 1rem;
+      margin-bottom: 40px;">
+      <img
+              src="assets/img/brand/catchabid-logo-blue.png"
+              class="navbar-brand-img"
+              alt="..."
+              style="height: 3rem;"
+
+      />
+    </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown
+    <form class="navbar-search navbar-search-dark">
+      <div id="searchForm" class="form-group mb-0" [ngClass]="{ 'focused': focus === true }">
+       <div class="input-group input-group-alternative">
+         <div class="input-group-prepend">
+           <span class="input-group-text"><i class="fa fa-search"></i></span>
+         </div>
+         <input class="form-control" placeholder="Search" type="text" (focus)="focus = true"
+                (blur)="focus = false">
+        </div>
+      </div>
+    </form>
+    <ul *ngIf="!isUserLoggedIn()" class="navbar-nav ml-auto">
+      <li class="nav-item" id="auction-post">
+        <a class="btn special" (click)="isUserLoggedIn() ? createAuction() : openLoginModal()" >
+          Create an auction post
         </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
+      </li>
+      <li class="nav-item" *ngIf="!isUserLoggedIn()">
+        <a class="btn special" (click)="openRegisterModal()" id="user-button" mdbWavesEffect>
+          Register
+        </a>
+      </li>
+      <li *ngIf="!isUserLoggedIn()" class="nav-item">
+        <a class="btn special" (click)="openLoginModal()" id="user-button">
+          Login
+        </a>
+    </li>
+    </ul>
+
+    <ul *ngIf="isUserLoggedIn()" class="navbar-nav ml-auto">
+      <li class="nav-item dropdown" ngbDropdown placement="bottom-right">
+        <button class="profile"
+        ngbDropdownToggle>
+         {{userName}} 
+         <i class="fa fa-sort-desc" aria-hidden="true" style="margin-left:7px; font-size: 1.2rem;"></i>
+        </button>
+        <div
+                class="dropdown-menu dropdown-menu-arrow dropdown-menu-right"
+                ngbDropdownMenu
+        >
+          <div class=" dropdown-header noti-title">
+            <h6 class="text-overflow m-0">Welcome!</h6>
+          </div>
+          <a
+                  routerLinkActive="active"
+                  class="dropdown-item"
+          >
+            <i class="ni ni-settings-gear-65"></i> <span>Settings</span>
+          </a>
+
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
+          <a routerLinkActive="active"
+             class="dropdown-item"
+             style="color: black;"
+             (click)="logout()">
+            <i class="ni ni-user-run"></i>
+            <span>Logout</span>
+          </a>
         </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
-      </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
   </div>
 </nav>
 
 
 
-
 <!-- 
-<nav class="navbar">
-  <a style="height: 1rem;
-
-      margin-bottom: 35px; margin-top: -15px;">
-      <img
-              src="assets/img/brand/catchabid-logo-blue.png"
-              class="navbar-brand-img"
-              alt="..."
-              style="height: 3rem; margin-top: 10px;"
-
-      />
-  </a>
-  <form class="navbar-search navbar-search-dark">
-    <div id="searchForm" class="form-group mb-0" [ngClass]="{ 'focused': focus === true }">
-     <div class="input-group input-group-alternative">
-       <div class="input-group-prepend" style="display: flex; flex-direction: row;">
-         <span class="input-group-text"><i class="fa fa-search"></i></span>
-       </div>
-       <input class="form-control" placeholder="Search" type="text" (focus)="focus = true"
-              (blur)="focus = false">
-      </div>
-    </div>
-  </form>
-    <ul class="nav navbar-nav mr-auto">
-      <li class="nav-item" style="margin-right: 30px !important;">
-        <a class="btn special" role="button" (click)="isUserLoggedIn() ? createAuction() : openLoginModal()" >
-          Create an auction post
-        </a>
-      </li>
-    <li class="nav-item" *ngIf="!isUserLoggedIn()" style="margin-right: 10px !important;">
-        <a class="btn special" role="button" (click)="openRegisterModal()" mdbWavesEffect>
-          Register
-        </a>
-      </li>
-    <li class="nav-item" *ngIf="!isUserLoggedIn()">
-        <a class="btn special" role="button" (click)="openLoginModal()">
-          Login
-        </a>
-    </li>
-    </ul> 
-    <div class="toggleDiv">
-      <span><i class="fa fa-bars" aria-hidden="true" style="font-size: 25px;"></i></span>
-    </div>
-</nav> -->
-
-
-<!-- <nav class="navbar navbar-top navbar-expand navbar-dark"
+<nav class="navbar navbar-top navbar-expand navbar-dark"
         id="navbar-main"
         style="background-color: #5271ff;"
    <a style="height: 1rem;
@@ -100,9 +96,9 @@
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
-  </button> -->
+  </button>
     
-  <!-- <form class="navbar-search navbar-search-dark">
+  <form class="navbar-search navbar-search-dark">
     <div id="searchForm" class="form-group mb-0" [ngClass]="{ 'focused': focus === true }">
      <div class="input-group input-group-alternative">
        <div class="input-group-prepend">
@@ -112,8 +108,8 @@
               (blur)="focus = false">
       </div>
     </div>
-  </form> -->
-  <!-- <div class="collapse navbar-collapse" id="navbarSupportedContent">
+  </form>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="nav navbar-nav mr-auto">
       <li class="nav-item">
         <a class="btn special" role="button" (click)="isUserLoggedIn() ? createAuction() : openLoginModal()" >
@@ -131,10 +127,10 @@
         </a>
     </li>
     </ul>
-  </div> -->
+  </div>
       
-      <!-- User -->
-      <!-- <ul *ngIf="isUserLoggedIn()" class="navbar-nav align-items-center ml-auto ml-md-0">
+      User
+      <ul *ngIf="isUserLoggedIn()" class="navbar-nav align-items-center ml-auto ml-md-0">
         <li class="nav-item dropdown" ngbDropdown placement="bottom-right">
           <a class="nav-link pr-0 dropdown-toggle"
           role="button" ngbDropdownToggle>
@@ -165,4 +161,10 @@
           </div>
         </li>
       </ul>
-</nav> -->
+</nav>
+
+<div class="header pb-8 pt-5 pt-md-8 d-flex align-items-center"
+
+  style="min-height: 300px; max-height: 400px; background-size: cover; background-position: center top;">
+
+</div> -->
