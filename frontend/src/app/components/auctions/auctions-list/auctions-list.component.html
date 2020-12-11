@@ -1,15 +1,18 @@
 <div>
   <div *ngFor="let auction of auctions" class="m-2" style="display:inline-block;">
-    <div class="auction-card recent-auction">
+    <div class="auction-card justify-content-center">
       <article class="col-item">
-          <div class="photo">
-        			<div class="options">
-        				<button class="btn btn-default" type="submit" data-toggle="tooltip" data-placement="top" id="toggle" title="Add to wish list">
-        					<i class="fa fa-heart"></i>
-        				</button>
-        			</div>
-              <a href="#"> <img src="data:image/jpeg;base64,{{auction.image}}" class="img-responsive" alt="Product Image"></a>
-        		</div>
+          <div class="container">
+              <img src="data:image/jpeg;base64,{{auction.image}}" class="image" alt="Product Image">             
+              <div class="overlay">
+                <a href="#detail" *ngIf="auctionsGroup=='RECENT'" (click)="showAuctionDetails(auction)"> 
+                  <div  class="text">SHOW DETAILS</div>
+                </a>
+                <a href="#" *ngIf="auctionsGroup=='UPCOMING'" (click)="subscribeToAuction()"> 
+                  <div class="text">SUBSCRIBE</div>
+                </a>
+              </div>             
+          </div>
         <div class="info">
           <p class="text-medium lh-100 font-weight-500 color-grey-subtext" style="margin: 0;">Created by {{auction.creatorName}} </p>
           <p class="text-lg lh-150 font-weight-500">{{auction.auctionName}}</p>
@@ -19,7 +22,7 @@
              *ngIf="auction.highestBid!=undefined">{{auction.highestBid}}€</p>
           <br>
           <div class="row">
-              <div class="col-sm-12">
+              <div class="col-sm-6">
                   <app-auction-countdown class="text-medium-left font-weight-200 color-grey-subtext float-left" style="padding-top:5px;" *ngIf="auctionsGroup=='RECENT'"
                                  [countdownType]="'ending-countdown'"
                                  [endDate]="auction.endTime"></app-auction-countdown>

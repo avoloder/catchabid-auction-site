@@ -1,0 +1,67 @@
+<div id="myModal" class="card">
+  <article class="card-body">
+      <h5 class="card-title text-center mb-2">{{auction.auctionName}}</h5>
+      <hr>    
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6" style="margin-bottom: 10px;">
+            <div class="row">
+              <div class="col-12" style="padding: 0;">
+                <img src="data:image/jpeg;base64,{{auction.image}}" class="image" alt="Product Image">    
+              </div>
+              <p class="h6" style="margin: 10px;">About this item</p>
+              <div class="col-12" style="padding: 0;border: 1px solid #E1E1E1;">
+                <div class="auction-description">
+                  {{auction.description}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-12"  style="margin-bottom: 10px;">
+                <span><i class="fa fa-clock-o"></i> {{auction.startTime | date:"dd.mm.yyyy, hh:mm"}} - {{auction.endTime |  date:"dd.mm.yyyy, hh:mm"}}</span>  
+              </div>
+              <div class="col-12"  style="margin-bottom: 10px;">
+                <p class="h6">Category: <span class="badge badge-secondary" style="margin-left:5px;"> {{auction.category}} </span></p>
+              </div>
+              <div class="col-12" style="margin-bottom: 15px;">
+                <p class="h6">Information about creator:</p>
+                <span>{{auction.creatorName}}</span>              
+                <br/> 
+                <span>
+                    {{auction.address}} {{auction.houseNr}}, 
+                    {{auction.city}}  {{auction.country}}
+                </span>
+              </div>
+              <div class="col-12"  style="margin-bottom: 10px;">
+                  <hr>
+              </div>
+              <div class="col-6">
+                <p class="h6">Starting bid </p>
+              </div>
+              <div class="col-6" style="text-align: right">
+                <span>EUR {{auction.minPrice}} </span>
+              </div>
+              <div class="col-6">
+                <p class="h6">Highest bid </p>
+              </div>
+              <div class="col-6"  style="text-align: right">
+                <span *ngIf="auction.highestBid">EUR {{auction.highestBid}} </span>
+                <span *ngIf="!auction.highestBid">EUR — </span>
+              </div>
+              <div class="col-12">
+                <app-auction-countdown class="text-medium-left font-weight-200 color-grey-subtext float-left" style="padding-top:5px;"
+                    [countdownType]="'ending-countdown'"
+                    [endDate]="auction.endTime">
+                </app-auction-countdown>
+              </div>
+              <div class="col-12"  style="margin-bottom: 10px;">
+                <a href="#" class="btn btn-primary card-button">Place a bid</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>       
+  </article>
+</div>
