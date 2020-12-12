@@ -89,8 +89,8 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public List<AuctionPostSendDTO> getRecentAuctionsForUser(Integer pageNr, Integer auctionsPerPage, Long userId, boolean usePreferences) {
-        Set<Category> preferences = getPreferences(userId,usePreferences);
+    public List<AuctionPostSendDTO> getRecentAuctionsForUser(Integer pageNr, Integer auctionsPerPage, String userEmail, boolean usePreferences) {
+        Set<Category> preferences = getPreferences(userEmail,usePreferences);
         if (preferences == null || preferences.isEmpty()) {
             logger.info("No preferences found, continue with fetching recent auctions without preferences");
             return getRecentAuctions(pageNr, auctionsPerPage);
@@ -113,8 +113,8 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public List<AuctionPostSendDTO> getUpcomingAuctionsForUser(Integer auctionsPerPage, Integer pageNr, Long userId, boolean usePreferences) {
-        Set<Category> preferences = getPreferences(userId,usePreferences);
+    public List<AuctionPostSendDTO> getUpcomingAuctionsForUser(Integer auctionsPerPage, Integer pageNr, String userEmail, boolean usePreferences) {
+        Set<Category> preferences = getPreferences(userEmail,usePreferences);
         if (preferences == null || preferences.isEmpty()) {
             logger.info("No preferences found, continue with retrieving upcoming auctions without preferences");
             return getUpcomingAuctions(pageNr, auctionsPerPage);
@@ -155,17 +155,15 @@ public class AuctionService implements IAuctionService {
         return PageRequest.of(pageNr, auctionsPerPage, sortMethod);
     }
 
-    private Set<Category> getPreferences(Long id, boolean usePreferences) {
-        Optional<RegularUser> regularUser = regularUserService.getUserById(id);
-
-        if (regularUser.isPresent()) {
+    private Set<Category> getPreferences(String userEmail, boolean usePreferences) {
+        RegularUser regularUser = regularUserService.getUserByEmail(userEmail);
+        if (regularUser != null) {
             if (usePreferences) {
-                return regularUser.get().getPreferences();
+                return regularUser.getPreferences();
             }else {
-                return Arrays.stream(getCategories()).filter(e -> regularUser.get().getPreferences().contains(e)).collect(Collectors.toSet());
+                return Arrays.stream(getCategories()).filter(e -> regularUser.getPreferences().contains(e)).collect(Collectors.toSet());
             }
         }
-
         return null;
     }
 }

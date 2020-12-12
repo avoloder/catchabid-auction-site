@@ -34,8 +34,6 @@ export class AuctionsListComponent implements OnInit {
 
     if (this.auctionsGroup == "RECENT") {
       this.dataService.getRecentPosts(this.pageNumber, this.pageSize).subscribe(data => {
-        console.log(this.auctionsGroup);
-        console.log(data.toString());
         this.auctions = this.auctions.concat(data);
         if(auctionsCountBeforeLoading == this.auctions.length || this.auctions.length < this.pageSize) {
           this.noMoreAuctionsToLoad = true;
@@ -44,7 +42,6 @@ export class AuctionsListComponent implements OnInit {
     }
     else if (this.auctionsGroup == "UPCOMING") {
       this.dataService.getUpcomingRequests(this.pageNumber, this.pageSize).subscribe(data => {
-        console.log(data);
         this.auctions = this.auctions.concat(data);
         if(auctionsCountBeforeLoading == this.auctions.length || this.auctions.length < this.pageSize)  {
           this.noMoreAuctionsToLoad = true;
