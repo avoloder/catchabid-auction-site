@@ -1,9 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {AuctionsService} from "../../../services/auction.service";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SigninComponent } from '../../signin/signin.component';
 import { AuctionDetailsComponent } from '../../auction-details/auction-details.component';
 import { AuctionPost } from '../../../models/auctionpost';
+import {ElementRef} from '@angular/core';
 
 @Component({
   selector: 'app-auctions-list',
@@ -26,6 +27,7 @@ export class AuctionsListComponent implements OnInit {
   get dataService(): AuctionsService {
     return this._dataService;
   }
+
 
   auctions: Array<AuctionPost> = [];
 

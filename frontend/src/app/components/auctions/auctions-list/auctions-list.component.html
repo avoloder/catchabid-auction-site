@@ -3,23 +3,25 @@
     <div class="col mb-4">
       <div class="card">
         <article class="col-item" style="border: none; margin-bottom: 0 !important;">
-          <div class="container">
-              <img src="data:image/jpeg;base64,{{auction.image}}" class="image" alt="Product Image">             
-              <div class="overlay">
-                <a href="#detail" *ngIf="auctionsGroup=='RECENT'" (click)="showAuctionDetails(auction)"> 
-                  <div  class="text">SHOW DETAILS</div>
-                </a>
-                <a href="#" *ngIf="auctionsGroup=='UPCOMING'" (click)="subscribeToAuction()"> 
+          <div id="container" class="container">
+              <img src="data:image/jpeg;base64,{{auction.image}}" class="image" alt="Product Image">   
+              <a href="#detail" *ngIf="auctionsGroup=='RECENT'" (click)="showAuctionDetails(auction)">          
+                <div class="overlay">  
+                  <div class="text">SHOW DETAILS</div>
+                </div>    
+              </a>  
+              <a href="#detail" *ngIf="auctionsGroup=='UPCOMING'" (click)="subscribeToAuction(auction)">          
+                <div class="overlay">  
                   <div class="text">SUBSCRIBE</div>
-                </a>
-              </div>             
+                </div>    
+              </a>         
           </div>
         <div class="info">
-          <p class="text-sm font-weight-500 color-grey-subtext" style="margin: 0;">Created by {{auction.creatorName}} </p>
-          <p class="text-lg font-weight-500" style="margin-bottom: 8px;">{{auction.auctionName}}</p>
-          <p class="text-sm font-weight-500 color-grey-subtext" style="margin-bottom: 0px;">CURRENT BID</p>
-          <p class="price-new text-lg font-weight-500"  style="margin-bottom: 8px;" *ngIf="auction.highestBid==undefined">{{auction.minPrice}}€</p>
-          <p class="price-new text-lg font-weight-500"  style="margin-bottom: 8px;"
+          <p class="card-text-small font-weight-500 color-grey-subtext">Created by {{auction.creatorName}} </p>
+          <p class="card-text-large font-weight-500 text-truncate">{{auction.auctionName}}</p>
+          <p class="card-text-small font-weight-500 color-grey-subtext">CURRENT BID</p>
+          <p class="card-text-large price-new font-weight-500" *ngIf="auction.highestBid==undefined">{{auction.minPrice}}€</p>
+          <p class="card-text-large price-new font-weight-500"
              *ngIf="auction.highestBid!=undefined">{{auction.highestBid}}€</p>
           <div class="row">
               <div class="col-sm-6" style="padding-right: 0; margin-bottom: 10px;">
