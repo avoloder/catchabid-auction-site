@@ -38,6 +38,10 @@ export class SigninComponent implements OnInit {
     });
   }
 
+  onModalClose(){
+    this,this.modalService.dismissAll();
+  }
+
   openRegisterModal(){
     this.modalService.dismissAll();
     this.modalService.open(RegisterComponent);
