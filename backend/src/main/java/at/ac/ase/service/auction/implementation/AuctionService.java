@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AuctionService implements IAuctionService {
@@ -88,8 +89,8 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public List<AuctionPostSendDTO> getRecentAuctionsForUser(Integer pageNr, Integer auctionsPerPage, Long userId) {
-        Set<Category> preferences = getPreferences(userId);
+    public List<AuctionPostSendDTO> getRecentAuctionsForUser(Integer pageNr, Integer auctionsPerPage, Long userId, boolean usePreferences) {
+        Set<Category> preferences = getPreferences(userId,usePreferences);
         if (preferences == null || preferences.isEmpty()) {
             logger.info("No preferences found, continue with fetching recent auctions without preferences");
             return getRecentAuctions(pageNr, auctionsPerPage);
@@ -112,8 +113,8 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public List<AuctionPostSendDTO> getUpcomingAuctionsForUser(Integer auctionsPerPage, Integer pageNr, Long userId) {
-        Set<Category> preferences = getPreferences(userId);
+    public List<AuctionPostSendDTO> getUpcomingAuctionsForUser(Integer auctionsPerPage, Integer pageNr, Long userId, boolean usePreferences) {
+        Set<Category> preferences = getPreferences(userId,usePreferences);
         if (preferences == null || preferences.isEmpty()) {
             logger.info("No preferences found, continue with retrieving upcoming auctions without preferences");
             return getUpcomingAuctions(pageNr, auctionsPerPage);
@@ -154,10 +155,15 @@ public class AuctionService implements IAuctionService {
         return PageRequest.of(pageNr, auctionsPerPage, sortMethod);
     }
 
-    private Set<Category> getPreferences(Long id) {
+    private Set<Category> getPreferences(Long id, boolean usePreferences) {
         Optional<RegularUser> regularUser = regularUserService.getUserById(id);
+
         if (regularUser.isPresent()) {
-            return regularUser.get().getPreferences();
+            if (usePreferences) {
+                return regularUser.get().getPreferences();
+            }else {
+                return Arrays.stream(getCategories()).filter(e -> regularUser.get().getPreferences().contains(e)).collect(Collectors.toSet());
+            }
         }
 
         return null;

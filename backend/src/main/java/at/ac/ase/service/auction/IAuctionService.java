@@ -25,9 +25,10 @@ public interface IAuctionService {
      * @param pageNr page number starting at 0. (default=0 if invalid parameter)
      * @param auctionsPerPage page size (default=50 if invalid parameter)
      * @param userId of the user
+     * @param usePreferences show auctions with user preferences or not
      * @return
      */
-    List<AuctionPostSendDTO> getRecentAuctionsForUser(Integer pageNr, Integer auctionsPerPage,Long userId);
+    List<AuctionPostSendDTO> getRecentAuctionsForUser(Integer pageNr, Integer auctionsPerPage,Long userId,boolean usePreferences);
 
     /**
      * Get upcomming auctions ordered by start-time ascending
@@ -42,9 +43,10 @@ public interface IAuctionService {
      * @param auctionsPerPage page size (default=50 if invalid parameter)
      * @param pageNr page number starting at 0. (default=0 if invalid parameter)
      * @param userId id of user whose preferences we should follow
+     * @param usePreferences show auctions with user preferences or not
      * @return
      */
-    List<AuctionPostSendDTO> getUpcomingAuctionsForUser(Integer auctionsPerPage, Integer pageNr,Long userId);
+    List<AuctionPostSendDTO> getUpcomingAuctionsForUser(Integer auctionsPerPage, Integer pageNr,Long userId,boolean usePreferences);
 
     /**
      *

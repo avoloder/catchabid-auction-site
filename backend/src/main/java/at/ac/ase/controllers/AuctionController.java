@@ -36,7 +36,8 @@ public class AuctionController {
     ResponseEntity<List<AuctionPostSendDTO>> getUpcomingAuctions(
             @RequestParam(required = false) Integer pageSize,
             @RequestParam(required = false) Integer pageNumber,
-            @RequestParam(required = false) Long user) {
+            @RequestParam(required = false) Long user,
+            @RequestParam(required = false) boolean usePreferences) {
         logger.info("Upcoming auctions requested for page size " + pageSize + " and age number requested " + pageNumber);
         if (user != null) {
             List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctions(pageSize, pageNumber);
@@ -44,7 +45,7 @@ public class AuctionController {
             logger.debug("Ids of Auctions in payload: " + posts.stream().map(AuctionPostSendDTO::getId).collect(Collectors.toList()));
             return new ResponseEntity<>(posts, HttpStatus.OK);
         } else {
-            List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctionsForUser(pageSize, pageNumber, user);
+            List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctionsForUser(pageSize, pageNumber, user,usePreferences);
             logger.info("Size of payload for upcoming auctions:" + posts.size());
             logger.debug("Ids of Auctions in payload: " + posts.stream().map(AuctionPostSendDTO::getId).collect(Collectors.toList()));
             return new ResponseEntity<>(posts, HttpStatus.OK);
@@ -66,13 +67,14 @@ public class AuctionController {
     public List<AuctionPostSendDTO> getRecentAuctions(
             @RequestParam(required = false) Integer pageNumber,
             @RequestParam(required = false) Integer auctionsPerPage,
-            @RequestParam(required = false) Long user) {
+            @RequestParam(required = false) Long user,
+            @RequestParam(required = false) boolean usePreferences) {
 
         logger.info("Recent auctions requested for page size " + auctionsPerPage + "and age number requested " + pageNumber);
         if (user != null) {
             return auctionService.getRecentAuctions(pageNumber, auctionsPerPage);
         } else {
-            List<AuctionPostSendDTO> posts = auctionService.getRecentAuctionsForUser(pageNumber, auctionsPerPage, user);
+            List<AuctionPostSendDTO> posts = auctionService.getRecentAuctionsForUser(pageNumber, auctionsPerPage, user,usePreferences);
             logger.info("Size of payload of recent auctions for userId" + user + " is " + posts.size());
             logger.debug("Ids of Auctions in payload: " + posts.stream().map(AuctionPostSendDTO::getId).collect(Collectors.toList()));
             return posts;
