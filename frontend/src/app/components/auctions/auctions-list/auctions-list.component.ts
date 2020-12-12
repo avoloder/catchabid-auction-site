@@ -1,7 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {AuctionsService} from "../../../services/auction.service";
-import {AuctionPostModel} from "../../../models/auctionPost.model";
-
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SigninComponent } from '../../signin/signin.component';
+import { AuctionDetailsComponent } from '../../auction-details/auction-details.component';
+import { AuctionPost } from '../../../models/auctionpost';
+import {ElementRef} from '@angular/core';
 
 @Component({
   selector: 'app-auctions-list',
@@ -10,7 +13,9 @@ import {AuctionPostModel} from "../../../models/auctionPost.model";
 })
 export class AuctionsListComponent implements OnInit {
 
-  constructor(private _dataService: AuctionsService) {
+  constructor(
+    private _dataService: AuctionsService,
+    private modalService: NgbModal) {
   }
 
   @Input() auctionsGroup : string;
@@ -23,7 +28,8 @@ export class AuctionsListComponent implements OnInit {
     return this._dataService;
   }
 
-  auctions: Array<AuctionPostModel> = [];
+
+  auctions: Array<AuctionPost> = [];
 
   ngOnInit() {
     this.loadMoreAuctions();
@@ -34,8 +40,6 @@ export class AuctionsListComponent implements OnInit {
 
     if (this.auctionsGroup == "RECENT") {
       this.dataService.getRecentPosts(this.pageNumber, this.pageSize).subscribe(data => {
-        console.log(this.auctionsGroup);
-        console.log(data.toString());
         this.auctions = this.auctions.concat(data);
         if(auctionsCountBeforeLoading == this.auctions.length || this.auctions.length < this.pageSize) {
           this.noMoreAuctionsToLoad = true;
@@ -44,7 +48,6 @@ export class AuctionsListComponent implements OnInit {
     }
     else if (this.auctionsGroup == "UPCOMING") {
       this.dataService.getUpcomingRequests(this.pageNumber, this.pageSize).subscribe(data => {
-        console.log(data);
         this.auctions = this.auctions.concat(data);
         if(auctionsCountBeforeLoading == this.auctions.length || this.auctions.length < this.pageSize)  {
           this.noMoreAuctionsToLoad = true;
@@ -52,5 +55,27 @@ export class AuctionsListComponent implements OnInit {
       });
     }
     this.pageNumber++;
+  }
+
+  showAuctionDetails(auction: AuctionPost): void{
+    if(localStorage.getItem('token') == null){
+      this.openLoginModal();
+    }else{
+      
+      const modal = this.modalService.open(AuctionDetailsComponent,  { size: 'lg', backdrop: 'static' });
+      modal.componentInstance.auction = auction;
+    }
+  }
+
+  subscribeToAuction(): void{
+    if(localStorage.getItem('token') == null){
+      this.openLoginModal();
+    }else{
+      console.log("click subscribe");
+    }
+  }
+
+  openLoginModal(): void {
+    this.modalService.open(SigninComponent);
   }
 }

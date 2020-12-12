@@ -38,6 +38,10 @@ export class SigninComponent implements OnInit {
     });
   }
 
+  onModalClose(){
+    this,this.modalService.dismissAll();
+  }
+
   openRegisterModal(){
     this.modalService.dismissAll();
     this.modalService.open(RegisterComponent);
@@ -59,8 +63,10 @@ export class SigninComponent implements OnInit {
                     if(user['firstName'] !== undefined && user['lastName'] !== undefined){
                       let userName = user['firstName'].concat(" ", user['lastName']);
                       localStorage.setItem('userName', userName);
+                      window.location.reload();
                     }else{
                       localStorage.setItem('userName', user['name']);
+                      window.location.reload();
                     }
                   },
                   error => console.log(error)

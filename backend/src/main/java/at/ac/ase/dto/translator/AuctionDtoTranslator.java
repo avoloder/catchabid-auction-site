@@ -32,7 +32,11 @@ public class AuctionDtoTranslator {
                         ((RegularUser) auction.getCreator()).getLastName());
             }
         }
-        auctionPostSendDTO.setAuctionDescription(auction.getDescription());
+        auctionPostSendDTO.setDescription(auction.getDescription());
+        auctionPostSendDTO.setAddress(auction.getAddress().getStreet());
+        auctionPostSendDTO.setHouseNr(auction.getAddress().getHouseNr());
+        auctionPostSendDTO.setCity(auction.getAddress().getCity());
+        auctionPostSendDTO.setCountry(auction.getAddress().getCountry());
         auctionPostSendDTO.setEndTime(auction.getEndTime());
         auctionPostSendDTO.setStartTime(auction.getStartTime());
         if (auction.getHighestBid()!=null) {

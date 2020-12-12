@@ -1,8 +1,17 @@
-.carousel-inner img {
+.image {
     width: 100%;
-    object-fit: cover;
-    object-position: 10% 0;
-  }
+    height: auto;
+}
+
+.auction-description{
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+}
+
+.info-text{
+   font-size: 15px;
+}
 
 .card-button{
     float: left;
@@ -12,6 +21,6 @@
     padding-left: 0;
     padding-right: 0;
     height: 40px;
-    width: 290px;
-    max-width: 98%;
+    width: 100%;
 }
+  

@@ -25,6 +25,10 @@ export class ResetPasswordTokenComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  onModalClose(){
+    this,this.modalService.dismissAll();
+  }
+
   sendResetPasswordToken(){
     this.passwordManagementService.sendResetPasswordToken(this.email, this.token)
     .subscribe(

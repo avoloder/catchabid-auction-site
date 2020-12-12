@@ -1,4 +1,4 @@
-export class AuctionPostModel {
+export class AuctionPost {
   id: number;
   name: string;
   creatorName: string;

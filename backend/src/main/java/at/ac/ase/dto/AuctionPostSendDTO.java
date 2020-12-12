@@ -17,7 +17,15 @@ public class AuctionPostSendDTO {
 
     private String auctionName;
 
-    private String auctionDescription;
+    private String description;
+
+    private String country;
+
+    private String city;
+
+    private String address;
+
+    private Integer houseNr;
 
     private LocalDateTime startTime;
 
@@ -79,6 +87,38 @@ public class AuctionPostSendDTO {
         this.status = status;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Integer getHouseNr() {
+        return houseNr;
+    }
+
+    public void setHouseNr(Integer houseNr) {
+        this.houseNr = houseNr;
+    }
+
     public LocalDateTime getStartTime() {
         return startTime;
     }
@@ -127,11 +167,11 @@ public class AuctionPostSendDTO {
         this.auctionName = auctionName;
     }
 
-    public String getAuctionDescription() {
-        return auctionDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setAuctionDescription(String auctionDescription) {
-        this.auctionDescription = auctionDescription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
