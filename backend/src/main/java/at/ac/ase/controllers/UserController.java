@@ -1,5 +1,7 @@
 package at.ac.ase.controllers;
 
+import at.ac.ase.dto.translator.AuctionHouseDtoTranslator;
+import at.ac.ase.dto.translator.UserDtoTranslator;
 import at.ac.ase.entities.AuctionHouse;
 import at.ac.ase.entities.RegularUser;
 import at.ac.ase.service.user.IAuctionHouseService;
@@ -24,6 +26,12 @@ public class UserController {
     @Autowired
     IAuctionHouseService auctionHouseService;
 
+    @Autowired
+    UserDtoTranslator userDtoTranslator;
+
+    @Autowired
+    AuctionHouseDtoTranslator auctionHouseDtoTranslator;
+
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
     public ResponseEntity findUser(@RequestParam Map<String, String> userData){
         logger.info("Retrieving user with the email " + userData.get("email"));
@@ -31,9 +39,9 @@ public class UserController {
         RegularUser user = regularUserService.getUserByEmail(email);
         AuctionHouse auctionHouse = auctionHouseService.getAuctionHouseByEmail(email);
         if(user != null){
-            return ResponseEntity.status(HttpStatus.OK).body(user);
+            return ResponseEntity.status(HttpStatus.OK).body(userDtoTranslator.toRegularUserDTO(user));
         } else if(auctionHouse != null){
-            return ResponseEntity.status(HttpStatus.OK).body(auctionHouse);
+            return ResponseEntity.status(HttpStatus.OK).body(auctionHouseDtoTranslator.toAuctionHouseDTO(auctionHouse));
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
