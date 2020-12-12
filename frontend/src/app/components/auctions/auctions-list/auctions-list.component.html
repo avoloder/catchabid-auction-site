@@ -1,7 +1,8 @@
-<div>
-  <div *ngFor="let auction of auctions" class="m-2" style="display:inline-block;">
-    <div class="auction-card justify-content-center">
-      <article class="col-item">
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+  <div *ngFor="let auction of auctions" >
+    <div class="col mb-4">
+      <div class="card">
+        <article class="col-item">
           <div class="container">
               <img src="data:image/jpeg;base64,{{auction.image}}" class="image" alt="Product Image">             
               <div class="overlay">
@@ -38,10 +39,4 @@
       </article>
     </div>
   </div>
-  <p></p>
-  <button *ngIf="!noMoreAuctionsToLoad" (click)="loadMoreAuctions()" class="btn btn-primary" style="background-color: #5271ff;">Load More</button>
 </div>
-
-
-
-
