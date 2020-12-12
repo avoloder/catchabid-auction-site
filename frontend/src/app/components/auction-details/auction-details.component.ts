@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuctionPost } from '../../models/auctionpost';
 import { AuctionsService } from '../../services/auction.service';
 
@@ -12,13 +13,13 @@ export class AuctionDetailsComponent implements OnInit {
   @Input() 
   public auction: AuctionPost;
 
-  constructor(private auctionsService: AuctionsService) { }
+  constructor(private modalService : NgbModal) { }
 
   ngOnInit(): void {
   }
 
   onModalClose(): void {
-    this.auctionsService.auctionDetailModalClosed.next();
+    this.modalService.dismissAll();
   }
 
 }
