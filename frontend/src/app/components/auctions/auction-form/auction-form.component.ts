@@ -61,7 +61,6 @@ export class AuctionFormComponent implements OnInit {
   ngOnInit(): void {
     this.imgPreview = 'assets/img/placeholder-image-300x225.png';
     this.auctionsService.getCategories().subscribe(x => this.categories = x);
-    console.log(this.categories);
   }
 
   inputImage($event: Event): void {
@@ -94,10 +93,6 @@ export class AuctionFormComponent implements OnInit {
   }
 
   saveAuction(): void{
-    console.log('star tDate');
-    console.log(this.startDateForm.value);
-    console.log('endDate');
-    console.log(this.endDateForm.value);
     if (!this.form.invalid) {
       const startDate = this.dateFormToValue(this.startDateForm.value, this.startTimeForm.value);
 
