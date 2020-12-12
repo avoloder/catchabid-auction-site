@@ -11,6 +11,7 @@ const api = 'api/auctions';
 })
 export class AuctionsService {
   auctionFormModalClosed: Subject<void> = new Subject<void>();
+  auctionDetailModalClosed: Subject<void> = new Subject<void>();
 
   private REST_API_SERVER: string = "http://localhost:8080/";
 

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AuctionPost } from '../../models/auctionpost';
+import { AuctionsService } from '../../services/auction.service';
 
 @Component({
   selector: 'app-auction-details',
@@ -11,10 +12,13 @@ export class AuctionDetailsComponent implements OnInit {
   @Input() 
   public auction: AuctionPost;
 
-  constructor() { }
+  constructor(private auctionsService: AuctionsService) { }
 
   ngOnInit(): void {
-    console.log(this.auction)
+  }
+
+  onModalClose(): void {
+    this.auctionsService.auctionDetailModalClosed.next();
   }
 
 }

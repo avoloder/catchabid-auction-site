@@ -1,7 +1,13 @@
 <div id="myModal" class="card">
   <article class="card-body">
-      <h5 class="card-title text-center mb-2">{{auction.auctionName}}</h5>
-      <hr>    
+      <div class="modal-header" style="border-bottom-width: 1px; justify-content: center;">
+        <div style="width: 100%; justify-content: center;">
+            <h5 class="card-title text-center mb-2">{{auction.auctionName}}</h5>
+        </div>  
+        <button type="button" class="close pull-right" (click)="onModalClose()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
       <div class="container">
         <div class="row">
           <div class="col-md-6" style="margin-bottom: 10px;">
