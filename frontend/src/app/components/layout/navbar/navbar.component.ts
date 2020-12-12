@@ -59,6 +59,7 @@ export class NavbarComponent implements OnInit {
     localStorage.removeItem('token');
     localStorage.removeItem('userName');
     this.userName = null;
+    window.location.reload();
   }
 
   isUserLoggedIn(){

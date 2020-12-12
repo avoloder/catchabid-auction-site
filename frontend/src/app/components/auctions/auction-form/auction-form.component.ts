@@ -114,6 +114,7 @@ export class AuctionFormComponent implements OnInit {
         this.auctionsService.saveAuction(auctionPost).subscribe(post => {
           this.toast.success('Auction successfully saved');
           this.onModalClose();
+          window.location.reload();
         }, error => {
           this.buttonDisable = false;
           this.toast.error('Failed to save the auction');
