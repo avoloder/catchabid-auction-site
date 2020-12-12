@@ -24,6 +24,7 @@ import {AuctionsModule} from "./components/auctions/auctions.module";
 import {AuthGuard} from "./services/auth-guard.service";
 import {CountdownModule} from "ngx-countdown";
 import { AuctionDetailsComponent } from './components/auction-details/auction-details.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 
 @NgModule({
@@ -50,7 +51,8 @@ import { AuctionDetailsComponent } from './components/auction-details/auction-de
     AuctionsModule,
     NgbModule,
     HomeModule,
-    CountdownModule
+    CountdownModule,
+    ImageCropperModule
   ],
   providers: [
     AuthGuard,

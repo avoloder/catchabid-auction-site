@@ -2,7 +2,7 @@
   <div *ngFor="let auction of auctions" >
     <div class="col mb-4">
       <div class="card">
-        <article class="col-item">
+        <article class="col-item" style="border: none; margin-bottom: 0 !important;">
           <div class="container">
               <img src="data:image/jpeg;base64,{{auction.image}}" class="image" alt="Product Image">             
               <div class="overlay">
@@ -15,15 +15,14 @@
               </div>             
           </div>
         <div class="info">
-          <p class="text-medium lh-100 font-weight-500 color-grey-subtext" style="margin: 0;">Created by {{auction.creatorName}} </p>
-          <p class="text-lg lh-150 font-weight-500">{{auction.auctionName}}</p>
-          <p class="text-medium lh-120 font-weight-500 color-grey-subtext" style="margin-bottom: 5px;">CURRENT BID</p>
-          <p class="price-new text-medium lh-100 font-weight-500" *ngIf="auction.highestBid==undefined">{{auction.minPrice}}€</p>
-          <p class="price-new text-lg lh-100 font-weight-500"
+          <p class="text-sm font-weight-500 color-grey-subtext" style="margin: 0;">Created by {{auction.creatorName}} </p>
+          <p class="text-lg font-weight-500" style="margin-bottom: 8px;">{{auction.auctionName}}</p>
+          <p class="text-sm font-weight-500 color-grey-subtext" style="margin-bottom: 0px;">CURRENT BID</p>
+          <p class="price-new text-lg font-weight-500"  style="margin-bottom: 8px;" *ngIf="auction.highestBid==undefined">{{auction.minPrice}}€</p>
+          <p class="price-new text-lg font-weight-500"  style="margin-bottom: 8px;"
              *ngIf="auction.highestBid!=undefined">{{auction.highestBid}}€</p>
-          <br>
           <div class="row">
-              <div class="col-sm-6">
+              <div class="col-sm-6" style="padding-right: 0; margin-bottom: 10px;">
                   <app-auction-countdown class="text-medium-left font-weight-200 color-grey-subtext float-left" style="padding-top:5px;" *ngIf="auctionsGroup=='RECENT'"
                                  [countdownType]="'ending-countdown'"
                                  [endDate]="auction.endTime"></app-auction-countdown>

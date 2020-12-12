@@ -40,10 +40,6 @@
 .color-grey-subtext{
    color: grey !important;
 }
-.auction-card{
-  width: 240px;
-  height: 300px;
-}
 
 .container {
   position: relative;
@@ -56,6 +52,7 @@
   display: block;
   width: 100%;
   height: auto;
+  border: 1px solid #E1E1E1;
   transition: .5s ease;
 }
 
