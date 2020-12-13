@@ -1,6 +1,7 @@
 image: maven:3-jdk-11
 
 variables:
+  POSTGRES_DB: catchabidDb
   POSTGRES_USER: catchabid
   POSTGRES_PASSWORD: "7PjJKSh7QpRQj9Tw"
   MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
