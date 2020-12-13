@@ -1,12 +1,13 @@
 package at.ac.ase.service.auction;
 
 
-import java.util.List;
-import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.AuctionCreationDTO;
+import at.ac.ase.dto.AuctionPostSendDTO;
+import at.ac.ase.dto.AuctionQueryDTO;
 import at.ac.ase.entities.AuctionPost;
 import at.ac.ase.entities.Category;
 import at.ac.ase.entities.User;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -57,6 +58,13 @@ public interface IAuctionService {
     List<AuctionPostSendDTO> getAllAuctions(Integer auctionsPerPage, Integer pageNr);
 
     /**
+     * Find auctions by a query where
+     * @param query
+     * @return found auctions
+     */
+    List<AuctionPostSendDTO> searchAuctions(AuctionQueryDTO query);
+
+    /**
      *
      * @return
      */
@@ -89,5 +97,11 @@ public interface IAuctionService {
      * @return list of categories
      */
     Category[] getCategories();
+
+    /**
+     * Method which retrieves all countries where auctions exist
+     * @return list of categories
+     */
+    List<String> getCountriesWhereAuctionsExist();
 
 }

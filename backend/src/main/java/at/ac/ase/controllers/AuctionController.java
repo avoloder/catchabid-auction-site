@@ -2,6 +2,7 @@ package at.ac.ase.controllers;
 
 import at.ac.ase.dto.AuctionCreationDTO;
 import at.ac.ase.dto.AuctionPostSendDTO;
+import at.ac.ase.dto.AuctionQueryDTO;
 import at.ac.ase.entities.AuctionPost;
 import at.ac.ase.entities.User;
 import at.ac.ase.service.auction.IAuctionService;
@@ -31,7 +32,7 @@ public class AuctionController {
     private AuctionHouseService auctionHouseService;
 
 
-    @GetMapping("/upcoming")
+    @GetMapping("upcoming")
     public @ResponseBody
     ResponseEntity<List<AuctionPostSendDTO>> getUpcomingAuctions(
             @RequestParam(required = false) Integer pageSize,
@@ -52,7 +53,7 @@ public class AuctionController {
         }
     }
 
-    @GetMapping("/all")
+    @GetMapping("all")
     public @ResponseBody
     ResponseEntity<List<AuctionPostSendDTO>> getAllAuctions(@RequestParam(required = false) Integer pageSize,
                                                             @RequestParam(required = false) Integer pageNr) {
@@ -79,6 +80,16 @@ public class AuctionController {
             logger.debug("Ids of Auctions in payload: " + posts.stream().map(AuctionPostSendDTO::getId).collect(Collectors.toList()));
             return posts;
         }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AuctionPostSendDTO>> searchAuctions(AuctionQueryDTO query) {
+        return ResponseEntity.ok(auctionService.searchAuctions(query));
+    }
+
+    @GetMapping("countriesWhereAuctionsExist")
+    public ResponseEntity<List<String>> getCountriesWhereAuctionsExist() {
+        return ResponseEntity.ok(auctionService.getCountriesWhereAuctionsExist());
     }
 
     @PostMapping

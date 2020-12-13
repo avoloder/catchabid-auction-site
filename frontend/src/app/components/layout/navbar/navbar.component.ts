@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { AuctionFormComponent } from '../../auctions/auction-form/auction-form.component';
 import { Router } from '@angular/router';
 import {AuctionsService} from '../../../services/auction.service';
+import {AuctionsSearchService} from "../../../services/auctions-search.service";
 
 @Component({
   selector: 'app-navbar',
@@ -25,10 +26,14 @@ export class NavbarComponent implements OnInit {
 
   userName: any;
 
+  searchInputText: string;
+
   constructor(
     private modalService: NgbModal,
     private auctionsService: AuctionsService,
-    private router: Router) { }
+    private router: Router,
+    private auctionsSearchService: AuctionsSearchService
+  ) { }
 
   ngOnInit(): void {
   }
@@ -71,4 +76,17 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  processTextInput($event) {
+    console.log("processing search query text");
+    const searchKeys = this.searchInputText.toString().split(" ");
+    this.auctionsSearchService.updateSearchKeys(searchKeys);
+
+    // prevent default behaviour and do not "submit" form
+    return false;
+  }
+
+  clearTestInput() {
+    this.searchInputText = "";
+    this.auctionsSearchService.updateSearchKeys([]);
+  }
 }

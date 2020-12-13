@@ -3,7 +3,7 @@
       <div class="modal-header" style="border-bottom-width: 1px; justify-content: center;">
         <div style="width: 100%; justify-content: center;">
             <h5 class="card-title text-center mb-2" style="margin-left: 52px;">{{auction.auctionName}}</h5>
-        </div>  
+        </div>
         <button type="button" class="close pull-right" (click)="onModalClose()" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -13,24 +13,24 @@
           <div class="col-md-6" style="margin-bottom: 10px;">
             <div class="row">
               <div class="col-12" style="padding: 0;">
-                <img src="data:image/jpeg;base64,{{auction.image}}" class="image" alt="Product Image">    
+                <img src="data:image/jpeg;base64,{{auction.image}}" class="image" alt="Product Image">
               </div>
             </div>
           </div>
           <div class="col-md-6">
             <div class="row">
               <div class="col-12"  style="margin-bottom: 10px;">
-                <span><i class="fa fa-clock-o"></i> {{auction.startTime | date:"dd.mm.yyyy, hh:mm"}} - {{auction.endTime |  date:"dd.mm.yyyy, hh:mm"}}</span>  
+                <span><i class="fa fa-clock-o"></i> {{auction.startTime | date:"dd.mm.yyyy, hh:mm"}} - {{auction.endTime |  date:"dd.mm.yyyy, hh:mm"}}</span>
               </div>
               <div class="col-12"  style="margin-bottom: 10px;">
                 <p class="h6">Category: <span class="badge badge-secondary" style="margin-left:5px;"> {{auction.category}} </span></p>
               </div>
               <div class="col-12" style="margin-bottom: 15px;">
                 <p class="h6">Information about creator:</p>
-                <span>{{auction.creatorName}}</span>              
-                <br/> 
+                <span>{{auction.creatorName}}</span>
+                <br/>
                 <span>
-                    {{auction.address}} {{auction.houseNr}}, 
+                    {{auction.address}} {{auction.houseNr}},
                     {{auction.city}}  {{auction.country}}
                 </span>
               </div>
@@ -57,7 +57,7 @@
                 </app-auction-countdown>
               </div>
               <div class="col-12"  style="margin-bottom: 10px;">
-                <a href="#" class="btn btn-primary card-button">Place a bid</a>
+                <a href="#" (click)="openBidModal(auction)" class="btn btn-primary card-button">Place a bid</a>
               </div>
             </div>
           </div>
@@ -70,6 +70,6 @@
                   </div>
                 </div>
         </div>
-      </div>       
+      </div>
   </article>
 </div>

@@ -2,6 +2,7 @@ package at.ac.ase.service.auction.implementation;
 
 import at.ac.ase.dto.AuctionCreationDTO;
 import at.ac.ase.dto.AuctionPostSendDTO;
+import at.ac.ase.dto.AuctionQueryDTO;
 import at.ac.ase.dto.translator.AuctionDtoTranslator;
 import at.ac.ase.entities.*;
 import at.ac.ase.repository.auction.AuctionRepository;
@@ -75,8 +76,13 @@ public class AuctionService implements IAuctionService {
 
     @Override
     public Category[] getCategories() {
-        Category[] categories = Category.values();
+        Category [] categories = Category.values();
         return categories;
+    }
+
+    @Override
+    public List<String> getCountriesWhereAuctionsExist() {
+        return auctionRepository.getAllCountriesWhereAuctionsExist();
     }
 
     @Override
@@ -137,6 +143,12 @@ public class AuctionService implements IAuctionService {
     public List<AuctionPostSendDTO> getAllAuctions(Integer auctionsPerPage, Integer pageNr) {
         Page<AuctionPost> result = auctionRepository.findAll(getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").ascending()));
         return convertAuctionsToDTO(result.getContent());
+    }
+
+    @Override
+    public List<AuctionPostSendDTO> searchAuctions(AuctionQueryDTO query) {
+        List<AuctionPost> foundAuctions = auctionRepository.query(auctionDtoTranslator.toEntity(query));
+        return auctionDtoTranslator.toDtoList(foundAuctions);
     }
 
     private List<AuctionPostSendDTO> convertAuctionsToDTO(Collection<AuctionPost> auctions) {

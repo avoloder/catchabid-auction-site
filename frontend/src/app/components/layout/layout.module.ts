@@ -3,14 +3,18 @@ import { CommonModule } from '@angular/common';
 import { FooterComponent } from './footer/footer.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
     FooterComponent,
-    NavbarComponent],
+    NavbarComponent
+  ],
   imports: [
     CommonModule,
-    NgbModule
+    NgbModule,
+    FormsModule
   ],
   exports: [
     NavbarComponent,
