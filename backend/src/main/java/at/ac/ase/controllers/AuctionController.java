@@ -1,7 +1,8 @@
 package at.ac.ase.controllers;
 
-import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.AuctionCreationDTO;
+import at.ac.ase.dto.AuctionPostSendDTO;
+import at.ac.ase.dto.AuctionQueryDTO;
 import at.ac.ase.entities.AuctionPost;
 import at.ac.ase.entities.User;
 import at.ac.ase.service.auction.IAuctionService;
@@ -60,6 +61,16 @@ public class AuctionController {
             @RequestParam(required = false) Integer auctionsPerPage) {
         logger.info("Recent auctions requested for page size "+auctionsPerPage+"and age number requested " + pageNumber);
         return auctionService.getRecentAuctions(pageNumber, auctionsPerPage);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AuctionPostSendDTO>> searchAuctions(AuctionQueryDTO query) {
+        return ResponseEntity.ok(auctionService.searchAuctions(query));
+    }
+
+    @GetMapping("countriesWhereAuctionsExist")
+    public ResponseEntity<List<String>> getCountriesWhereAuctionsExist() {
+        return ResponseEntity.ok(auctionService.getCountriesWhereAuctionsExist());
     }
 
     @PostMapping
