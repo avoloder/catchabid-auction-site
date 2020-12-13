@@ -1,6 +1,7 @@
 image: maven:3-jdk-11
 
 variables:
+  REDIS_HOST: redis
   POSTGRES_DB: catchabidDb
   POSTGRES_USER: catchabid
   POSTGRES_PASSWORD: "7PjJKSh7QpRQj9Tw"
@@ -8,6 +9,7 @@ variables:
 
 services:
   - postgres:latest
+  - redis: latest
   
 stages:
   - build
