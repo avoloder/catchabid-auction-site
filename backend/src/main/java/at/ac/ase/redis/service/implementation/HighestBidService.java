@@ -25,12 +25,7 @@ public class HighestBidService implements IHighestBidService {
         newHighestBid.setOffer(bid.getOffer());
         newHighestBid.setUserId(bid.getUser().getId());
 
-        if (currentHighestBid != null) {
-            System.out.println(currentHighestBid.getOffer());
-        }
         highestBidRepository.saveHighestBid(bid.getAuction().getId(), newHighestBid);
-
-
     }
 
     @Override

@@ -7,6 +7,9 @@ import at.ac.ase.entities.RegularUser;
 import at.ac.ase.entities.User;
 import at.ac.ase.redis.service.IHighestBidService;
 import at.ac.ase.repository.bid.BidRepository;
+import at.ac.ase.util.exceptions.AuctionExpiredException;
+import at.ac.ase.util.exceptions.InvalidBidException;
+import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import at.ac.ase.service.bid.IBidService;
@@ -38,6 +41,12 @@ public class BidService implements IBidService {
 
     @Override
     public Bid placeBid(Bid bid) {
+        if (bid.getAuction().getEndTime().isBefore(LocalDateTime.now())) {
+            throw new AuctionExpiredException();
+        }
+        if (bid.getAuction().getMinPrice() > bid.getOffer()) {
+            throw new InvalidBidException();
+        }
         highestBidService.updateHighestBid(bid);
         bid.getAuction().setHighestBid(bid);
         return bidRepository.save(bid);
