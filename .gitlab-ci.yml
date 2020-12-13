@@ -1,7 +1,7 @@
 image: maven:3-jdk-11
 
 variables:
-  POSTGRES_HOST: docker
+  POSTGRES_HOST: postgres
   MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
 
 services:
@@ -45,6 +45,7 @@ deploy-backend:
   tags: [runner]
   only:
     - master
+    - dev 
 
 deploy-frontend:
   image: node:lts
