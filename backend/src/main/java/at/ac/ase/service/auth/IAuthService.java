@@ -16,5 +16,9 @@ public interface IAuthService {
      */
     public JSONObject authenticate(Map<String,String> userData);
 
+    /**
+     * Method which send a password reset token to user's email address
+     * @param user user requested a password reset token
+     */
     public void sendPasswordResetToken(User user);
 }

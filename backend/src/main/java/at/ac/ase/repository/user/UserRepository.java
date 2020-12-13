@@ -17,6 +17,11 @@ public interface UserRepository extends JpaRepository<RegularUser, Long> {
      */
     RegularUser findByEmail(String email);
 
+    /**
+     * Method which updates a user's password
+     * @param email an email address of user
+     * @param passwordHash a hashed new password
+     */
     @Modifying
     @Query("UPDATE RegularUser u SET u.passwordHash = :passwordHash WHERE u.email = :email")
     void changePassword(@Param(value = "email")String email,@Param(value = "passwordHash")String passwordHash);
