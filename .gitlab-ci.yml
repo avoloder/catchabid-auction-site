@@ -1,11 +1,17 @@
 image: maven:3-jdk-11
 
 variables:
-  POSTGRES_HOST: postgres
+  POSTGRES_HOST: docker
+  POSTGRES_USER: catchabid
+  POSTGRES_PASSWORD: "7PjJKSh7QpRQj9Tw"
   MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
 
 services:
-  - postgres:latest
+  postgres:
+  image: 'postgres: latest'
+  ports:
+    - "5432:5432"
+
   
 stages:
   - build
