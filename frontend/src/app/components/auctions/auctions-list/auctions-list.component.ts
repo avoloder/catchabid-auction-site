@@ -22,6 +22,8 @@ export class AuctionsListComponent implements OnInit {
 
   bidModalClosedSub: Subscription;
 
+  auctionDetailsModalClosedSub: Subscription;
+
   constructor(
     private _dataService: AuctionsService,
     private bidsService: BidsService,
@@ -104,9 +106,11 @@ export class AuctionsListComponent implements OnInit {
     if(localStorage.getItem('token') == null){
       this.openLoginModal();
     }else{
-
       const modal = this.modalService.open(AuctionDetailsComponent,  { size: 'lg', backdrop: 'static' });
       modal.componentInstance.auction = auction;
+      this.auctionDetailsModalClosedSub = this._dataService.auctionDetailModalClosed.subscribe(
+        () => this.refreshAuctions()
+      )
     }
   }
 
@@ -141,6 +145,10 @@ export class AuctionsListComponent implements OnInit {
     /**
      * Refresh auctions after placing a bid
      */
+    this.refreshAuctions();
+  }
+
+  private refreshAuctions(): void {
     this.pageNumber--; // decrement the pageNumber, so it doesn't load more auctions
     this.auctions = [];
     this.loadMoreAuctions();

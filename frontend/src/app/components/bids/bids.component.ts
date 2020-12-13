@@ -1,10 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AuctionPostModel } from 'src/app/models/auctionPost.model';
+import { AuctionPost } from 'src/app/models/auctionpost';
 import { BidsService } from 'src/app/services/bids.service';
 import { Bid } from 'src/app/models/bid.model';
 import { ToastrService } from 'ngx-toastr';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-bids',
@@ -20,7 +19,7 @@ export class BidsComponent implements OnInit {
   newCurrentBidValue: string;
 
   @Input()
-  auction: AuctionPostModel;
+  auction: AuctionPost;
 
   constructor(
     private formBuilder: FormBuilder,
