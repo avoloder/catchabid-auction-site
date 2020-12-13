@@ -24,6 +24,7 @@ import {AuctionsModule} from "./components/auctions/auctions.module";
 import {AuthGuard} from "./services/auth-guard.service";
 import {CountdownModule} from "ngx-countdown";
 import { CategoriesPickerComponent } from './components/register/categories-picker/categories-picker/categories-picker.component';
+import { AuctionDetailsComponent } from './components/auction-details/auction-details.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { CategoriesPickerComponent } from './components/register/categories-pick
     ResetPasswordComponent,
     ResetPasswordTokenComponent,
     ForgotPasswordComponent,
+    AuctionDetailsComponent,
     CategoriesPickerComponent
   ],
   imports: [

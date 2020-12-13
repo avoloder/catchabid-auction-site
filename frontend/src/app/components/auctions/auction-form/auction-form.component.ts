@@ -1,10 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
-import {AuctionPostModel} from '../../../models/auctionPost.model';
 import {ToastrService} from 'ngx-toastr';
 import {NgbDate, NgbModule, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Observable, Subject} from "rxjs";
 import {AuctionsService} from '../../../services/auction.service';
+import { AuctionPost } from '../../../models/auctionpost';
 
 @Component({
   selector: 'app-auction-form',
@@ -107,7 +107,7 @@ export class AuctionFormComponent implements OnInit {
         this.toast.error('Auction can last for maximum 24 hours');
       } else {
         this.buttonDisable = true;
-        const auctionPost = new AuctionPostModel(null, this.nameForm.value, this.categoryForm.value.toUpperCase(),
+        const auctionPost = new AuctionPost(null, this.nameForm.value, this.categoryForm.value.toUpperCase(),
           new Date(startDate), new Date(endDate), this.countryForm.value, this.cityForm.value, this.addressForm.value,
           this.houseNrForm.value, this.priceForm.value, this.descriptionForm.value, this.imageFile);
 

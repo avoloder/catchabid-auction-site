@@ -65,6 +65,10 @@ export class RegisterComponent implements OnInit  {
       });
   }
 
+  onModalClose(){
+    this,this.modalService.dismissAll();
+  }
+
   openLoginModal() {
       this.modalService.dismissAll();
       this.modalService.open(SigninComponent);

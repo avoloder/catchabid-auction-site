@@ -5,13 +5,16 @@
     <li class="nav-item">
         <a class="nav-link" id="auction-house-tab" data-toggle="tab" href="#auctionhouse" role="tab" aria-controls="profile" aria-selected="false">Auction House</a>
     </li>
+    <button type="button" class="close pull-right ml-auto" style="padding-right: 20px;" (click)="onModalClose()" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
  </ul>
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="regularuser" role="tabpanel" aria-labelledby="regular-user-tab">
         <article class="card-body">
-            <h3 class="card-title text-center mb-2">Register</h3>
+            <h3 class="card-title text-center mb-2" style="color:#5271ff">Register</h3>
             <hr>
-            <form ngNativeValidate name="form" (ngSubmit)="openCategories()" class="form-horizontal" oninput='pass4.setCustomValidity(pass4.value != pass3.value ? "Passwords do not match." : "")'>              
+            <form ngNativeValidate name="form" (ngSubmit)="openCategories()" class="form-horizontal" oninput='pass4.setCustomValidity(pass4.value != pass3.value ? "Passwords do not match." : "")'>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -19,7 +22,7 @@
                         </div>
                         <input name="firstName"  [(ngModel)]="model.firstName" class="form-control" style="padding-left: 5px;" placeholder="First Name" type="text" required>
                     </div>
-                </div> 
+                </div>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -27,7 +30,7 @@
                         </div>
                         <input name="lastName"  [(ngModel)]="model.lastName" class="form-control" style="padding-left: 5px;" placeholder="Last Name" type="text" required>
                     </div>
-                </div> 
+                </div>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -130,7 +133,7 @@
                 </div>
                 <label style="font-size: 14px;"><input type="checkbox" name="terms"> I agree with the <a  href="#">Terms and Conditions</a>.</label>
                 <div class="form-group" >
-                    <button type="submit"  class="btn btn-primary btn-lg btn-block login-button mt-4">Next</button>
+                    <button type="submit"  class="btn btn-primary btn-lg btn-block login-button mt-4" style="background-color:#5271ff">Next</button>
                 </div>
                 <div class="small text-center">
                     <a  href="#login" (click)="openLoginModal()">Login</a>
@@ -140,9 +143,9 @@
     </div>
     <div class="tab-pane fade" id="auctionhouse" role="tabpanel" aria-labelledby="auction-house-tab">
         <article class="card-body">
-            <h3 class="card-title text-center mb-2">Register</h3>
+            <h3 class="card-title text-center mb-2" style="color:#5271ff">Register</h3>
             <hr>
-            <form ngNativeValidate name="form" (ngSubmit)="registerAuctionHouse()" class="form-horizontal" oninput='pass2.setCustomValidity(pass2.value != pass.value ? "Passwords do not match." : "")'>              
+            <form ngNativeValidate name="form" (ngSubmit)="registerAuctionHouse()" class="form-horizontal" oninput='pass2.setCustomValidity(pass2.value != pass.value ? "Passwords do not match." : "")'>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -150,14 +153,14 @@
                         </div>
                         <input name="name" [(ngModel)]="model.name" class="form-control" style="padding-left: 5px;" placeholder="Legal Bussines Name" type="text" required>
                     </div>
-                </div> 
+                </div>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-id-card"></i> </span>
                         </div>
                         <input name="tid" [(ngModel)]="model.tid" class="form-control" style="padding-left: 5px;" placeholder="Tax Identification Number" type="text" required>
-                    </div> 
+                    </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
@@ -260,14 +263,14 @@
                         </div>
                     </div>
                 </div>
-                <label style="font-size: 14px;"><input type="checkbox" name="terms"> I agree with the <a href="#">Terms and Conditions</a>.</label>           
+                <label style="font-size: 14px;"><input type="checkbox" name="terms"> I agree with the <a href="#">Terms and Conditions</a>.</label>
                 <div class="form-group" >
-                    <button type="submit" class="btn btn-primary btn-lg btn-block login-button mt-4">Register</button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block login-button mt-4" style="background-color: #5271ff">Register</button>
                 </div>
                 <div class="small text-center">
                     <a href="#login" (click)="openLoginModal()">Login</a>
                 </div>
-            </form>     
+            </form>
         </article>
     </div>
 </div>

@@ -1,5 +1,7 @@
 package at.ac.ase.controllers;
 
+import at.ac.ase.dto.translator.AuctionHouseDtoTranslator;
+import at.ac.ase.dto.translator.UserDtoTranslator;
 import at.ac.ase.entities.AuctionHouse;
 import at.ac.ase.entities.RegularUser;
 import at.ac.ase.entities.*;
@@ -41,13 +43,17 @@ public class AuthController {
     private IAuctionHouseService auctionHouseService;
     @Autowired
     private PasswordTokenService tokenService;
+    @Autowired
+    private UserDtoTranslator userDtoTranslator;
+    @Autowired
+    private AuctionHouseDtoTranslator auctionHouseDtoTranslator;
 
     @RequestMapping(value = "/registerUser", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity register(@RequestBody RegularUser regularUser){
         try {
             logger.info("Registering the user " + regularUser.getFirstName() + " " + regularUser.getLastName());
             RegularUser user = registerService.registerUser(regularUser);
-            return user != null ? ResponseEntity.status(HttpStatus.OK).body(user) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return user != null ? ResponseEntity.status(HttpStatus.OK).body(userDtoTranslator.toRegularUserDTO(user)) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (DataAccessException e){
             throw new UserAlreadyExistsException();
         }
@@ -58,7 +64,7 @@ public class AuthController {
         try {
             logger.info("Registering the house " + auctionHouse.getName());
             AuctionHouse user = registerService.registerHouse(auctionHouse);
-            return user != null ? ResponseEntity.status(HttpStatus.OK).body(user) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return user != null ? ResponseEntity.status(HttpStatus.OK).body(auctionHouseDtoTranslator.toAuctionHouseDTO(user)) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (DataAccessException e){
             throw new UserAlreadyExistsException();
         }

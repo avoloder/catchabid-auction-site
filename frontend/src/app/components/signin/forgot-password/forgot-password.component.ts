@@ -22,6 +22,10 @@ export class ForgotPasswordComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  onModalClose(){
+    this,this.modalService.dismissAll();
+  }
+
   requestPasswordReset(){
     this.openResetPasswordTokenModal();
     this.toast.info("Email sent");
@@ -34,6 +38,7 @@ export class ForgotPasswordComponent implements OnInit {
         this.toast.error(error.error.message);
       });
   }
+
 
   openResetPasswordTokenModal(){
     this.modalService.dismissAll();

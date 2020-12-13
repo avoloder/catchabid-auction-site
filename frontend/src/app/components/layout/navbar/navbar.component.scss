@@ -1,54 +1,228 @@
-.btn-separator:after {
-    content: ' ';
-    display: block;
-    float: left;
-    background: #ADADAD;
-    height: 34px;
-    width: 1px;
-}
+
+
+// // .btn-separator:after {
+// //     content: ' ';
+// //     display: block;
+// //     float: left;
+// //     background: #ADADAD;
+// //     height: 34px;
+// //     width: 1px;
+// // }
 
 .form-control {
-  background-color: transparent !important;
-  color: white !important;
+   background-color: transparent !important;
+   color: white !important;
 }
 
-nav {
-  color: white !important;
+
+// // nav {
+// //   color: white !important;
+// // }
+
+
+.navbar-search-dark{
+  flex-grow: 0.5;
 }
 
 .navbar-dark .navbar-nav .nav-link {
-  color: white;
+   color: white;
 }
 
 .navbar-search-dark .input-group {
-  color: white;
-  border-color: white;
+   color: white;
+   border-color: white;
 }
 
 .input-group-text {
-  background-color: transparent !important;
+   background-color: transparent !important;
 }
 
-.navbar-nav .nav-link {
+#user-button{
+  width: 7em;
+}
+
+.btn.special{
+   min-width: 7em;
+   min-height: 2em;
+   background-color: #5271ff; 
+   color: white;
+   border: 1px solid white;
+}
+
+
+.btn.special:hover{
+  background-color: white !important;
+  color:#5271ff !important;
+}
+
+.nav-item{
+  padding: 5px;
+}
+
+#auction-post{
+  padding-right:50px;
+}
+
+.profile{
+  background-color: #5271ff;
+  outline: none;
+  height: 100%;
+  display: inline;
+  color: white;
+  border:none;
+}
+
+.profile:hover{
+  outline:none;
+  border:none!important;
+  text-decoration: none;
+}
+
+//.navbar-nav .nav-link {
+// //     color: white !important;
+// // }
+
+// // @media (max-width: 767.98px) {
+// //   .navbar-nav .nav-link {
+// //     color: white !important;
+// //       /* color: #172b4d !important; */
+// //   }
+// // }
+// /* 
+// @media (max-width: 1200px) {
+
+//   #searchForm {
+//     display: none !important;
+//   }
+// }
+
+// @media (min-width: 1201px) {
+//   #searchForm {
+//     display: inline !important;
+//   } 
+// }*/
+
+
+// .navbar {
+//   display: flex;
+//   position: relative;
+//   justify-content: space-between;
+//   align-items: center;
+//   background-color: #5271ff;
+//   color: white;
+// }
+
+// .navbar-search-dark{
+//   flex:1;
+//   margin-left:20px;
+// }
+
+// #searchForm{
+//   width: 90%;
+// }
+
+// .toggleDiv{
+//   height: 39px;
+//   width: 39px;
+//   background-color: yellow;
+//   border-radius: 10px;
+//   display: none;
+//   margin-left:10px;
+//   text-align: center;
+//   position: relative;
+// }
+
+// .toggleDiv span{
+//   width:30px;
+//   height:10px;
+// }
+// .toggle-button {
+//   position: absolute;
+//   top: .75rem;
+//   right: 1rem;
+//   display: none;
+//   flex-direction: column;
+//   justify-content: space-between;
+//   width: 30px;
+//   height: 21px;
+// }
+
+// .toggle-button .bar {
+//   height: 3px;
+//   width: 100%;
+//   background-color: white;
+//   border-radius: 10px;
+// }
+
+// .btn.special{
+//    background-color: #5271ff; 
+//    color: white;
+//    border: 1px solid white;
+// }
+
+// .btn.special:hover{
+//   background-color: white;
+//   color:#5271ff;
+// }
+
+// .navbar-nav{
+//   display: flex;
+//   flex-direction: row;
+// }
+
+// .navbar-nav .nav-item {
+//     color: white !important;
+// }
+
+// .form-control { /* <-- THE SECRET SAUCE! */
+//    background-color: transparent !important;
+//    color: white !important;
+// }
+
+// .navbar-search-dark .input-group {
+//    color: white;
+//    border-color: white;
+// }
+
+// .input-group-text {
+//    background-color: transparent !important;
+// }
+
+// .icon-design:before{
+//   content: "\e610";
+//   color:#f16822;
+//   text-align: center;
+//   display: block;
+//   width:100px;
+// }
+
+@media (max-width: 991px){
+
+  .navbar-search-dark{
+    width: 100%;
+  }
+
+  #user-button{
+    width: 100% !important;
+  }
+  
+.nav-item{
+  text-align: center;
+  width: 100%;
+  padding-top: 10px;
+}
+
+  .btn.special{
+    width: 100%;
+    background-color: #5271ff !important; 
     color: white !important;
+    border: 0px;
+    border-bottom: 1px white solid !important;
+ }
+
+ #auction-post{
+  padding-right:0px;
+}
 }
 
-@media (max-width: 767.98px) {
-  .navbar-nav .nav-link {
-    color: white !important;
-      /* color: #172b4d !important; */
-  }
-}
 
-@media (max-width: 1200px) {
-
-  #searchForm {
-    display: none !important;
-  }
-}
-
-@media (min-width: 1201px) {
-  #searchForm {
-    display: inline !important;
-  }
-}
