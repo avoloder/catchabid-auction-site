@@ -13,8 +13,7 @@ import {AuctionFormComponent} from "../auction-form/auction-form.component";
 })
 export class AuctionsListComponent implements OnInit {
 
-  constructor(private _dataService: AuctionsService,
-              private modalService: NgbModal) {
+  constructor(private _dataService: AuctionsService) {
   }
 
   @Input() auctionsGroup : string;
@@ -56,11 +55,5 @@ export class AuctionsListComponent implements OnInit {
       });
     }
     this.pageNumber++;
-  }
-
-  // TODO remove this later
-  openContactForm(auction: AuctionPostModel): void {
-    const modalRef = this.modalService.open(ContactFormComponent);
-    modalRef.componentInstance.auction = auction;
   }
 }
