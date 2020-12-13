@@ -58,8 +58,10 @@ public abstract class BaseSpringBootTest {
      */
     protected void cleanDatabase() {
         tx(status -> {
+            executeJpql("DELETE FROM PasswordResetToken");
             executeJpql("DELETE FROM Notification");
             executeJpql("DELETE FROM Rating");
+            executeJpql("UPDATE AuctionPost SET bid_id = NULL WHERE bid_id IS NOT NULL");
             executeJpql("DELETE FROM Bid");
             executeJpql("DELETE FROM AuctionPost");
             executeJpql("DELETE FROM AuctionHouse");

@@ -62,6 +62,12 @@ public class AuctionDtoTranslatorTest {
         Bid bid = new Bid();
         bid.setOffer(2.1);
 
+        Address address = new Address();
+        address.setStreet("Resselgasse");
+        address.setHouseNr(1);
+        address.setCity("Vienna");
+        address.setCountry("Austria");
+
         AuctionPost post = new AuctionPost();
         post.setStartTime(LocalDateTime.of(2020, 1, 1, 0, 0));
         post.setEndTime(LocalDateTime.of(2020, 1, 1, 1, 0));
@@ -69,6 +75,7 @@ public class AuctionDtoTranslatorTest {
         post.setHighestBid(bid);
         post.setCategory(Category.CARS);
         post.setStatus(Status.ACTIVE);
+        post.setAddress(address);
 
         return post;
     }

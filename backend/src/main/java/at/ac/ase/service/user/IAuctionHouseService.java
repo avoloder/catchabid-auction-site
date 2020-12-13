@@ -27,6 +27,11 @@ public interface IAuctionHouseService {
      */
     AuctionHouse getAuctionHouseByEmail(String email);
 
+    /**
+     * Method which updates a auction house's password
+     * @param email an email address of auction house
+     * @param password a new password
+     */
     void changePassword(String email, String password);
 
 }

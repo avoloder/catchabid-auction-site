@@ -19,5 +19,10 @@ public interface IRegularUserService {
      */
     RegularUser getUserByEmail(String email);
 
+    /**
+     * Method which updates a user's password
+     * @param email an email address of user
+     * @param password a new password
+     */
     void changePassword(String email, String password);
 }

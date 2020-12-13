@@ -1,12 +1,15 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AuctionsService} from "../../../services/auction.service";
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { BidsComponent } from '../../bids/bids.component';
+import { BidsService } from 'src/app/services/bids.service';
+import { Subscription } from 'rxjs';
 import { SigninComponent } from '../../signin/signin.component';
 import { AuctionDetailsComponent } from '../../auction-details/auction-details.component';
 import { AuctionPost } from '../../../models/auctionpost';
 import {AuctionSearchQuery} from "../../../models/auctionSearchQuery";
-import {LoadingSpinnerService} from "../../../services/loading-spinner.service";
-import {AuctionsSearchService} from "../../../services/auctions-search.service";
+import { AuctionsSearchService } from 'src/app/services/auctions-search.service';
+import { LoadingSpinnerService } from 'src/app/services/loading-spinner.service';
 
 @Component({
   selector: 'app-auctions-list',
@@ -15,8 +18,15 @@ import {AuctionsSearchService} from "../../../services/auctions-search.service";
 })
 export class AuctionsListComponent implements OnInit {
 
+  modalRef: NgbModalRef;
+
+  bidModalClosedSub: Subscription;
+
+  auctionDetailsModalClosedSub: Subscription;
+
   constructor(
     private _dataService: AuctionsService,
+    private bidsService: BidsService,
     private modalService: NgbModal,
     private _auctionsSearchService: AuctionsSearchService,
     private _loadingSpinnerService: LoadingSpinnerService) {
@@ -96,9 +106,11 @@ export class AuctionsListComponent implements OnInit {
     if(localStorage.getItem('token') == null){
       this.openLoginModal();
     }else{
-
       const modal = this.modalService.open(AuctionDetailsComponent,  { size: 'lg', backdrop: 'static' });
       modal.componentInstance.auction = auction;
+      this.auctionDetailsModalClosedSub = this._dataService.auctionDetailModalClosed.subscribe(
+        () => this.refreshAuctions()
+      )
     }
   }
 
@@ -117,4 +129,29 @@ export class AuctionsListComponent implements OnInit {
   get dataService(): AuctionsService {
     return this._dataService;
   }
+
+  openBidModal(auction: AuctionPost): void {
+    this.modalRef = this.modalService.open(BidsComponent);
+    this.modalRef.componentInstance.auction = auction;
+
+    this.bidModalClosedSub = this.bidsService.bidModalClosed.subscribe(
+      () => this.onBidModalClose()
+    );
+  }
+
+  onBidModalClose(): void {
+    this.modalRef.close();
+    this.bidModalClosedSub.unsubscribe();
+    /**
+     * Refresh auctions after placing a bid
+     */
+    this.refreshAuctions();
+  }
+
+  private refreshAuctions(): void {
+    this.pageNumber--; // decrement the pageNumber, so it doesn't load more auctions
+    this.auctions = [];
+    this.loadMoreAuctions();
+  }
+
 }

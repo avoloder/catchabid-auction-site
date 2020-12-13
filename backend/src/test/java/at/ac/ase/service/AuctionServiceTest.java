@@ -2,10 +2,7 @@ package at.ac.ase.service;
 
 import at.ac.ase.basetest.BaseIntegrationTest;
 import at.ac.ase.dto.AuctionPostSendDTO;
-import at.ac.ase.entities.AuctionHouse;
-import at.ac.ase.entities.AuctionPost;
-import at.ac.ase.entities.Category;
-import at.ac.ase.entities.Status;
+import at.ac.ase.entities.*;
 import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import org.junit.After;
@@ -145,6 +142,14 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         auctionPost.setCategory(Category.CARS);
         auctionPost.setStatus(Status.ACTIVE);
         auctionPost.setImage(getImageBytes());
+
+        Address address = new Address();
+        address.setStreet("Resselgasse");
+        address.setHouseNr(1);
+        address.setCity("Vienna");
+        address.setCountry("Austria");
+        auctionPost.setAddress(address);
+
         return auctionPost;
     }
 
