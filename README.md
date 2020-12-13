@@ -1,5 +1,5 @@
 
-#Backend
+# Backend
 
 ### Build Application without Tests
 
@@ -28,3 +28,12 @@ user2@test.com | test1234
 auctionhouse1@test.com | test1234
 auctionhouse2@test.com | test1234
 
+# Frontend
+
+### Install dependencies
+
+`npm install`
+
+### build an run
+
+`ng serve`
