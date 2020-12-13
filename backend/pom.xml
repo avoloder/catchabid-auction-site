@@ -35,7 +35,6 @@
 
     </properties>
 
-
     <build>
         <plugins>
             <plugin>
@@ -47,9 +46,26 @@
                     <target>10</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sql-maven-plugin</artifactId>
+                <version>1.5</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>9.4-1201-jdbc41</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <driver>org.postgresql.Driver</driver>
+                    <url>jdbc:postgresql://localhost:5432/catchabid_db</url>
+                    <username>catchabid</username>
+                    <password>7PjJKSh7QpRQj9Tw</password>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
 
     <profiles>
         <profile>
@@ -79,6 +95,67 @@
                 </plugins>
             </build>
         </profile>
+
+        <profile>
+            <id>insert-testdata</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>sql-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>default-cli</id>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <delimiter>/</delimiter>
+                                    <delimiterType>normal</delimiterType>
+                                    <autocommit>true</autocommit>
+                                    <srcFiles>
+                                        <srcFile>src/test/resources/testdata/initial-testdata.sql</srcFile>
+                                    </srcFiles>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+
+        </profile>
+
+        <profile>
+            <id>clean-db</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>sql-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>default-cli</id>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <delimiter>/</delimiter>
+                                    <delimiterType>normal</delimiterType>
+                                    <autocommit>true</autocommit>
+
+                                    <srcFiles>
+                                        <srcFile>src/test/resources/testdata/clean-db.sql</srcFile>
+                                    </srcFiles>
+                                </configuration>
+
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+
+        </profile>
+
     </profiles>
 
 
@@ -97,7 +174,8 @@
             <version>2.4.0-b180830.0359</version>
         </dependency>
 
-        <dependency><groupId>org.springframework.boot</groupId>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
             <version>2.4.0</version>
         </dependency>
