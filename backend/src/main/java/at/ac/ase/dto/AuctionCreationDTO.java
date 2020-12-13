@@ -14,6 +14,9 @@ public class AuctionCreationDTO {
     private Long id;
 
     @NotNull
+    private String creatorEmail;
+
+    @NotNull
     private String name;
 
     @NotNull
@@ -49,6 +52,14 @@ public class AuctionCreationDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCreatorEmail() {
+        return creatorEmail;
+    }
+
+    public void setCreatorEmail(String creatorEmail) {
+        this.creatorEmail = creatorEmail;
     }
 
     public Category getCategory() {
