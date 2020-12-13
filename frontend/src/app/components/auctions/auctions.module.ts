@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {AuctionsComponent} from './auctions.component';
 import {HttpClientModule} from '@angular/common/http';
@@ -8,16 +8,17 @@ import {AuctionCountdownComponent} from "./auction-countdown/auction-countdown.c
 import {CountdownModule} from "ngx-countdown";
 import {AuctionsListComponent} from "./auctions-list/auctions-list.component";
 import {AuctionFormComponent} from "./auction-form/auction-form.component";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
-
+import { AuctionsSearchFormComponent } from './auctions-search-form/auctions-search-form.component';
 
 @NgModule({
   declarations: [
     AuctionsListComponent,
     AuctionsComponent,
     AuctionCountdownComponent,
-    AuctionFormComponent
+    AuctionFormComponent,
+    AuctionsSearchFormComponent
   ],
   imports: [
     CommonModule,
@@ -27,13 +28,16 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
     CountdownModule,
     BrowserModule,
     ReactiveFormsModule,
-    NgbModule
+    NgbModule,
+    FormsModule
   ],
   providers:[],
   exports:[
     AuctionsListComponent,
-    AuctionCountdownComponent
-  ]
+    AuctionCountdownComponent,
+    AuctionsSearchFormComponent
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AuctionsModule {
 }

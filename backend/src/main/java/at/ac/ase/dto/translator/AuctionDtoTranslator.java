@@ -1,19 +1,24 @@
 package at.ac.ase.dto.translator;
 
 import at.ac.ase.dto.AuctionPostSendDTO;
+import at.ac.ase.dto.AuctionQueryDTO;
 import at.ac.ase.entities.AuctionHouse;
 import at.ac.ase.entities.AuctionPost;
 import at.ac.ase.entities.RegularUser;
+import at.ac.ase.repository.auction.AuctionPostQuery;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 public class AuctionDtoTranslator {
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     public AuctionPostSendDTO toSendDto(AuctionPost auction) {
 
@@ -54,5 +59,9 @@ public class AuctionDtoTranslator {
 
     public List<AuctionPostSendDTO> toDtoList(List<AuctionPost> auctions) {
         return auctions.stream().map(this::toSendDto).collect(Collectors.toList());
+    }
+
+    public AuctionPostQuery toEntity(AuctionQueryDTO queryDTO) {
+        return modelMapper.map(queryDTO, AuctionPostQuery.class);
     }
 }
