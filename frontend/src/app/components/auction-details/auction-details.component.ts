@@ -1,7 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { AuctionPost } from '../../models/auctionpost';
 import { AuctionsService } from '../../services/auction.service';
+import { BidsComponent } from '../bids/bids.component';
+import { BidsService } from 'src/app/services/bids.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-auction-details',
@@ -10,16 +13,39 @@ import { AuctionsService } from '../../services/auction.service';
 })
 export class AuctionDetailsComponent implements OnInit {
 
-  @Input() 
+  @Input()
   public auction: AuctionPost;
 
-  constructor(private modalService : NgbModal) { }
+  modalRef: NgbModalRef;
+
+  bidModalClosedSub: Subscription;
+
+  constructor(
+    private modalService : NgbModal,
+    private auctionService: AuctionsService,
+    private bidsService: BidsService) { }
 
   ngOnInit(): void {
   }
 
+
   onModalClose(): void {
     this.modalService.dismissAll();
+    this.auctionService.auctionDetailModalClosed.next();
+  }
+
+  openBidModal(auction: AuctionPost): void {
+    this.modalRef = this.modalService.open(BidsComponent);
+    this.modalRef.componentInstance.auction = auction;
+
+    this.bidModalClosedSub = this.bidsService.bidModalClosed.subscribe(
+      () => this.onBidModalClose()
+    );
+  }
+
+  onBidModalClose(): void {
+    this.modalRef.close();
+    this.bidModalClosedSub.unsubscribe();
   }
 
 }

@@ -1,4 +1,4 @@
-<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-4">
   <div *ngFor="let auction of auctions" >
     <div class="col mb-4">
       <div class="card">
@@ -33,7 +33,7 @@
                                  [endDate]="auction.startTime"></app-auction-countdown>
               </div>
               <div class="col-sm-6">
-                  <a href="#" *ngIf="auctionsGroup=='RECENT'" class="btn btn-primary card-button">Bid</a>
+                  <a href="#" *ngIf="auctionsGroup=='RECENT'" (click)="openBidModal(auction)" class="btn btn-primary card-button">Bid</a>
               </div>
           </div>
         </div>

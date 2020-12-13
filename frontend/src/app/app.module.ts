@@ -23,6 +23,7 @@ import {UserService} from './services/user.service';
 import {AuctionsModule} from "./components/auctions/auctions.module";
 import {AuthGuard} from "./services/auth-guard.service";
 import {CountdownModule} from "ngx-countdown";
+import { BidsModule } from './components/bids/bids.module';
 import {AuctionDetailsComponent} from "./components/auction-details/auction-details.component";
 import {LoadingSpinnerService} from "./services/loading-spinner.service";
 import {NgxSpinnerModule} from "ngx-spinner";
@@ -52,6 +53,7 @@ import {NgxSpinnerModule} from "ngx-spinner";
     NgbModule,
     HomeModule,
     CountdownModule,
+    BidsModule,
     NgxSpinnerModule
   ],
   providers: [
