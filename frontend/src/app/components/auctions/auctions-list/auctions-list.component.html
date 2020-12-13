@@ -4,17 +4,17 @@
       <div class="card">
         <article class="col-item" style="border: none; margin-bottom: 0 !important;">
           <div id="container" class="container">
-              <img src="data:image/jpeg;base64,{{auction.image}}" class="image" alt="Product Image">   
-              <a href="#detail" *ngIf="auctionsGroup=='RECENT'" (click)="showAuctionDetails(auction)">          
-                <div class="overlay">  
+              <img src="data:image/jpeg;base64,{{auction.image}}" class="image" alt="Product Image">
+              <a href="#detail" *ngIf="auctionsGroup=='RECENT'" (click)="showAuctionDetails(auction)">
+                <div class="overlay">
                   <div class="text">SHOW DETAILS</div>
-                </div>    
-              </a>  
-              <a href="#detail" *ngIf="auctionsGroup=='UPCOMING'" (click)="subscribeToAuction(auction)">          
-                <div class="overlay">  
+                </div>
+              </a>
+              <a href="#detail" *ngIf="auctionsGroup=='UPCOMING'" (click)="subscribeToAuction(auction)">
+                <div class="overlay">
                   <div class="text">SUBSCRIBE</div>
-                </div>    
-              </a>         
+                </div>
+              </a>
           </div>
         <div class="info">
           <p class="card-text-small font-weight-500 color-grey-subtext">Created by {{auction.creatorName}} </p>
@@ -40,4 +40,6 @@
       </article>
     </div>
   </div>
+  </div>
 </div>
+<button *ngIf="!noMoreAuctionsToLoad" (click)="loadMoreAuctions()" class="btn btn-primary h-100"  style="background-color: #5271ff;">Load More</button>
