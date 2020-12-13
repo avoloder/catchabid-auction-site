@@ -3,10 +3,12 @@ package at.ac.ase.service.auction.implementation;
 import at.ac.ase.dto.AuctionCreationDTO;
 import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.AuctionQueryDTO;
+import at.ac.ase.dto.ContactFormDTO;
 import at.ac.ase.dto.translator.AuctionDtoTranslator;
 import at.ac.ase.entities.*;
 import at.ac.ase.repository.auction.AuctionRepository;
 import at.ac.ase.repository.user.UserRepository;
+import at.ac.ase.repository.auction.ContactFormRepository;
 import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.util.exceptions.ObjectNotFoundException;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.validation.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -32,6 +35,9 @@ public class AuctionService implements IAuctionService {
     private IAuctionHouseService auctionHouseService;
 
     @Autowired
+    private ContactFormRepository contactFormRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
@@ -39,6 +45,10 @@ public class AuctionService implements IAuctionService {
 
     @Autowired
     private UserRepository userRepository;
+
+    private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    private final Validator validator = factory.getValidator();
+
 
     @Override
     public Optional<AuctionPost> getAuctionPost(Long id) {
@@ -129,4 +139,27 @@ public class AuctionService implements IAuctionService {
         }
         return PageRequest.of(pageNr, auctionsPerPage, sortMethod);
     }
+
+    public ContactForm postContactForm(ContactForm contactForm) {
+        Set<ConstraintViolation<ContactForm>> violations = validator.validate(contactForm);
+        if (violations.isEmpty()) {
+            return contactFormRepository.save(contactForm);
+        } else {
+            for (ConstraintViolation<ContactForm> violation : violations) {
+                throw new ValidationException(violation.getMessage());
+            }
+            return null;
+        }
+    }
+
+    public ContactForm convertContactFormToDTO(ContactFormDTO contactFormDTO, User user) {
+        ContactForm contactForm = modelMapper.map(contactFormDTO, ContactForm.class);
+
+        contactForm.setAddress(new Address(contactFormDTO.getCountry(), contactFormDTO.getCity(), contactFormDTO.getStreet(), contactFormDTO.getHouseNr()));
+        contactForm.setUser(user);
+        auctionRepository.findById(contactFormDTO.getAuctionPostId()).ifPresent(contactForm::setAuctionPost);
+
+        return contactForm;
+    }
+
 }

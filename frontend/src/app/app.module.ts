@@ -27,6 +27,7 @@ import { BidsModule } from './components/bids/bids.module';
 import {AuctionDetailsComponent} from "./components/auction-details/auction-details.component";
 import {LoadingSpinnerService} from "./services/loading-spinner.service";
 import {NgxSpinnerModule} from "ngx-spinner";
+import {ContactFormComponent} from "./components/auctions/contact-form/contact-form.component";
 
 @NgModule({
   declarations: [
@@ -37,6 +38,8 @@ import {NgxSpinnerModule} from "ngx-spinner";
     SigninComponent,
     ResetPasswordComponent,
     ResetPasswordTokenComponent,
+    ForgotPasswordComponent,
+    ContactFormComponent
     ForgotPasswordComponent,
     AuctionDetailsComponent
   ],

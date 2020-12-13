@@ -10,6 +10,11 @@ import { AuctionPost } from '../../../models/auctionpost';
 import {AuctionSearchQuery} from "../../../models/auctionSearchQuery";
 import { AuctionsSearchService } from 'src/app/services/auctions-search.service';
 import { LoadingSpinnerService } from 'src/app/services/loading-spinner.service';
+import {AuctionPostModel} from "../../../models/auctionPost.model";
+import {ContactFormComponent} from "../contact-form/contact-form.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {AuctionFormComponent} from "../auction-form/auction-form.component";
+
 
 @Component({
   selector: 'app-auctions-list',
