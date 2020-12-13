@@ -13,13 +13,16 @@ export class AuctionCountdownComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   timeDiffInSeconds() {
     const now = new Date();
-    const endDateDate = new Date(this.endDate);
-    return (endDateDate.getTime() - now.getTime()) / 1000;
+
+    const endDateDateUTC = new Date(this.endDate);
+    const endDateDateLocal = new Date(Date.UTC(endDateDateUTC.getFullYear(),endDateDateUTC.getMonth(), endDateDateUTC.getDate() ,
+      endDateDateUTC.getHours(), endDateDateUTC.getMinutes(), endDateDateUTC.getSeconds(), endDateDateUTC.getMilliseconds()));
+
+    return (endDateDateLocal.getTime() - now.getTime()) / 1000;
   }
 
   timeDiffInDays() {
