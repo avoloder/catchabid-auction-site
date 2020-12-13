@@ -26,7 +26,6 @@ import { AuctionsSearchFormComponent } from './auctions-search-form/auctions-sea
     AppRoutingModule,
     BrowserModule,
     CountdownModule,
-    BrowserModule,
     ReactiveFormsModule,
     NgbModule,
     FormsModule

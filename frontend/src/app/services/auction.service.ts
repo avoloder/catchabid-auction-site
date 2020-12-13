@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParameterCodec, HttpParams} from '@angular/common/http';
 import {Observable, Subject} from "rxjs";
-import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/map';
 import {AuctionPost} from '../models/auctionpost';
 import {AuctionSearchQuery} from "../models/auctionSearchQuery";
 

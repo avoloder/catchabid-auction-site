@@ -23,9 +23,8 @@
                  (blur)="focus = false"
                  name="searchInputText" (keydown.enter)="processTextInput($event)" (focusout)="processTextInput($event)" [(ngModel)]="searchInputText"
           >
-
           <div class="input-group-prepend" >
-            <span class="input-group-text"><i  (click)="clearTestInput()" class="fa fa-times" style="cursor: pointer;"></i></span>
+            <span *ngIf="searchInputText" class="input-group-text"><i  (click)="clearTestInput()" class="fa fa-times" style="cursor: pointer;"></i></span>
           </div>
         </div>
       </div>
