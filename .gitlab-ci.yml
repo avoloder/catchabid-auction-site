@@ -1,11 +1,15 @@
 image: maven:3-jdk-11
 
 variables:
-  POSTGRES_HOST: postgres
+  REDIS_HOST: redis
+  POSTGRES_DB: catchabidDb
+  POSTGRES_USER: catchabid
+  POSTGRES_PASSWORD: "7PjJKSh7QpRQj9Tw"
   MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
 
 services:
   - postgres:latest
+  - redis: latest
   
 stages:
   - build
@@ -41,7 +45,7 @@ deploy-backend:
   stage: deploy
   script:
     - cd backend && mvn clean install -DskipTests
-    - mvn $MAVEN_CLI_OPTS  org.springframework.boot:spring-boot-maven-plugin:run
+    - mvn $MAVEN_CLI_OPTS  org.springframework.boot:spring-boot-maven-plugin:start
   tags: [runner]
   only:
     - master
