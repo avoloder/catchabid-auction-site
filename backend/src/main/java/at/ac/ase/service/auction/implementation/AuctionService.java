@@ -6,11 +6,13 @@ import at.ac.ase.dto.AuctionQueryDTO;
 import at.ac.ase.dto.translator.AuctionDtoTranslator;
 import at.ac.ase.entities.*;
 import at.ac.ase.repository.auction.AuctionRepository;
+import at.ac.ase.repository.user.UserRepository;
 import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
 import at.ac.ase.util.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +41,12 @@ public class AuctionService implements IAuctionService {
 
     @Autowired
     private ModelMapper modelMapper;
+
     @Autowired
     private AuctionDtoTranslator auctionDtoTranslator;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public Optional<AuctionPost> getAuctionPost(Long id) {
@@ -53,7 +59,8 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public AuctionPost toAuctionPostEntity(User user, AuctionCreationDTO auctionPostDTO) {
+    public AuctionPost toAuctionPostEntity(AuctionCreationDTO auctionPostDTO) {
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         AuctionPost auctionPost = modelMapper.map(auctionPostDTO, AuctionPost.class);
         if (auctionPostDTO.getId() != null) {
             auctionPost = auctionRepository
@@ -67,7 +74,7 @@ public class AuctionService implements IAuctionService {
         auctionPost.setEndTime(auctionPostDTO.getEndTime());
         auctionPost.setMinPrice(auctionPostDTO.getMinPrice());
         auctionPost.setDescription(auctionPostDTO.getDescription());
-        auctionPost.setCreator(user);
+        auctionPost.setCreator(userRepository.findByEmail(auctionPostDTO.getCreatorEmail()));
         auctionPost.setImage(Base64.getDecoder().decode(auctionPostDTO.getImage()));
         auctionPost.setAddress(new Address(auctionPostDTO.getCountry(), auctionPostDTO.getCity(),
                 auctionPostDTO.getAddress(), auctionPostDTO.getHouseNr()));

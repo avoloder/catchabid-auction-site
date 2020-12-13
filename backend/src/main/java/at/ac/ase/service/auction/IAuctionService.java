@@ -90,7 +90,7 @@ public interface IAuctionService {
      * @param auctionPostDTO
      * @return
      */
-    AuctionPost toAuctionPostEntity(User user, AuctionCreationDTO auctionPostDTO);
+    AuctionPost toAuctionPostEntity(AuctionCreationDTO auctionPostDTO);
 
     /**
      * Method which retrieves all auction post's categories

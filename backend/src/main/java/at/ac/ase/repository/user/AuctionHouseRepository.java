@@ -17,6 +17,11 @@ public interface AuctionHouseRepository extends JpaRepository<AuctionHouse, Long
      */
     AuctionHouse findByEmail(String email);
 
+    /**
+     * Method which updates a auction house's password
+     * @param email an email address of auction house
+     * @param passwordHash a hashed new password
+     */
     @Modifying
     @Query("UPDATE AuctionHouse u SET u.passwordHash = :passwordHash WHERE u.email = :email")
     void changePassword(@Param(value = "email")String email,@Param(value = "passwordHash")String passwordHash);

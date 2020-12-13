@@ -107,7 +107,9 @@ export class AuctionFormComponent implements OnInit {
         this.toast.error('Auction can last for maximum 24 hours');
       } else {
         this.buttonDisable = true;
-        const auctionPost = new AuctionPost(null, this.nameForm.value, this.categoryForm.value.toUpperCase(),
+        const userData = JSON.parse(atob(localStorage.getItem('token').split('.')[1]));
+
+        const auctionPost = new AuctionPost(userData['sub'], this.nameForm.value, this.categoryForm.value.toUpperCase(),
           new Date(startDate), new Date(endDate), this.countryForm.value, this.cityForm.value, this.addressForm.value,
           this.houseNrForm.value, this.priceForm.value, this.descriptionForm.value, this.imageFile);
 
