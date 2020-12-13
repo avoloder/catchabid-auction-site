@@ -1,10 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
-import {AuctionPostModel} from '../../../models/auctionPost.model';
 import {ToastrService} from 'ngx-toastr';
 import {NgbDate, NgbModule, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Observable, Subject} from "rxjs";
 import {AuctionsService} from '../../../services/auction.service';
+import { AuctionPost } from '../../../models/auctionpost';
 
 @Component({
   selector: 'app-auction-form',
@@ -61,7 +61,6 @@ export class AuctionFormComponent implements OnInit {
   ngOnInit(): void {
     this.imgPreview = 'assets/img/placeholder-image-300x225.png';
     this.auctionsService.getCategories().subscribe(x => this.categories = x);
-    console.log(this.categories);
   }
 
   inputImage($event: Event): void {
@@ -94,10 +93,6 @@ export class AuctionFormComponent implements OnInit {
   }
 
   saveAuction(): void{
-    console.log('star tDate');
-    console.log(this.startDateForm.value);
-    console.log('endDate');
-    console.log(this.endDateForm.value);
     if (!this.form.invalid) {
       const startDate = this.dateFormToValue(this.startDateForm.value, this.startTimeForm.value);
 
@@ -112,13 +107,14 @@ export class AuctionFormComponent implements OnInit {
         this.toast.error('Auction can last for maximum 24 hours');
       } else {
         this.buttonDisable = true;
-        const auctionPost = new AuctionPostModel(null, this.nameForm.value, this.categoryForm.value.toUpperCase(),
+        const auctionPost = new AuctionPost(null, this.nameForm.value, this.categoryForm.value.toUpperCase(),
           new Date(startDate), new Date(endDate), this.countryForm.value, this.cityForm.value, this.addressForm.value,
           this.houseNrForm.value, this.priceForm.value, this.descriptionForm.value, this.imageFile);
 
         this.auctionsService.saveAuction(auctionPost).subscribe(post => {
           this.toast.success('Auction successfully saved');
           this.onModalClose();
+          window.location.reload();
         }, error => {
           this.buttonDisable = false;
           this.toast.error('Failed to save the auction');

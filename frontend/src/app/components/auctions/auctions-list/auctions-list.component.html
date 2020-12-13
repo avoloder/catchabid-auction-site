@@ -1,21 +1,30 @@
-<div>
-  <div *ngFor="let auction of auctions" class="m-2" style="display:inline-block;">
-    <div class="auction-card recent-auction">
-      <article class="col-item">
-        <div class="photo">
-          <a href="#"> <img src="data:image/jpeg;base64,{{auction.image}}" class="img-responsive" alt="Product Image"/>
-          </a>
-        </div>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+  <div *ngFor="let auction of auctions" >
+    <div class="col mb-4">
+      <div class="card">
+        <article class="col-item" style="border: none; margin-bottom: 0 !important;">
+          <div id="container" class="container">
+              <img src="data:image/jpeg;base64,{{auction.image}}" class="image" alt="Product Image">
+              <a href="#detail" *ngIf="auctionsGroup=='RECENT'" (click)="showAuctionDetails(auction)">
+                <div class="overlay">
+                  <div class="text">SHOW DETAILS</div>
+                </div>
+              </a>
+              <a href="#detail" *ngIf="auctionsGroup=='UPCOMING'" (click)="subscribeToAuction(auction)">
+                <div class="overlay">
+                  <div class="text">SUBSCRIBE</div>
+                </div>
+              </a>
+          </div>
         <div class="info">
-          <p class="text-medium lh-100 font-weight-500 color-grey-subtext" style="margin: 0;">Created by {{auction.creatorName}} </p>
-          <p class="text-lg lh-150 font-weight-500">{{auction.auctionName}}</p>
-          <p class="text-medium lh-120 font-weight-500 color-grey-subtext" style="margin-bottom: 5px;">CURRENT PRICE</p>
-          <p class="price-new text-medium lh-100 font-weight-500" *ngIf="auction.highestBid==undefined">{{auction.minPrice}}€</p>
-          <p class="price-new text-lg lh-100 font-weight-500"
+          <p class="card-text-small font-weight-500 color-grey-subtext">Created by {{auction.creatorName}} </p>
+          <p class="card-text-large font-weight-500 text-truncate">{{auction.auctionName}}</p>
+          <p class="card-text-small font-weight-500 color-grey-subtext">CURRENT BID</p>
+          <p class="card-text-large price-new font-weight-500" *ngIf="auction.highestBid==undefined">{{auction.minPrice}}€</p>
+          <p class="card-text-large price-new font-weight-500"
              *ngIf="auction.highestBid!=undefined">{{auction.highestBid}}€</p>
-          <br>
           <div class="row">
-              <div class="col-sm-6">
+              <div class="col-sm-6" style="padding-right: 0; margin-bottom: 10px;">
                   <app-auction-countdown class="text-medium-left font-weight-200 color-grey-subtext float-left" style="padding-top:5px;" *ngIf="auctionsGroup=='RECENT'"
                                  [countdownType]="'ending-countdown'"
                                  [endDate]="auction.endTime"></app-auction-countdown>
@@ -24,18 +33,13 @@
                                  [endDate]="auction.startTime"></app-auction-countdown>
               </div>
               <div class="col-sm-6">
-                  <a *ngIf="auctionsGroup=='RECENT'" (click)="openBidModal(auction)" class="btn btn-primary card-button">Bid</a>
-                  <a *ngIf="auctionsGroup=='UPCOMING'" class="btn btn-primary card-button">Subscribe</a>
+                  <a href="#" *ngIf="auctionsGroup=='RECENT'" (click)="openBidModal(auction)" class="btn btn-primary card-button">Bid</a>
               </div>
           </div>
         </div>
       </article>
     </div>
   </div>
-  <p></p>
-  <button *ngIf="!noMoreAuctionsToLoad" (click)="loadMoreAuctions()" class="btn btn-primary" style="background-color: #5271ff;">Load More</button>
+  </div>
 </div>
-
-
-
-
+<button *ngIf="!noMoreAuctionsToLoad" (click)="loadMoreAuctions()" class="btn btn-primary h-100"  style="background-color: #5271ff;">Load More</button>

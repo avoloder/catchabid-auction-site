@@ -45,6 +45,10 @@ export class ResetPasswordComponent implements OnInit {
   });
   }
 
+  onModalClose(){
+    this,this.modalService.dismissAll();
+  }
+
   resetPassword(){
     this.passwordManagementService.resetPassword(this.email, this.password)
     .subscribe(

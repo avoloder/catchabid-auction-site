@@ -14,8 +14,6 @@ export class PasswordManagementService {
     }
 
     sendResetPasswordToken(email: String, token: Number) {
-        console.log(email)
-        console.log(token)
         return this.http.post(this.endpoint + '/sendResetPasswordToken', {email: email, token: token});
     }
 
