@@ -10,5 +10,6 @@ public enum Category {
     TRAVEL,
     FURNITURE,
     MUSIC,
-    SPORT
+    SPORT,
+    OTHER
 }

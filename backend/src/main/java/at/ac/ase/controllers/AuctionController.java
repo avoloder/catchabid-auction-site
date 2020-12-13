@@ -39,7 +39,7 @@ public class AuctionController {
             @RequestParam(required = false) Integer pageNumber,
             @RequestParam(required = false) String userEmail,
             @RequestParam(required = false) boolean usePreferences) {
-        logger.info("Upcoming auctions requested for page size " + pageSize + " and age number requested " + pageNumber);
+        logger.info("Upcoming auctions requested for page size " + pageSize + " and page number requested " + pageNumber);
         if ("null".equals(userEmail)) {
             List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctions(pageSize, pageNumber);
             logger.info("Size of payload for upcoming auctions:" + posts.size());
@@ -57,21 +57,21 @@ public class AuctionController {
     public @ResponseBody
     ResponseEntity<List<AuctionPostSendDTO>> getAllAuctions(@RequestParam(required = false) Integer pageSize,
                                                             @RequestParam(required = false) Integer pageNr) {
-        logger.info("All auctions requested for page size " + pageSize + " and age number requested" + pageNr);
+        logger.info("All auctions requested for page size " + pageSize + " and page number requested" + pageNr);
         List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctions(pageSize, pageNr);
         logger.info("Size of payload for all auctions: " + posts.size());
         logger.debug("Ids of Auctions in payload: " + posts.stream().map(AuctionPostSendDTO::getId).collect(Collectors.toList()));
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
-    @GetMapping("/recent")
+    @GetMapping("recent")
     public List<AuctionPostSendDTO> getRecentAuctions(
             @RequestParam(required = false) Integer pageNumber,
             @RequestParam(required = false) Integer auctionsPerPage,
             @RequestParam(required = false) String userEmail,
             @RequestParam(required = false) boolean usePreferences) {
 
-        logger.info("Recent auctions requested for page size " + auctionsPerPage + "and age number requested " + pageNumber);
+        logger.info("Recent auctions requested for page size " + auctionsPerPage + "and page number requested " + pageNumber);
         if ("null".equals(userEmail)) {
             return auctionService.getRecentAuctions(pageNumber, auctionsPerPage);
         } else {
