@@ -45,7 +45,7 @@ deploy-backend:
   stage: deploy
   script:
     - cd backend && mvn clean install -DskipTests
-    - mvn $MAVEN_CLI_OPTS  org.springframework.boot:spring-boot-maven-plugin:run
+    - mvn $MAVEN_CLI_OPTS  org.springframework.boot:spring-boot-maven-plugin:start
   tags: [runner]
   only:
     - master
