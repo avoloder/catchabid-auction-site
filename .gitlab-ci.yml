@@ -9,7 +9,7 @@ variables:
 
 services:
   - postgres:latest
-  - redis: latest
+  - redis:latest
   
 stages:
   - build
