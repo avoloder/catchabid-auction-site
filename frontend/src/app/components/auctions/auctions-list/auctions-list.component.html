@@ -5,6 +5,7 @@
         <div class="photo">
           <a href="#"> <img src="data:image/jpeg;base64,{{auction.image}}" class="img-responsive" alt="Product Image"/>
           </a>
+
         </div>
         <div class="info">
           <p class="text-medium lh-100 font-weight-500 color-grey-subtext" style="margin: 0;">Created by {{auction.creatorName}} </p>
@@ -25,7 +26,7 @@
               </div>
               <div class="col-sm-6">
                   <a href="#" *ngIf="auctionsGroup=='RECENT'" class="btn btn-primary card-button">Bid</a>
-                  <a href="#" *ngIf="auctionsGroup=='UPCOMING'" class="btn btn-primary card-button">Subscribe</a>
+                  <a href="#" *ngIf="auctionsGroup=='UPCOMING'" class="btn btn-primary card-button" (click)="openContactForm(auction)">Subscribe</a>
               </div>
           </div>
         </div>

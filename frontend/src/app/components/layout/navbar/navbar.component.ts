@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { AuctionFormComponent } from '../../auctions/auction-form/auction-form.component';
 import { Router } from '@angular/router';
 import {AuctionsService} from '../../../services/auction.service';
+import {ContactFormComponent} from "../../auctions/contact-form/contact-form.component";
 
 @Component({
   selector: 'app-navbar',

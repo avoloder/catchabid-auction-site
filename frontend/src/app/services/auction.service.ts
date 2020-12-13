@@ -3,6 +3,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable, Subject} from "rxjs";
 import {AuctionPostModel} from "../models/auctionPost.model";
 import 'rxjs/add/operator/map'
+import {ContactForm} from "../models/contact-form";
 
 const api = 'api/auctions';
 
@@ -40,7 +41,11 @@ export class AuctionsService {
     return this.http.post<AuctionPostModel>(api, auctionPost);
   }
 
-  getCategories() : Observable<Object> {
+  getCategories(): Observable<Object> {
     return this.http.get(this.REST_API_SERVER + api + "/getCategories");
+  }
+
+  postContactForm(contactForm: ContactForm): Observable<ContactForm> {
+    return this.http.post<ContactForm>(this.REST_API_SERVER + api + '/postContactForm', contactForm);
   }
 }

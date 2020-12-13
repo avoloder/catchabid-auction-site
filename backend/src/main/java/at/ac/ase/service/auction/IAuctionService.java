@@ -4,8 +4,10 @@ package at.ac.ase.service.auction;
 import java.util.List;
 import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.AuctionCreationDTO;
+import at.ac.ase.dto.ContactFormDTO;
 import at.ac.ase.entities.AuctionPost;
 import at.ac.ase.entities.Category;
+import at.ac.ase.entities.ContactForm;
 import at.ac.ase.entities.User;
 import java.util.List;
 import java.util.Optional;
@@ -69,5 +71,15 @@ public interface IAuctionService {
      * @return list of categories
      */
     Category[] getCategories();
+
+    ContactForm postContactForm(ContactForm contactForm);
+
+    /**
+     *
+     * @param contactFormDTO
+     * @param user
+     * @return
+     */
+    ContactForm convertContactFormToDTO(ContactFormDTO contactFormDTO, User user);
 
 }

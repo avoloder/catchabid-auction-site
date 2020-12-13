@@ -2,7 +2,9 @@ package at.ac.ase.controllers;
 
 import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.AuctionCreationDTO;
+import at.ac.ase.dto.ContactFormDTO;
 import at.ac.ase.entities.AuctionPost;
+import at.ac.ase.entities.ContactForm;
 import at.ac.ase.entities.User;
 import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.implementation.AuctionHouseService;
@@ -78,6 +80,18 @@ public class AuctionController {
     @RequestMapping(value = "/getCategories", method = RequestMethod.GET)
     public ResponseEntity getCategories(){
         return ResponseEntity.status(HttpStatus.OK).body(this.auctionService.getCategories());
+    }
+
+    @PostMapping(value = "/postContactForm")
+    public ResponseEntity<Object> postContactForm(
+            @RequestBody ContactFormDTO contactFormDTO,
+            @CurrentSecurityContext(expression = "authentication.principal") User user) {
+
+        ContactForm contactForm = auctionService.convertContactFormToDTO(contactFormDTO, user);
+
+        auctionService.postContactForm(contactForm);
+
+        return ResponseEntity.ok(auctionService.postContactForm(contactForm));
     }
 
 
