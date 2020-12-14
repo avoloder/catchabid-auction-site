@@ -6,6 +6,7 @@ import at.ac.ase.dto.AuctionQueryDTO;
 import at.ac.ase.dto.ContactFormDTO;
 import at.ac.ase.dto.translator.AuctionDtoTranslator;
 import at.ac.ase.entities.*;
+import at.ac.ase.repository.auction.AuctionPostQuery;
 import at.ac.ase.repository.auction.AuctionRepository;
 import at.ac.ase.repository.user.UserRepository;
 import at.ac.ase.repository.auction.ContactFormRepository;
@@ -113,7 +114,7 @@ public class AuctionService implements IAuctionService {
 
     @Override
     public List<AuctionPostSendDTO> getRecentAuctionsForUser(Integer pageNr, Integer auctionsPerPage, String userEmail, boolean usePreferences) {
-        Set<Category> preferences = getPreferences(userEmail,usePreferences);
+        List<Category> preferences = getPreferences(userEmail,usePreferences);
         if (preferences == null || preferences.isEmpty()) {
             logger.info("No preferences found, continue with fetching recent auctions without preferences");
             return getRecentAuctions(pageNr, auctionsPerPage);
@@ -137,7 +138,7 @@ public class AuctionService implements IAuctionService {
 
     @Override
     public List<AuctionPostSendDTO> getUpcomingAuctionsForUser(Integer auctionsPerPage, Integer pageNr, String userEmail, boolean usePreferences) {
-        Set<Category> preferences = getPreferences(userEmail,usePreferences);
+        List<Category> preferences = getPreferences(userEmail,usePreferences);
         if (preferences == null || preferences.isEmpty()) {
             logger.info("No preferences found, continue with retrieving upcoming auctions without preferences");
             return getUpcomingAuctions(pageNr, auctionsPerPage);
@@ -164,7 +165,12 @@ public class AuctionService implements IAuctionService {
 
     @Override
     public List<AuctionPostSendDTO> searchAuctions(AuctionQueryDTO query) {
-        List<AuctionPost> foundAuctions = auctionRepository.query(auctionDtoTranslator.toEntity(query));
+        AuctionPostQuery entityQuery = auctionDtoTranslator.toEntity(query);
+        if (entityQuery.isEmptySearch()){
+         entityQuery.setCategories(getPreferences(entityQuery.getUserEmail(),entityQuery.isUseUserPreferences()));
+        }
+        List<AuctionPost> foundAuctions = auctionRepository.query(entityQuery);
+        logger.info("Size of auctions: " + foundAuctions.size());
         return auctionDtoTranslator.toDtoList(foundAuctions);
     }
 
@@ -184,16 +190,16 @@ public class AuctionService implements IAuctionService {
         return PageRequest.of(pageNr, auctionsPerPage, sortMethod);
     }
 
-    private Set<Category> getPreferences(String userEmail, boolean usePreferences) {
+    private List<Category> getPreferences(String userEmail, boolean usePreferences) {
         RegularUser regularUser = regularUserService.getUserByEmail(userEmail);
         if (regularUser != null) {
             if (usePreferences) {
-                return regularUser.getPreferences();
+                return regularUser.getPreferences().stream().collect(Collectors.toList());
             }else {
-                return Arrays.stream(getCategories()).filter(e -> !regularUser.getPreferences().contains(e)).collect(Collectors.toSet());
+                return Arrays.stream(getCategories()).filter(e -> !regularUser.getPreferences().contains(e)).collect(Collectors.toList());
             }
         }
-        return null;
+        return new ArrayList<>();
     }
 
     public ContactForm postContactForm(ContactForm contactForm) {

@@ -41,6 +41,7 @@ export class AuctionsListComponent implements OnInit {
 
   auctions: Array<AuctionPost> = [];
   noMoreAuctionsToLoad: boolean = false;
+  useUserPreferences: boolean =true;
 
   @Output() resultSizeEvent = new EventEmitter<number>();
 
@@ -73,7 +74,12 @@ export class AuctionsListComponent implements OnInit {
       console.log(data.toString());
       this.auctions = this.auctions.concat(data);
       if(auctionsCountBeforeLoading == this.auctions.length || (this.auctions.length / (this.pageNumber+1)) < this.pageSize) {
-        this.noMoreAuctionsToLoad = true;
+        if (this.useUserPreferences){
+          this.useUserPreferences=false;
+          this.pageNumber=-1
+        }else {
+          this.noMoreAuctionsToLoad = true;
+        }
       }
       else {
         this.pageNumber++;
@@ -88,16 +94,21 @@ export class AuctionsListComponent implements OnInit {
     query.countries = this.currentAuctionQuery.countries;
     query.pageNumber = this.pageNumber;
     query.pageSize   = this.pageSize;
+    query.userEmail= localStorage.getItem('email');
+    query.useUserPreferences = this.useUserPreferences;
+
+    console.log(query.userEmail)
+
 
     if (this.auctionsGroup == "RECENT") {
       query.sortBy = "endTime";
-      query.sortOrder = "DESC";
+      query.sortOrder = "ASC";
       query.auctionsStartUntil = new Date();
       query.auctionsEndFrom = new Date();
     }
     if (this.auctionsGroup == "UPCOMING") {
       query.sortBy = "startTime";
-      query.sortOrder = "DESC";
+      query.sortOrder = "ASC";
       query.auctionsStartFrom = new Date();
     }
     this.dataService.findAuctions(query).subscribe(handleResponse);

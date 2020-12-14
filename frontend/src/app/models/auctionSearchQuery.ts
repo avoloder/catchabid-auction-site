@@ -10,6 +10,8 @@ export class AuctionSearchQuery {
   pageSize: number;
   sortBy: string;
   sortOrder: string;
+  userEmail: string;
+  useUserPreferences:boolean;
 
   equals (otherQuery: AuctionSearchQuery) {
     if (otherQuery == null) return false;

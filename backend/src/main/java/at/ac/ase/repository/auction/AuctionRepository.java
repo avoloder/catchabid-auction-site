@@ -40,7 +40,7 @@ public interface AuctionRepository extends JpaRepository<AuctionPost, Long>, Auc
      * @param pageable page of results
      * @return
      */
-    List<AuctionPost> findAllByStartTimeLessThanAndEndTimeGreaterThanAndCategoryIn(LocalDateTime fromStartTime, LocalDateTime untilEndTime, Set<Category> categories, Pageable pageable);
+    List<AuctionPost> findAllByStartTimeLessThanAndEndTimeGreaterThanAndCategoryIn(LocalDateTime fromStartTime, LocalDateTime untilEndTime, List<Category> categories, Pageable pageable);
 
     /**
      * get upcoming auctions from database by user preferences
@@ -49,7 +49,7 @@ public interface AuctionRepository extends JpaRepository<AuctionPost, Long>, Auc
      * @param categories preferences categories of user
      * @return
      */
-    List<AuctionPost> findAllByStartTimeGreaterThanAndCategoryIn(LocalDateTime from, Set<Category> categories, Pageable pageable);
+    List<AuctionPost> findAllByStartTimeGreaterThanAndCategoryIn(LocalDateTime from, List<Category> categories, Pageable pageable);
 
     /**
      * get countries where auctions exist
