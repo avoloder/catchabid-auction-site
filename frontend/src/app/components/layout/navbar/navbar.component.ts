@@ -7,6 +7,7 @@ import { AuctionFormComponent } from '../../auctions/auction-form/auction-form.c
 import { Router } from '@angular/router';
 import {AuctionsService} from '../../../services/auction.service';
 import {AuctionsSearchService} from "../../../services/auctions-search.service";
+import {ContactFormComponent} from "../../auctions/contact-form/contact-form.component";
 
 @Component({
   selector: 'app-navbar',

@@ -11,6 +11,7 @@ import {AuctionSearchQuery} from "../../../models/auctionSearchQuery";
 import { AuctionsSearchService } from 'src/app/services/auctions-search.service';
 import { LoadingSpinnerService } from 'src/app/services/loading-spinner.service';
 
+
 @Component({
   selector: 'app-auctions-list',
   templateUrl: './auctions-list.component.html',

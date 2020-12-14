@@ -4,6 +4,8 @@ import {Observable, Subject} from "rxjs";
 import 'rxjs/add/operator/map';
 import {AuctionPost} from '../models/auctionpost';
 import {AuctionSearchQuery} from "../models/auctionSearchQuery";
+import 'rxjs/add/operator/map'
+import {ContactForm} from "../models/contact-form";
 
 const api = 'api/auctions';
 
@@ -70,11 +72,15 @@ export class AuctionsService {
     return this.http.post<AuctionPost>(api, auctionPost);
   }
 
-  getCategories() : Observable<Object> {
+  getCategories(): Observable<Object> {
     return this.http.get(this.REST_API_SERVER + api + "/getCategories");
   }
 
   getCountriesWhereAuctionsExist() : Observable<Object> {
     return this.http.get(this.REST_API_SERVER + api + "/countriesWhereAuctionsExist");
+  }
+
+  postContactForm(contactForm: ContactForm): Observable<ContactForm> {
+    return this.http.post<ContactForm>(this.REST_API_SERVER + api + '/postContactForm', contactForm);
   }
 }
