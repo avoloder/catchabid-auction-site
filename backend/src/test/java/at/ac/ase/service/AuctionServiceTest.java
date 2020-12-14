@@ -118,6 +118,34 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     }
 
     @Test
+    public void testRecentAuctionsForUser(){
+        insertTestData("auctions-filter-preferences.sql");
+        List<AuctionPostSendDTO> posts = auctionService.getRecentAuctionsForUser(0,10,"testRegular@test.com",true);
+        assertEquals(1,posts.size());
+        assertEquals("Desktop PC - Intel i7, AMD RX 580 8GB",posts.get(0).getDescription());
+
+        posts = auctionService.getRecentAuctionsForUser(0,10,"testRegular@test.com",false);
+        assertEquals(2,posts.size());
+        assertEquals("Bob Marley Tickets",posts.get(0).getDescription());
+        assertEquals("Ticket to Paradise CD",posts.get(1).getDescription());
+
+    }
+
+    @Test
+    public void testUpcomingAuctionsForUser(){
+        insertTestData("auctions-filter-preferences.sql");
+        List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctionsForUser(10,0,"testRegular@test.com",true);
+        assertEquals(1,posts.size());
+        assertEquals("Desktop PC - Intel i7, AMD RX 580 8GB",posts.get(0).getDescription());
+
+        posts = auctionService.getUpcomingAuctionsForUser(10,0,"testRegular@test.com",false);
+        assertEquals(2,posts.size());
+        assertEquals("Bob Marley Tickets",posts.get(0).getDescription());
+        assertEquals("Ticket to Paradise CD",posts.get(1).getDescription());
+
+    }
+
+    @Test
     public void testGetUpcomingAuctions() {
         insertTestData("auctions.sql");
         AuctionPost postRecent = createAuction("test@test.com");

@@ -180,7 +180,7 @@ public class AuctionService implements IAuctionService {
             if (usePreferences) {
                 return regularUser.getPreferences();
             }else {
-                return Arrays.stream(getCategories()).filter(e -> regularUser.getPreferences().contains(e)).collect(Collectors.toSet());
+                return Arrays.stream(getCategories()).filter(e -> !regularUser.getPreferences().contains(e)).collect(Collectors.toSet());
             }
         }
         return null;
