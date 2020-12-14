@@ -6,10 +6,9 @@ public enum Category {
     ELECTRONICS,
     ART,
     CARS,
-    ANTIQUES,
+    EXPERIENCE,
     TRAVEL,
     FURNITURE,
     MUSIC,
-    SPORT,
     OTHER
 }

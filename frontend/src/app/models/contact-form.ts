@@ -2,6 +2,7 @@ import {Address} from './address';
 
 export class ContactForm {
   id: number;
+  user: string;
   auctionPostId: number;
   firstName: string;
   lastName: string;
@@ -13,8 +14,9 @@ export class ContactForm {
   houseNr: number;
   remark: string;
 
-  constructor(auctionPostId: number, firstName: string, lastName: string, email: string,
+  constructor(user: string, auctionPostId: number, firstName: string, lastName: string, email: string,
               phoneNr: string, country: string, city: string, street: string, houseNr: number, remark: string) {
+    this.user = user;
     this.auctionPostId = auctionPostId;
     this.firstName = firstName;
     this.lastName = lastName;

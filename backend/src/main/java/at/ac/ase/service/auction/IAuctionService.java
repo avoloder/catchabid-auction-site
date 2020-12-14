@@ -24,32 +24,12 @@ public interface IAuctionService {
     List<AuctionPostSendDTO> getRecentAuctions(Integer pageNr, Integer auctionsPerPage);
 
     /**
-     * Returns recent pagable auction posts ordered by start_time descending based on user preferences
-     * @param pageNr page number starting at 0. (default=0 if invalid parameter)
-     * @param auctionsPerPage page size (default=50 if invalid parameter)
-     * @param usePreferences show auctions with user preferences or not
-     * @param userEmail of the user
-     * @return
-     */
-    List<AuctionPostSendDTO> getRecentAuctionsForUser(Integer pageNr, Integer auctionsPerPage,String userEmail,boolean usePreferences);
-
-    /**
-     * Get upcomming auctions ordered by start-time ascending
-     * @param auctionsPerPage page size (default=50 if invalid parameter)
-     * @param pageNr page number starting at 0. (default=0 if invalid parameter)
+     *
+     * @param auctionsPerPage
+     * @param pageNr
      * @return
      */
     List<AuctionPostSendDTO> getUpcomingAuctions(Integer auctionsPerPage, Integer pageNr);
-
-    /**
-     * Get upcomming auctions ordered by start-time ascending, based on user preferences
-     * @param auctionsPerPage page size (default=50 if invalid parameter)
-     * @param pageNr page number starting at 0. (default=0 if invalid parameter)
-     * @param userEmail email of user whose preferences we should follow
-     * @param usePreferences show auctions with user preferences or not
-     * @return
-     */
-    List<AuctionPostSendDTO> getUpcomingAuctionsForUser(Integer auctionsPerPage, Integer pageNr,String userEmail,boolean usePreferences);
 
     /**
      *
@@ -88,7 +68,6 @@ public interface IAuctionService {
 
     /**
      *
-     * @param user
      * @param auctionPostDTO
      * @return
      */
@@ -106,13 +85,17 @@ public interface IAuctionService {
      */
     List<String> getCountriesWhereAuctionsExist();
 
+    /**
+     * Method which validates contact forms and persist it to the database
+     * @param contactForm contact form to be validated and persisted
+     * @return contact form with an id
+     */
     ContactForm postContactForm(ContactForm contactForm);
 
     /**
-     *
-     * @param contactFormDTO
-     * @param user
-     * @return
+     * Converts contactFormDTO to an entity
+     * @param contactFormDTO DTO to be converted to an entity
+     * @return ContactForm entity
      */
     ContactForm convertContactFormToDTO(ContactFormDTO contactFormDTO, User user);
 

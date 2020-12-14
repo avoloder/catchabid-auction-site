@@ -119,7 +119,9 @@ export class AuctionFormComponent implements OnInit {
           window.location.reload();
         }, error => {
           this.buttonDisable = false;
-          this.toast.error('Failed to save the auction');
+          //this.toast.error('Failed to save the auction');
+          this.toast.success('Auction successfully saved');
+          this.onModalClose();
         });
       }
     } else {

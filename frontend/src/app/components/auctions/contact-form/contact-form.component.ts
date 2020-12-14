@@ -52,7 +52,8 @@ export class ContactFormComponent implements OnInit {
 
   submitContactForm(): void {
     this.buttonDisable = true;
-    const contactForm = new ContactForm(this.auction.id, this.model.firstName,
+    const userData = JSON.parse(atob(localStorage.getItem('token').split('.')[1]));
+    const contactForm = new ContactForm(userData['sub'], this.auction.id, this.model.firstName,
       this.model.lastName, this.model.email, this.model.phoneNumbe, this.model.country, this.model.city,
       this.model.street, this.model.houseNr, this.model.remark);
     this.auctionService.postContactForm(contactForm).subscribe(contactForm => {

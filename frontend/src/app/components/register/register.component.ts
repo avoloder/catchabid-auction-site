@@ -5,7 +5,6 @@ import { SigninComponent } from '../signin/signin.component';
 import { RegisterService } from '../../services/register.service';
 import { Address } from 'src/app/models/address';
 import { ToastrService } from 'ngx-toastr';
-import { CategoriesPickerComponent } from './categories-picker/categories-picker/categories-picker.component';
 
 @Component({
   selector: 'app-register',
@@ -74,7 +73,7 @@ export class RegisterComponent implements OnInit  {
       this.modalService.open(SigninComponent);
   }
 
-  openCategories() {
+  registerUser() {
     let phoneNumber = +this.model.phoneNumber;
     let finalPhoneNumber = this.model.areaCode + phoneNumber;
     this.model.phoneNr = finalPhoneNumber;
@@ -83,10 +82,16 @@ export class RegisterComponent implements OnInit  {
     this.address.street = this.model.street;
     this.address.houseNr = this.model.houseNr;
     this.model.address = this.address;
-    this.modalService.dismissAll();
-    const component = this.modalService.open(CategoriesPickerComponent);
-    component.componentInstance.user = this.model;
-    component.componentInstance.address = this.address;
+    this.registerService.registerUser(this.model)
+        .subscribe(
+            data => {
+                this.toast.success("User successfully registered")
+                this.openLoginModal();
+            },
+            error => {
+              this.toast.error(error.error.message);
+            
+            });
   }
 
   registerAuctionHouse() {

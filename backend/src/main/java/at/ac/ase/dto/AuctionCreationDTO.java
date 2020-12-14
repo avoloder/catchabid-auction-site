@@ -40,7 +40,6 @@ public class AuctionCreationDTO {
     @DecimalMin("0.1")
     private Double minPrice;
 
-    @NotNull
     private String description;
 
     @NotNull

@@ -39,7 +39,7 @@ public class AuctionPost {
     @NotNull
     private Double minPrice;
 
-    @Column(columnDefinition="LONGTEXT")
+    @Column(length = 700)
     private String description;
 
     @Column

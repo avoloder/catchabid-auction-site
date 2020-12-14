@@ -50,8 +50,7 @@ export class AuctionsService {
   getRecentPosts(pageNumber: number, pageSize: number): Observable<Array<AuctionPost>> {
     const params = new HttpParams()
       .set("pageNumber", pageNumber.toString())
-      .set("auctionsPerPage", pageSize.toString())
-      .set("userEmail", localStorage.getItem("email"));
+      .set("auctionsPerPage", pageSize.toString());
 
     return this.http.get<Array<AuctionPost>>(this.REST_API_SERVER + api + "/recent", {params});
   }
@@ -59,8 +58,7 @@ export class AuctionsService {
   public getUpcomingRequests(pageNumber: number, pageSize: number): Observable<Array<AuctionPost>> {
     const params = new HttpParams()
       .set("pageNumber", pageNumber.toString())
-      .set("pageSize", pageSize.toString())
-      .set("userEmail", localStorage.getItem("email"));
+      .set("pageSize", pageSize.toString());
 
     const request: string = this.REST_API_SERVER + api + "/upcoming";
 

@@ -2,6 +2,7 @@ package at.ac.ase.service;
 
 import at.ac.ase.basetest.BaseIntegrationTest;
 import at.ac.ase.dto.AuctionPostSendDTO;
+import at.ac.ase.dto.ContactFormDTO;
 import at.ac.ase.entities.*;
 import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.IAuctionHouseService;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.ValidationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -118,34 +120,6 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void testRecentAuctionsForUser(){
-        insertTestData("auctions-filter-preferences.sql");
-        List<AuctionPostSendDTO> posts = auctionService.getRecentAuctionsForUser(0,10,"testRegular@test.com",true);
-        assertEquals(1,posts.size());
-        assertEquals("Desktop PC - Intel i7, AMD RX 580 8GB",posts.get(0).getDescription());
-
-        posts = auctionService.getRecentAuctionsForUser(0,10,"testRegular@test.com",false);
-        assertEquals(2,posts.size());
-        assertEquals("Bob Marley Tickets",posts.get(0).getDescription());
-        assertEquals("Ticket to Paradise CD",posts.get(1).getDescription());
-
-    }
-
-    @Test
-    public void testUpcomingAuctionsForUser(){
-        insertTestData("auctions-filter-preferences.sql");
-        List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctionsForUser(10,0,"testRegular@test.com",true);
-        assertEquals(1,posts.size());
-        assertEquals("Desktop PC - Intel i7, AMD RX 580 8GB",posts.get(0).getDescription());
-
-        posts = auctionService.getUpcomingAuctionsForUser(10,0,"testRegular@test.com",false);
-        assertEquals(2,posts.size());
-        assertEquals("Bob Marley Tickets",posts.get(0).getDescription());
-        assertEquals("Ticket to Paradise CD",posts.get(1).getDescription());
-
-    }
-
-    @Test
     public void testGetUpcomingAuctions() {
         insertTestData("auctions.sql");
         AuctionPost postRecent = createAuction("test@test.com");
@@ -189,5 +163,21 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         }
         return new byte[10];
     }
+
+    @Test (expected = ValidationException.class)
+    public void testInvalidAddressContactFormDTO() {
+        insertTestData("auctions.sql");
+        ContactForm contactForm = new ContactForm();
+        contactForm.setAuctionPost(createAuction("test@test.com"));
+        User user = new RegularUser();
+        user.setId(1L);
+        user.setEmail("test@test.com");
+        contactForm.setUser(user);
+        contactForm.setEmail("test@test.com");
+        contactForm.setPhoneNr("+4376689284920");
+
+        auctionService.postContactForm(contactForm);
+    }
+
 }
 

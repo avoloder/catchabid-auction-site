@@ -11,12 +11,9 @@ import at.ac.ase.repository.user.UserRepository;
 import at.ac.ase.repository.auction.ContactFormRepository;
 import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.IAuctionHouseService;
-import at.ac.ase.service.user.IRegularUserService;
 import at.ac.ase.util.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,17 +24,12 @@ import org.springframework.stereotype.Service;
 import javax.validation.*;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class AuctionService implements IAuctionService {
-    private static final Logger logger = LoggerFactory.getLogger(AuctionService.class);
 
     @Autowired
     private AuctionRepository auctionRepository;
-
-    @Autowired
-    private IRegularUserService regularUserService;
 
     @Autowired
     private IAuctionHouseService auctionHouseService;
@@ -104,51 +96,15 @@ public class AuctionService implements IAuctionService {
 
     @Override
     public List<AuctionPostSendDTO> getRecentAuctions(Integer pageNr, Integer auctionsPerPage) {
-        logger.info("Fetching recent auctions without preferences, for pageNumber " + pageNr + ", and page size " + auctionsPerPage);
         List<AuctionPost> recentAuctions = auctionRepository.findAllByStartTimeLessThanAndEndTimeGreaterThan(
                 LocalDateTime.now(), LocalDateTime.now(), getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").descending()));
-        logger.debug("Fetched " + recentAuctions.size() + " auctions from database.");
         return auctionDtoTranslator.toDtoList(recentAuctions);
     }
 
     @Override
-    public List<AuctionPostSendDTO> getRecentAuctionsForUser(Integer pageNr, Integer auctionsPerPage, String userEmail, boolean usePreferences) {
-        Set<Category> preferences = getPreferences(userEmail,usePreferences);
-        if (preferences == null || preferences.isEmpty()) {
-            logger.info("No preferences found, continue with fetching recent auctions without preferences");
-            return getRecentAuctions(pageNr, auctionsPerPage);
-        } else {
-            logger.info("Fetching recent auctions with preferences: " + preferences.toString() + "pageNumber " + pageNr + ", and page size " + auctionsPerPage);
-            List<AuctionPost> recentAuctions = auctionRepository.findAllByStartTimeLessThanAndEndTimeGreaterThanAndCategoryIn(
-                    LocalDateTime.now(), LocalDateTime.now(), preferences, getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").descending()));
-            logger.debug("Fetched " + recentAuctions.size() + " auctions from database.");
-            return auctionDtoTranslator.toDtoList(recentAuctions);
-        }
-    }
-
-    @Override
     public List<AuctionPostSendDTO> getUpcomingAuctions(Integer auctionsPerPage, Integer pageNr) {
-        logger.info("Fetching upcoming auctions without preferences, for pageNumber " + pageNr + ", and page size " + auctionsPerPage);
-        List<AuctionPost> upcomingAuctions =auctionRepository.findAllByStartTimeGreaterThan(LocalDateTime.now(),
-                getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").ascending()));
-        logger.debug("Fetched " + upcomingAuctions.size() + " auctions from database.");
-        return convertAuctionsToDTO(upcomingAuctions);
-    }
-
-    @Override
-    public List<AuctionPostSendDTO> getUpcomingAuctionsForUser(Integer auctionsPerPage, Integer pageNr, String userEmail, boolean usePreferences) {
-        Set<Category> preferences = getPreferences(userEmail,usePreferences);
-        if (preferences == null || preferences.isEmpty()) {
-            logger.info("No preferences found, continue with retrieving upcoming auctions without preferences");
-            return getUpcomingAuctions(pageNr, auctionsPerPage);
-        } else {
-            logger.info("Retrieving upcoming auctions with preferences: " + preferences.toString() + " for pageNumber " + pageNr + ", and page size " + auctionsPerPage);
-            List<AuctionPost> upcomingAuctions = auctionRepository.findAllByStartTimeGreaterThanAndCategoryIn(LocalDateTime.now(), preferences,
-                    getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").ascending()));
-            logger.debug("Fetched " + upcomingAuctions.size() + " auctions from database.");
-            return convertAuctionsToDTO(upcomingAuctions);
-
-        }
+        return convertAuctionsToDTO(auctionRepository.findAllByStartTimeGreaterThan(LocalDateTime.now(),
+                getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").ascending())));
     }
 
     @Override
@@ -182,18 +138,6 @@ public class AuctionService implements IAuctionService {
             auctionsPerPage = 50;
         }
         return PageRequest.of(pageNr, auctionsPerPage, sortMethod);
-    }
-
-    private Set<Category> getPreferences(String userEmail, boolean usePreferences) {
-        RegularUser regularUser = regularUserService.getUserByEmail(userEmail);
-        if (regularUser != null) {
-            if (usePreferences) {
-                return regularUser.getPreferences();
-            }else {
-                return Arrays.stream(getCategories()).filter(e -> !regularUser.getPreferences().contains(e)).collect(Collectors.toSet());
-            }
-        }
-        return null;
     }
 
     public ContactForm postContactForm(ContactForm contactForm) {

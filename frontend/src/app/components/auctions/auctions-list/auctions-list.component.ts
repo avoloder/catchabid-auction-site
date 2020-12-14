@@ -10,6 +10,7 @@ import { AuctionPost } from '../../../models/auctionpost';
 import {AuctionSearchQuery} from "../../../models/auctionSearchQuery";
 import { AuctionsSearchService } from 'src/app/services/auctions-search.service';
 import { LoadingSpinnerService } from 'src/app/services/loading-spinner.service';
+import {ContactFormComponent} from "../contact-form/contact-form.component";
 
 
 @Component({
@@ -115,10 +116,12 @@ export class AuctionsListComponent implements OnInit {
     }
   }
 
-  subscribeToAuction(): void{
-    if(localStorage.getItem('token') == null){
+  subscribeToAuction(auction: AuctionPost): void{
+    if (localStorage.getItem('token') == null){
       this.openLoginModal();
     }else{
+      const modalRef = this.modalService.open(ContactFormComponent);
+      modalRef.componentInstance.auction = auction;
       console.log("click subscribe");
     }
   }
