@@ -4,7 +4,6 @@ import {Observable, Subject} from "rxjs";
 import 'rxjs/add/operator/map';
 import {AuctionPost} from '../models/auctionpost';
 import {AuctionSearchQuery} from "../models/auctionSearchQuery";
-import {AuctionPostModel} from "../models/auctionPost.model";
 import 'rxjs/add/operator/map'
 import {ContactForm} from "../models/contact-form";
 
