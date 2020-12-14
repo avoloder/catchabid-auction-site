@@ -41,7 +41,6 @@ import {ContactFormComponent} from "./components/auctions/contact-form/contact-f
     ResetPasswordTokenComponent,
     ForgotPasswordComponent,
     ContactFormComponent,
-    AuctionDetailsComponent
     AuctionDetailsComponent,
     CategoriesPickerComponent
   ],
