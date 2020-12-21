@@ -1,5 +1,6 @@
 package at.ac.ase.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Type;
 
 import java.util.HashSet;
@@ -56,6 +57,7 @@ public class AuctionPost {
 
     @OneToOne
     @JoinColumn(name = "bid_id", referencedColumnName = "id")
+    @JsonManagedReference
     private Bid highestBid;
 
     @ManyToMany(fetch = FetchType.LAZY)

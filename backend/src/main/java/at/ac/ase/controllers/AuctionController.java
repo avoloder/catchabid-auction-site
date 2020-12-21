@@ -75,15 +75,16 @@ public class AuctionController {
         return ResponseEntity.ok(auctionService.getCountriesWhereAuctionsExist());
     }
 
-    @PostMapping
+    @PostMapping("/save")
     public ResponseEntity<Object> createAuction(
-            @RequestBody @Valid AuctionCreationDTO auction) {
+            @RequestBody @Valid AuctionCreationDTO auction,
+            @CurrentSecurityContext(expression = "authentication.principal") User user) {
         if (auction.getId() != null) {
             auctionService
                     .getAuctionPost(auction.getId())
                     .orElseThrow(ObjectNotFoundException::new);
         }
-        AuctionPost auctionPost = auctionService.toAuctionPostEntity(auction);
+        AuctionPost auctionPost = auctionService.toAuctionPostEntity(user, auction);
         return ResponseEntity.ok(auctionService.createAuction(auctionPost));
     }
 

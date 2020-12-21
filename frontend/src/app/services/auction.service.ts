@@ -67,7 +67,7 @@ export class AuctionsService {
 
 
   saveAuction(auctionPost: AuctionPost): Observable<AuctionPost> {
-    return this.http.post<AuctionPost>(api, auctionPost);
+    return this.http.post<AuctionPost>(this.REST_API_SERVER + api + "/save", auctionPost);
   }
 
   getCategories(): Observable<Object> {

@@ -61,7 +61,7 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public AuctionPost toAuctionPostEntity(AuctionCreationDTO auctionPostDTO) {
+    public AuctionPost toAuctionPostEntity(User user, AuctionCreationDTO auctionPostDTO) {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         AuctionPost auctionPost = modelMapper.map(auctionPostDTO, AuctionPost.class);
         if (auctionPostDTO.getId() != null) {
@@ -76,7 +76,7 @@ public class AuctionService implements IAuctionService {
         auctionPost.setEndTime(auctionPostDTO.getEndTime());
         auctionPost.setMinPrice(auctionPostDTO.getMinPrice());
         auctionPost.setDescription(auctionPostDTO.getDescription());
-        auctionPost.setCreator(userRepository.findByEmail(auctionPostDTO.getCreatorEmail()));
+        auctionPost.setCreator(user);
         auctionPost.setImage(Base64.getDecoder().decode(auctionPostDTO.getImage()));
         auctionPost.setAddress(new Address(auctionPostDTO.getCountry(), auctionPostDTO.getCity(),
                 auctionPostDTO.getAddress(), auctionPostDTO.getHouseNr()));

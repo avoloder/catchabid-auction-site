@@ -2,7 +2,7 @@ export class AuctionPost {
   id: number;
   name: string;
   creatorName: string;
-  creatorEmail: string;
+  creatorId: number;
   category: string;
   status: string;
   auctionName: string;
@@ -17,10 +17,9 @@ export class AuctionPost {
   highestBid: number;
   image: string;
 
-  constructor(creatorEmail: string, name: string, category: string, startTime: Date, endTime: Date, country: string,
+  constructor(creatorId: number, name: string, category: string, startTime: Date, endTime: Date, country: string,
               city: string, address: string, houseNr: number, minPrice: number, description: string, image: string) {
-    this.creatorEmail = creatorEmail;
-    this.name = name;
+    this.creatorId = creatorId;    this.name = name;
     this.category = category;
     this.startTime = startTime;
     this.endTime = endTime;

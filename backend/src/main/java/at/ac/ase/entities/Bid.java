@@ -1,5 +1,7 @@
 package at.ac.ase.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.time.LocalDateTime;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -22,9 +24,11 @@ public class Bid {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JsonBackReference
     private AuctionPost auction;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonBackReference
     private RegularUser user;
 
     @Column

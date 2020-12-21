@@ -136,5 +136,18 @@ public abstract class User {
         this.ownedAuctions = ownedAuctions;
     }
 
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", active=" + active +
+                ", email='" + email + '\'' +
+                ", phoneNr='" + phoneNr + '\'' +
+                ", passwordHash='" + passwordHash + '\'' +
+                ", ratings=" + ratings +
+                ", auctionSubscriptions=" + auctionSubscriptions +
+                ", bids=" + bids +
+                ", ownedAuctions=" + ownedAuctions +
+                '}';
+    }
 }
