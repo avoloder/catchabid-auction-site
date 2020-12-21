@@ -19,6 +19,8 @@ public class AuctionPostQuery {
     Integer pageSize;
     String sortBy;
     String sortOrder;
+    String userEmail;
+    boolean useUserPreferences;
 
     public List<String> getSearchKeys() {
         return searchKeys;
@@ -118,5 +120,25 @@ public class AuctionPostQuery {
 
     public void addCategories(Category category) {
         this.categories.add(category);
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public boolean isUseUserPreferences() {
+        return useUserPreferences;
+    }
+
+    public void setUseUserPreferences(boolean useUserPreferences) {
+        this.useUserPreferences = useUserPreferences;
+    }
+
+    public boolean isEmptySearch(){
+        return searchKeys.isEmpty() && categories.isEmpty() && countries.isEmpty();
     }
 }

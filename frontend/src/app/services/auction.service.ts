@@ -30,7 +30,9 @@ export class AuctionsService {
       .set("searchKeys", query.searchKeys.join(","))
       .set("countries", query.countries.join(","))
       .set("sortBy", query.sortBy)
-      .set("sortOrder", query.sortOrder);
+      .set("sortOrder", query.sortOrder)
+      .set("useUserPreferences", String(query.useUserPreferences))
+      .set("userEmail",query.userEmail);
 
     if(query.auctionsStartUntil) {
       params = params.append("auctionsStartUntil", query.auctionsStartUntil.toISOString());
