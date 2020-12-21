@@ -1,6 +1,7 @@
 package at.ac.ase.repository.auction;
 
 import at.ac.ase.entities.AuctionPost;
+import at.ac.ase.entities.Category;
 import at.ac.ase.repository.auction.implementation.AuctionRepositoryCustomQueries;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
