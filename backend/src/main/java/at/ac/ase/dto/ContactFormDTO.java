@@ -5,8 +5,6 @@ public class ContactFormDTO {
 
     private Long id;
 
-    private String user;
-
     private Long auctionPostId;
 
     private String phoneNr;
@@ -21,22 +19,12 @@ public class ContactFormDTO {
 
     private Integer houseNr;
 
-    private String remark;
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
     }
 
     public Long getAuctionPostId() {
@@ -93,13 +81,5 @@ public class ContactFormDTO {
 
     public void setHouseNr(Integer houseNr) {
         this.houseNr = houseNr;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
     }
 }

@@ -35,9 +35,6 @@ public class ContactForm {
     @Column
     private String email;
 
-    @Column
-    private String remark;
-
     public Long getId() {
         return id;
     }
@@ -84,14 +81,6 @@ public class ContactForm {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
     }
 
     @Override

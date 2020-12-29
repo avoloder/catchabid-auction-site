@@ -10,7 +10,6 @@ import at.ac.ase.entities.User;
 import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.implementation.AuctionHouseService;
 import at.ac.ase.util.exceptions.ObjectNotFoundException;
-import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -37,32 +38,50 @@ public class AuctionController {
     public @ResponseBody
     ResponseEntity<List<AuctionPostSendDTO>> getUpcomingAuctions(
             @RequestParam(required = false) Integer pageSize,
-            @RequestParam(required = false) Integer pageNumber) {
-
-        logger.info("Upcoming auctions requested for page size "+pageSize+" and age number requested " + pageNumber);
+            @RequestParam(required = false) Integer pageNumber,
+            @RequestParam(required = false) String userEmail,
+            @RequestParam(required = false) boolean usePreferences) {
+        logger.info("Upcoming auctions requested for page size " + pageSize + " and page number requested " + pageNumber);
+        if ("null".equals(userEmail)) {
             List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctions(pageSize, pageNumber);
-         logger.info("Size of payload for upcoming auctions:" + posts.size());
-            logger.debug("Upcoming auctions sent to frontend for pageNr " + posts.size() +" : "+ posts);
+            logger.info("Size of payload for upcoming auctions:" + posts.size());
+            logger.debug("Ids of Auctions in payload: " + posts.stream().map(AuctionPostSendDTO::getId).collect(Collectors.toList()));
             return new ResponseEntity<>(posts, HttpStatus.OK);
+        } else {
+            List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctionsForUser(pageSize, pageNumber, userEmail,usePreferences);
+            logger.info("Size of payload for upcoming auctions:" + posts.size());
+            logger.debug("Ids of Auctions in payload: " + posts.stream().map(AuctionPostSendDTO::getId).collect(Collectors.toList()));
+            return new ResponseEntity<>(posts, HttpStatus.OK);
+        }
     }
 
     @GetMapping("all")
     public @ResponseBody
     ResponseEntity<List<AuctionPostSendDTO>> getAllAuctions(@RequestParam(required = false) Integer pageSize,
                                                             @RequestParam(required = false) Integer pageNr) {
-        logger.info("All auctions requested for page size "+pageSize +" and age number requested" + pageNr);
-        List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctions(pageSize,pageNr);
+        logger.info("All auctions requested for page size " + pageSize + " and page number requested" + pageNr);
+        List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctions(pageSize, pageNr);
         logger.info("Size of payload for all auctions: " + posts.size());
-        logger.debug("All auctions sent to frontend for pageNr "+posts.size()+" : "+ posts);
+        logger.debug("Ids of Auctions in payload: " + posts.stream().map(AuctionPostSendDTO::getId).collect(Collectors.toList()));
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
     @GetMapping("recent")
     public List<AuctionPostSendDTO> getRecentAuctions(
             @RequestParam(required = false) Integer pageNumber,
-            @RequestParam(required = false) Integer auctionsPerPage) {
-        logger.info("Recent auctions requested for page size "+auctionsPerPage+"and age number requested " + pageNumber);
-        return auctionService.getRecentAuctions(pageNumber, auctionsPerPage);
+            @RequestParam(required = false) Integer auctionsPerPage,
+            @RequestParam(required = false) String userEmail,
+            @RequestParam(required = false) boolean usePreferences) {
+
+        logger.info("Recent auctions requested for page size " + auctionsPerPage + "and page number requested " + pageNumber);
+        if ("null".equals(userEmail)) {
+            return auctionService.getRecentAuctions(pageNumber, auctionsPerPage);
+        } else {
+            List<AuctionPostSendDTO> posts = auctionService.getRecentAuctionsForUser(pageNumber, auctionsPerPage, userEmail,usePreferences);
+            logger.info("Size of payload of recent auctions for user with the email " + userEmail + " is " + posts.size());
+            logger.debug("Ids of Auctions in payload: " + posts.stream().map(AuctionPostSendDTO::getId).collect(Collectors.toList()));
+            return posts;
+        }
     }
 
     @GetMapping
@@ -88,8 +107,8 @@ public class AuctionController {
         return ResponseEntity.ok(auctionService.createAuction(auctionPost));
     }
 
-    @RequestMapping(value = "/getCategories", method = RequestMethod.GET)
-    public ResponseEntity getCategories(){
+    @GetMapping("/getCategories")
+    public ResponseEntity getCategories() {
         return ResponseEntity.status(HttpStatus.OK).body(this.auctionService.getCategories());
     }
 

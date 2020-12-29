@@ -3,6 +3,7 @@ package at.ac.ase.service.user;
 import at.ac.ase.entities.RegularUser;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IRegularUserService {
 
@@ -25,4 +26,11 @@ public interface IRegularUserService {
      * @param password a new password
      */
     void changePassword(String email, String password);
+
+    /**
+     * Method which retrieves an auction house based on its id
+     * @param id of an auction house
+     * @return auction house if found
+     */
+    Optional<RegularUser> getUserById(Long id);
 }

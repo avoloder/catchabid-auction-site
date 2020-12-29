@@ -27,6 +27,7 @@ import { BidsModule } from './components/bids/bids.module';
 import {AuctionDetailsComponent} from "./components/auction-details/auction-details.component";
 import {LoadingSpinnerService} from "./services/loading-spinner.service";
 import {NgxSpinnerModule} from "ngx-spinner";
+import { CategoriesPickerComponent } from './components/register/categories-picker/categories-picker/categories-picker.component';
 import {ContactFormComponent} from "./components/auctions/contact-form/contact-form.component";
 
 @NgModule({
@@ -40,7 +41,8 @@ import {ContactFormComponent} from "./components/auctions/contact-form/contact-f
     ResetPasswordTokenComponent,
     ForgotPasswordComponent,
     ContactFormComponent,
-    AuctionDetailsComponent
+    AuctionDetailsComponent,
+    CategoriesPickerComponent
   ],
   imports: [
     BrowserModule,

@@ -3,6 +3,7 @@ package at.ac.ase.service;
 import at.ac.ase.basetest.BaseIntegrationTest;
 import at.ac.ase.entities.Address;
 import at.ac.ase.entities.AuctionHouse;
+import at.ac.ase.entities.Category;
 import at.ac.ase.entities.RegularUser;
 import at.ac.ase.service.auth.implementation.RegisterService;
 import at.ac.ase.service.user.IAuctionHouseService;
@@ -11,6 +12,8 @@ import org.junit.After;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
@@ -48,6 +51,7 @@ public class RegisterServiceTest extends BaseIntegrationTest {
         address.setHouseNr(3);
         address.setStreet("Karlsplatz");
         user.setAddress(address);
+        user.setPreferences(Set.of(Category.ART,Category.CARS,Category.TRAVEL));
 
         registerService.registerUser(user);
         assertEquals(1, regularUserService.getAllUsers().size());

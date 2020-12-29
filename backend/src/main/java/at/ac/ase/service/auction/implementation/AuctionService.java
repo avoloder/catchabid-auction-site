@@ -41,6 +41,9 @@ public class AuctionService implements IAuctionService {
     private IRegularUserService regularUserService;
 
     @Autowired
+    private IAuctionHouseService auctionHouseService;
+
+    @Autowired
     private ContactFormRepository contactFormRepository;
 
     @Autowired
@@ -48,6 +51,9 @@ public class AuctionService implements IAuctionService {
 
     @Autowired
     private AuctionDtoTranslator auctionDtoTranslator;
+
+    @Autowired
+    private UserRepository userRepository;
 
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private final Validator validator = factory.getValidator();
@@ -106,6 +112,7 @@ public class AuctionService implements IAuctionService {
         return auctionDtoTranslator.toDtoList(recentAuctions);
     }
 
+    @Override
     public List<AuctionPostSendDTO> getRecentAuctionsForUser(Integer pageNr, Integer auctionsPerPage, String userEmail, boolean usePreferences) {
         List<Category> preferences = getPreferences(userEmail,usePreferences);
         if (preferences == null || preferences.isEmpty()) {
@@ -129,6 +136,7 @@ public class AuctionService implements IAuctionService {
         return convertAuctionsToDTO(upcomingAuctions);
     }
 
+    @Override
     public List<AuctionPostSendDTO> getUpcomingAuctionsForUser(Integer auctionsPerPage, Integer pageNr, String userEmail, boolean usePreferences) {
         List<Category> preferences = getPreferences(userEmail,usePreferences);
         if (preferences == null || preferences.isEmpty()) {

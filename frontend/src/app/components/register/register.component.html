@@ -14,7 +14,7 @@
         <article class="card-body">
             <h3 class="card-title text-center mb-2" style="color:#5271ff">Register</h3>
             <hr>
-            <form ngNativeValidate name="form" (ngSubmit)="registerUser()" class="form-horizontal" oninput='pass4.setCustomValidity(pass4.value != pass3.value ? "Passwords do not match." : "")'>              
+            <form ngNativeValidate name="form" (ngSubmit)="openCategories()" class="form-horizontal" oninput='pass4.setCustomValidity(pass4.value != pass3.value ? "Passwords do not match." : "")'>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -22,7 +22,7 @@
                         </div>
                         <input name="firstName"  [(ngModel)]="model.firstName" class="form-control" style="padding-left: 5px;" placeholder="First Name" type="text" required>
                     </div>
-                </div> 
+                </div>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -30,7 +30,7 @@
                         </div>
                         <input name="lastName"  [(ngModel)]="model.lastName" class="form-control" style="padding-left: 5px;" placeholder="Last Name" type="text" required>
                     </div>
-                </div> 
+                </div>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -133,7 +133,7 @@
                 </div>
                 <label style="font-size: 14px;"><input type="checkbox" name="terms"> I agree with the <a  href="#">Terms and Conditions</a>.</label>
                 <div class="form-group" >
-                    <button type="submit"  class="btn btn-primary btn-lg btn-block login-button mt-4" style="background-color:#5271ff">Register</button>
+                    <button type="submit"  class="btn btn-primary btn-lg btn-block login-button mt-4" style="background-color:#5271ff">Next</button>
                 </div>
                 <div class="small text-center">
                     <a  href="#login" (click)="openLoginModal()">Login</a>
@@ -145,7 +145,7 @@
         <article class="card-body">
             <h3 class="card-title text-center mb-2" style="color:#5271ff">Register</h3>
             <hr>
-            <form ngNativeValidate name="form" (ngSubmit)="registerAuctionHouse()" class="form-horizontal" oninput='pass2.setCustomValidity(pass2.value != pass.value ? "Passwords do not match." : "")'>              
+            <form ngNativeValidate name="form" (ngSubmit)="registerAuctionHouse()" class="form-horizontal" oninput='pass2.setCustomValidity(pass2.value != pass.value ? "Passwords do not match." : "")'>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -153,14 +153,14 @@
                         </div>
                         <input name="name" [(ngModel)]="model.name" class="form-control" style="padding-left: 5px;" placeholder="Legal Bussines Name" type="text" required>
                     </div>
-                </div> 
+                </div>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-id-card"></i> </span>
                         </div>
                         <input name="tid" [(ngModel)]="model.tid" class="form-control" style="padding-left: 5px;" placeholder="Tax Identification Number" type="text" required>
-                    </div> 
+                    </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
@@ -263,14 +263,14 @@
                         </div>
                     </div>
                 </div>
-                <label style="font-size: 14px;"><input type="checkbox" name="terms"> I agree with the <a href="#">Terms and Conditions</a>.</label>           
+                <label style="font-size: 14px;"><input type="checkbox" name="terms"> I agree with the <a href="#">Terms and Conditions</a>.</label>
                 <div class="form-group" >
                     <button type="submit" class="btn btn-primary btn-lg btn-block login-button mt-4" style="background-color: #5271ff">Register</button>
                 </div>
                 <div class="small text-center">
                     <a href="#login" (click)="openLoginModal()">Login</a>
                 </div>
-            </form>     
+            </form>
         </article>
     </div>
 </div>
