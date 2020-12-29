@@ -57,7 +57,7 @@ public class AuctionPost {
 
     @OneToOne
     @JoinColumn(name = "bid_id", referencedColumnName = "id")
-    @JsonManagedReference
+    @JsonManagedReference(value = "post_highest_bid")
     private Bid highestBid;
 
     @ManyToMany(fetch = FetchType.LAZY)

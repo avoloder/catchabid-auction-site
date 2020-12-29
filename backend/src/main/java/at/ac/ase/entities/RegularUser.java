@@ -39,7 +39,7 @@ public class RegularUser extends User {
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    @JsonManagedReference
+    @JsonManagedReference(value = "user_highest_bid")
     private Set<Bid> bids = new HashSet<>();
 
     public RegularUser(){}
