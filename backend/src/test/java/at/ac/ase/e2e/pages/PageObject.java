@@ -27,7 +27,7 @@ public abstract class PageObject {
     }
 
     public void waitUntil(ExpectedCondition<?> condition) {
-        WebDriverWait wait = new WebDriverWait(driver,20);
+        WebDriverWait wait = new WebDriverWait(driver,5);
         wait.until(condition);
     }
 }
