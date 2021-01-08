@@ -13,6 +13,7 @@ import at.ac.ase.repository.auction.ContactFormRepository;
 import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
+import at.ac.ase.util.exceptions.EmailNotSentException;
 import at.ac.ase.util.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -23,8 +24,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import javax.validation.*;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -54,6 +59,9 @@ public class AuctionService implements IAuctionService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    JavaMailSender emailSender;
 
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private final Validator validator = factory.getValidator();
@@ -199,7 +207,7 @@ public class AuctionService implements IAuctionService {
 
     private List<AuctionPostSendDTO> convertAuctionsToDTO(Collection<AuctionPost> auctions) {
         List<AuctionPostSendDTO> auctionPostSendDTOS = new ArrayList<>();
-        auctions.forEach((x) -> auctionPostSendDTOS.add(auctionDtoTranslator.toSendDto(x)));
+        auctions.forEach((x) -> auctionPostSendDTOS.add(auctionDtoTranslator.toSendDto(x, true)));
         return auctionPostSendDTOS;
     }
 
@@ -260,6 +268,22 @@ public class AuctionService implements IAuctionService {
         Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
         subscriptions.removeIf(subscribedUser -> subscribedUser.getId().equals(user.getId()));
         auctionPost.setSubscriptions(subscriptions);
-        return auctionRepository.save(auctionPost);
+        AuctionPost post = auctionRepository.save(auctionPost);
+        return post;
+    }
+
+    @Override
+    @Transactional
+    public void sendAuctionStartedNotification(User user, AuctionPost auctionPost) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("noreply.catchabid@gmail.com");
+            message.setTo(user.getEmail());
+            message.setSubject("Auction started");
+            message.setText("Auction " + auctionPost.getName() + " that you subscribed to just started!");
+            emailSender.send(message);
+        }catch (MailException e){
+            throw new EmailNotSentException();
+        }
     }
 }

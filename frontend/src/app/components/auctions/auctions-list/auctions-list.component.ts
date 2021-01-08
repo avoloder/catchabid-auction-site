@@ -75,8 +75,6 @@ export class AuctionsListComponent implements OnInit {
       console.log(this.auctionsGroup);
       console.log(data.toString());
       this.auctions = this.auctions.concat(data);
-      console.log("tu ste")
-      console.log(this.auctions)
       if(auctionsCountBeforeLoading == this.auctions.length || (this.auctions.length / (this.pageNumber+1)) < this.pageSize) {
         if (this.useUserPreferences){
           this.useUserPreferences=false;
@@ -148,10 +146,10 @@ export class AuctionsListComponent implements OnInit {
   unsubscribeFromAuction(auction: AuctionPost): void{
     this._dataService.unsubsribeFromAuction(auction).subscribe(
       x => {
-        this.toast.success('You successfully subscribed to this auction');
+        this.toast.success('You unsubscribed from this auction');
         this.refreshAuctions();
       },
-      error => this.toast.error('Could not subscribe to this auction')
+      error => this.toast.error('Could not unsubscribe from this auction')
     )  
   }
 

@@ -11,6 +11,9 @@ public class UserDtoTranslator {
     @Autowired
     private AddressDtoTranslator addressDtoTranslator;
 
+    @Autowired
+    private AuctionDtoTranslator auctionDtoTranslator;
+
     public RegularUserDTO toRegularUserDTO(RegularUser regularUser){
         RegularUserDTO regularUserDTO = new RegularUserDTO();
         regularUserDTO.setId(regularUser.getId());
@@ -21,7 +24,7 @@ public class UserDtoTranslator {
         regularUserDTO.setLastName(regularUser.getLastName());
         regularUserDTO.setPasswordHash(regularUser.getPasswordHash());
         regularUserDTO.setPhoneNr(regularUser.getPhoneNr());
-        regularUserDTO.setOwnedAuctions(regularUser.getOwnedAuctions());
+        regularUserDTO.setOwnedAuctions(auctionDtoTranslator.toDtoSet(regularUser.getOwnedAuctions()));
         regularUserDTO.setRatings(regularUser.getRatings());
         return regularUserDTO;
     }

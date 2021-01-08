@@ -26,7 +26,7 @@ public class AuctionDtoTranslator {
     @Autowired
     private UserDtoTranslator userDtoTranslator;
 
-    public AuctionPostSendDTO toSendDto(AuctionPost auction) {
+    public AuctionPostSendDTO toSendDto(AuctionPost auction, boolean subscriptionsRequired) {
 
         AuctionPostSendDTO auctionPostSendDTO = new AuctionPostSendDTO();
         auctionPostSendDTO.setId(auction.getId());
@@ -60,16 +60,24 @@ public class AuctionDtoTranslator {
         if (auction.getImage() != null) {
             auctionPostSendDTO.setImage(Base64.getEncoder().encodeToString(auction.getImage()));
         }
-        Set<RegularUserDTO> subscriptions = new HashSet<>();
-        for(RegularUser user: auction.getSubscriptions()){
-            subscriptions.add(userDtoTranslator.toRegularUserDTO(user));
+
+        if(subscriptionsRequired) {
+            Set<RegularUserDTO> subscriptions = new HashSet<>();
+            for (RegularUser user : auction.getSubscriptions()) {
+                subscriptions.add(userDtoTranslator.toRegularUserDTO(user));
+            }
+            auctionPostSendDTO.setSubscriptions(subscriptions);
         }
-        auctionPostSendDTO.setSubscriptions(subscriptions);
+
         return auctionPostSendDTO;
     }
 
     public List<AuctionPostSendDTO> toDtoList(List<AuctionPost> auctions) {
-        return auctions.stream().map(this::toSendDto).collect(Collectors.toList());
+        return auctions.stream().map(n -> toSendDto(n, true)).collect(Collectors.toList());
+    }
+
+    public Set<AuctionPostSendDTO> toDtoSet(Set<AuctionPost> auctions) {
+        return auctions.stream().map(n -> toSendDto(n, false)).collect(Collectors.toSet());
     }
 
     public AuctionPostQuery toEntity(AuctionQueryDTO queryDTO) {

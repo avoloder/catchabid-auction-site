@@ -95,9 +95,9 @@ public interface IAuctionService {
     AuctionPost toAuctionPostEntity(User user, AuctionCreationDTO auctionPostDTO);
 
     /**
-     * Translates auction post send DTO to auction post entity
+     * Method which translates auction post send DTO to auction post entity
      * @param user - logged in user
-     * @param auctionPostSendDTO - auction post send DTO received from frontend
+     * @param auctionPostDTO - auction post send DTO received from frontend
      * @return - tranlated auction post entity
      */
     AuctionPost toAuctionPostEntity(User user, AuctionPostSendDTO auctionPostDTO);
@@ -124,8 +124,27 @@ public interface IAuctionService {
      */
     ContactForm convertContactFormToDTO(ContactFormDTO contactFormDTO, User user);
 
+    /**
+     * Method which subscribes user to specific auction post
+     * @param auctionPost - auction post that the user wants to subscribe to
+     * @param user - logged in user
+     * @return - modified auction post to which the user subscribed to
+     */
     AuctionPost subscribeToAuction(AuctionPost auctionPost, User user);
 
+    /**
+     * Method which unsubscribes user to specific auction post
+     * @param auctionPost - auction post that the user wants to unsubscribe from
+     * @param user - logged in user
+     * @return - modified auction post to which the user unsubscribed from
+     */
     AuctionPost unsubscribeFromAuction(AuctionPost auctionPost, User user);
+
+    /**
+     * Method which send an email to users subscribed to this auction
+     * @param user - logged in user
+     * @param auctionPost - auction post that just started
+     */
+    void sendAuctionStartedNotification(User user, AuctionPost auctionPost);
 
 }

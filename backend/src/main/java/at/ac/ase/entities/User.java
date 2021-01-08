@@ -105,7 +105,6 @@ public abstract class User {
         this.ratings = ratings;
     }
 
-
     public Set<Bid> getBids() {
         return bids;
     }
