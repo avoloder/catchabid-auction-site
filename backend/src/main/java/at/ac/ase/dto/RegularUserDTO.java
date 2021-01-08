@@ -31,7 +31,6 @@ public class RegularUserDTO {
     private Set<Bid> bids = new HashSet<>();
     private Boolean active = true;
     private Set<Rating> ratings = new HashSet<>();
-    private Set<AuctionPost> auctionSubscriptions = new HashSet<>();
     private Set<AuctionPost> ownedAuctions = new HashSet<>();
 
     public Long getId() {
@@ -96,14 +95,6 @@ public class RegularUserDTO {
 
     public void setRatings(Set<Rating> ratings) {
         this.ratings = ratings;
-    }
-
-    public Set<AuctionPost> getAuctionSubscriptions() {
-        return auctionSubscriptions;
-    }
-
-    public void setAuctionSubscriptions(Set<AuctionPost> auctionSubscriptions) {
-        this.auctionSubscriptions = auctionSubscriptions;
     }
 
     public Set<AuctionPost> getOwnedAuctions() {

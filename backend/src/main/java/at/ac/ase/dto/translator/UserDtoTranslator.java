@@ -21,7 +21,6 @@ public class UserDtoTranslator {
         regularUserDTO.setLastName(regularUser.getLastName());
         regularUserDTO.setPasswordHash(regularUser.getPasswordHash());
         regularUserDTO.setPhoneNr(regularUser.getPhoneNr());
-        regularUserDTO.setAuctionSubscriptions(regularUser.getAuctionSubscriptions());
         regularUserDTO.setOwnedAuctions(regularUser.getOwnedAuctions());
         regularUserDTO.setRatings(regularUser.getRatings());
         return regularUserDTO;

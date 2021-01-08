@@ -93,8 +93,31 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
+    public AuctionPost toAuctionPostEntity(User user, AuctionPostSendDTO auctionPostDTO) {
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        AuctionPost auctionPost = modelMapper.map(auctionPostDTO, AuctionPost.class);
+        if (auctionPostDTO.getId() != null) {
+            auctionPost = auctionRepository
+                    .findById(auctionPost.getId()).orElseThrow(ObjectNotFoundException::new);
+        } else {
+            auctionPost.setStatus(Status.UPCOMING);
+        }
+        auctionPost.setName(auctionPostDTO.getAuctionName());
+        auctionPost.setCategory(Category.valueOf(auctionPostDTO.getCategory()));
+        auctionPost.setStartTime(auctionPostDTO.getStartTime());
+        auctionPost.setEndTime(auctionPostDTO.getEndTime());
+        auctionPost.setMinPrice(auctionPostDTO.getMinPrice());
+        auctionPost.setDescription(auctionPostDTO.getDescription());
+        auctionPost.setCreator(user);
+        auctionPost.setImage(Base64.getDecoder().decode(auctionPostDTO.getImage()));
+        auctionPost.setAddress(new Address(auctionPostDTO.getCountry(), auctionPostDTO.getCity(),
+                auctionPostDTO.getAddress(), auctionPostDTO.getHouseNr()));
+        return auctionPost;
+    }
+
+    @Override
     public Category[] getCategories() {
-        Category [] categories = Category.values();
+        Category[] categories = Category.values();
         return categories;
     }
 
@@ -114,7 +137,7 @@ public class AuctionService implements IAuctionService {
 
     @Override
     public List<AuctionPostSendDTO> getRecentAuctionsForUser(Integer pageNr, Integer auctionsPerPage, String userEmail, boolean usePreferences) {
-        List<Category> preferences = getPreferences(userEmail,usePreferences);
+        List<Category> preferences = getPreferences(userEmail, usePreferences);
         if (preferences == null || preferences.isEmpty()) {
             logger.info("No preferences found, continue with fetching recent auctions without preferences");
             return getRecentAuctions(pageNr, auctionsPerPage);
@@ -130,7 +153,7 @@ public class AuctionService implements IAuctionService {
     @Override
     public List<AuctionPostSendDTO> getUpcomingAuctions(Integer auctionsPerPage, Integer pageNr) {
         logger.info("Fetching upcoming auctions without preferences, for pageNumber " + pageNr + ", and page size " + auctionsPerPage);
-        List<AuctionPost> upcomingAuctions =auctionRepository.findAllByStartTimeGreaterThan(LocalDateTime.now(),
+        List<AuctionPost> upcomingAuctions = auctionRepository.findAllByStartTimeGreaterThan(LocalDateTime.now(),
                 getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").ascending()));
         logger.debug("Fetched " + upcomingAuctions.size() + " auctions from database.");
         return convertAuctionsToDTO(upcomingAuctions);
@@ -138,7 +161,7 @@ public class AuctionService implements IAuctionService {
 
     @Override
     public List<AuctionPostSendDTO> getUpcomingAuctionsForUser(Integer auctionsPerPage, Integer pageNr, String userEmail, boolean usePreferences) {
-        List<Category> preferences = getPreferences(userEmail,usePreferences);
+        List<Category> preferences = getPreferences(userEmail, usePreferences);
         if (preferences == null || preferences.isEmpty()) {
             logger.info("No preferences found, continue with retrieving upcoming auctions without preferences");
             return getUpcomingAuctions(pageNr, auctionsPerPage);
@@ -166,8 +189,8 @@ public class AuctionService implements IAuctionService {
     @Override
     public List<AuctionPostSendDTO> searchAuctions(AuctionQueryDTO query) {
         AuctionPostQuery entityQuery = auctionDtoTranslator.toEntity(query);
-        if (entityQuery.isEmptySearch()){
-         entityQuery.setCategories(getPreferences(entityQuery.getUserEmail(),entityQuery.isUseUserPreferences()));
+        if (entityQuery.isEmptySearch()) {
+            entityQuery.setCategories(getPreferences(entityQuery.getUserEmail(), entityQuery.isUseUserPreferences()));
         }
         List<AuctionPost> foundAuctions = auctionRepository.query(entityQuery);
         logger.info("Size of auctions: " + foundAuctions.size());
@@ -195,7 +218,7 @@ public class AuctionService implements IAuctionService {
         if (regularUser != null) {
             if (usePreferences) {
                 return regularUser.getPreferences().stream().collect(Collectors.toList());
-            }else {
+            } else {
                 return Arrays.stream(getCategories()).filter(e -> !regularUser.getPreferences().contains(e)).collect(Collectors.toList());
             }
         }
@@ -224,4 +247,19 @@ public class AuctionService implements IAuctionService {
         return contactForm;
     }
 
+    @Override
+    public AuctionPost subscribeToAuction(AuctionPost auctionPost, User user) {
+        Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
+        subscriptions.add((RegularUser) user);
+        auctionPost.setSubscriptions(subscriptions);
+        return auctionRepository.save(auctionPost);
+    }
+
+    @Override
+    public AuctionPost unsubscribeFromAuction(AuctionPost auctionPost, User user) {
+        Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
+        subscriptions.removeIf(subscribedUser -> subscribedUser.getId().equals(user.getId()));
+        auctionPost.setSubscriptions(subscriptions);
+        return auctionRepository.save(auctionPost);
+    }
 }

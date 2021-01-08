@@ -95,6 +95,14 @@ public interface IAuctionService {
     AuctionPost toAuctionPostEntity(User user, AuctionCreationDTO auctionPostDTO);
 
     /**
+     * Translates auction post send DTO to auction post entity
+     * @param user - logged in user
+     * @param auctionPostSendDTO - auction post send DTO received from frontend
+     * @return - tranlated auction post entity
+     */
+    AuctionPost toAuctionPostEntity(User user, AuctionPostSendDTO auctionPostDTO);
+
+    /**
      * Method which retrieves all auction post's categories
      * @return list of categories
      */
@@ -115,5 +123,9 @@ public interface IAuctionService {
      * @return
      */
     ContactForm convertContactFormToDTO(ContactFormDTO contactFormDTO, User user);
+
+    AuctionPost subscribeToAuction(AuctionPost auctionPost, User user);
+
+    AuctionPost unsubscribeFromAuction(AuctionPost auctionPost, User user);
 
 }

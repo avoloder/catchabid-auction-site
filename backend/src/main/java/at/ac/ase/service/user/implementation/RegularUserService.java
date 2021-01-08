@@ -1,6 +1,8 @@
 package at.ac.ase.service.user.implementation;
 
+import at.ac.ase.entities.AuctionPost;
 import at.ac.ase.entities.RegularUser;
+import at.ac.ase.entities.User;
 import at.ac.ase.repository.user.UserRepository;
 import at.ac.ase.service.user.IRegularUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class RegularUserService implements IRegularUserService {
@@ -42,4 +45,5 @@ public class RegularUserService implements IRegularUserService {
     public Optional<RegularUser> getUserById(Long id) {
         return userRepository.findById(id);
     }
+
 }

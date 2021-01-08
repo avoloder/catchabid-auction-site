@@ -10,6 +10,7 @@ import { AuctionPost } from '../../../models/auctionpost';
 import {AuctionSearchQuery} from "../../../models/auctionSearchQuery";
 import { AuctionsSearchService } from 'src/app/services/auctions-search.service';
 import { LoadingSpinnerService } from 'src/app/services/loading-spinner.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -29,6 +30,7 @@ export class AuctionsListComponent implements OnInit {
     private _dataService: AuctionsService,
     private bidsService: BidsService,
     private modalService: NgbModal,
+    private toast: ToastrService,
     private _auctionsSearchService: AuctionsSearchService,
     private _loadingSpinnerService: LoadingSpinnerService) {
   }
@@ -73,6 +75,8 @@ export class AuctionsListComponent implements OnInit {
       console.log(this.auctionsGroup);
       console.log(data.toString());
       this.auctions = this.auctions.concat(data);
+      console.log("tu ste")
+      console.log(this.auctions)
       if(auctionsCountBeforeLoading == this.auctions.length || (this.auctions.length / (this.pageNumber+1)) < this.pageSize) {
         if (this.useUserPreferences){
           this.useUserPreferences=false;
@@ -126,12 +130,23 @@ export class AuctionsListComponent implements OnInit {
     }
   }
 
-  subscribeToAuction(): void{
+  subscribeToAuction(auction: AuctionPost): void{
     if(localStorage.getItem('token') == null){
       this.openLoginModal();
     }else{
-      console.log("click subscribe");
+      this._dataService.subscribeToAuction(auction).subscribe(
+        x => this.toast.success('You successfully subscribed to this auction'),
+        error => this.toast.error('Could not subscribe to this auction') 
+      )
     }
+  }
+
+  
+  unsubscribeFromAuction(auction: AuctionPost): void{
+    this._dataService.unsubsribeFromAuction(auction).subscribe(
+      x => this.toast.success('You successfully subscribed to this auction'),
+      error => this.toast.error('Could not subscribe to this auction') 
+    )  
   }
 
   openLoginModal(): void {
