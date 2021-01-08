@@ -107,6 +107,13 @@ public class AuctionController {
         return ResponseEntity.ok(auctionService.createAuction(auctionPost));
     }
 
+    @PostMapping("/cancel")
+    public ResponseEntity<Object> cancelAuction(
+            @RequestParam Long auctionPostId,
+            @CurrentSecurityContext(expression = "authentication.principal") User user) {
+        return ResponseEntity.ok(auctionService.cancelAuction(user, auctionPostId));
+    }
+
     @GetMapping("/getCategories")
     public ResponseEntity getCategories() {
         return ResponseEntity.status(HttpStatus.OK).body(this.auctionService.getCategories());
