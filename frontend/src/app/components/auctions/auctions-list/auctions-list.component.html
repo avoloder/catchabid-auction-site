@@ -10,9 +10,14 @@
                   <div class="text">SHOW DETAILS</div>
                 </div>
               </a>
-              <a href="#detail" *ngIf="auctionsGroup=='UPCOMING'" (click)="subscribeToAuction(auction)">
+              <a href="#detail" *ngIf="auctionsGroup=='UPCOMING' && !isUserSubscribed(auction)" (click)="subscribeToAuction(auction)">
                 <div class="overlay">
                   <div class="text">SUBSCRIBE</div>
+                </div>
+              </a>
+              <a href="#detail" *ngIf="auctionsGroup=='UPCOMING' && isUserSubscribed(auction)" (click)="unsubscribeFromAuction(auction)">
+                <div class="overlay">
+                  <div class="text">UNSUBSCRIBE</div>
                 </div>
               </a>
           </div>
@@ -32,8 +37,11 @@
                                  [countdownType]="'starting-countdown'"
                                  [endDate]="auction.startTime"></app-auction-countdown>
               </div>
-              <div class="col-sm-6">
-                  <a href="#" *ngIf="auctionsGroup=='RECENT'" (click)="openBidModal(auction)" class="btn btn-primary card-button">Bid</a>
+              <div class="col-sm-6" *ngIf="auctionsGroup=='RECENT'" >
+                <a href="#" (click)="openBidModal(auction)" class="btn btn-primary card-button">Bid</a>
+              </div>
+              <div class="col-sm-6" *ngIf="auctionsGroup=='UPCOMING' && isUserSubscribed(auction)" style="padding-top: 5px; text-align: right;">
+                <span class="badge badge-secondary" ngbTooltip="You will receive a notification when this auction starts" placement="bottom" style="margin-right: 5px;">SUBSCRIBED </span>
               </div>
           </div>
         </div>
