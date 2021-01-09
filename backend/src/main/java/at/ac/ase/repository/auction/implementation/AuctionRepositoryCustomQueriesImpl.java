@@ -26,7 +26,6 @@ public class AuctionRepositoryCustomQueriesImpl implements AuctionRepositoryCust
         Join<AuctionPost, User> joinUser = root.join("creator", JoinType.INNER);
         List<Predicate> predicatesAnd = new ArrayList<>();
 
-
         /*
          * time constrains
          */
@@ -47,8 +46,6 @@ public class AuctionRepositoryCustomQueriesImpl implements AuctionRepositoryCust
             predicatesAnd.add(cb.lessThanOrEqualTo(root.get("endTime"), auctionQuery.getAuctionsEndFrom()));
         }
 
-
-
         /*
          * categories
          */
@@ -62,8 +59,6 @@ public class AuctionRepositoryCustomQueriesImpl implements AuctionRepositoryCust
             }
             predicatesAnd.add(cb.or(predicatesOr.toArray(new Predicate[predicatesOr.size()])));
         }
-
-
 
         /*
          * countries
@@ -123,8 +118,6 @@ public class AuctionRepositoryCustomQueriesImpl implements AuctionRepositoryCust
         cquery.where(cb.and(predicatesAnd.toArray(new Predicate[predicatesAnd.size()])));
 
         TypedQuery<AuctionPost> finalQuery = entityManager.createQuery(cquery);
-
-
 
         /*
          * paging

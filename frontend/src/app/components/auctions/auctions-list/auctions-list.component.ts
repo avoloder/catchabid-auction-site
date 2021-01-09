@@ -73,7 +73,6 @@ export class AuctionsListComponent implements OnInit {
 
     const handleResponse = data => {
       console.log(this.auctionsGroup);
-      console.log(data.toString());
       this.auctions = this.auctions.concat(data);
       if(auctionsCountBeforeLoading == this.auctions.length || (this.auctions.length / (this.pageNumber+1)) < this.pageSize) {
         if (this.useUserPreferences){
@@ -98,9 +97,6 @@ export class AuctionsListComponent implements OnInit {
     query.pageSize   = this.pageSize;
     query.userEmail= localStorage.getItem('email');
     query.useUserPreferences = this.useUserPreferences;
-
-    console.log(query.userEmail)
-
 
     if (this.auctionsGroup == "RECENT") {
       query.sortBy = "endTime";
@@ -186,7 +182,7 @@ export class AuctionsListComponent implements OnInit {
   }
 
   isUserSubscribed(auction: AuctionPost){
-    if (auction.subscriptions.filter(x => x.email = localStorage.getItem('email')).length > 0){
+    if (auction.subscriptions.filter(x => x.email == localStorage.getItem('email')).length > 0){
       return true;
     }
     return false;
