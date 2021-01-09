@@ -14,6 +14,7 @@ import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
 import at.ac.ase.util.exceptions.ObjectNotFoundException;
+import javax.validation.constraints.NotNull;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.slf4j.Logger;
@@ -216,4 +217,9 @@ public class AuctionService implements IAuctionService {
         return contactForm;
     }
 
+    @Override
+    public Boolean isAuctionPayable(AuctionPost auctionpost) {
+        return Objects.nonNull(auctionpost.getHighestBid()) &&
+            auctionpost.getEndTime().isAfter(LocalDateTime.now());
+    }
 }

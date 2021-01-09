@@ -1,0 +1,13 @@
+<label class="form-control-label" >Credit card details</label>
+<ngx-stripe-card
+  [options]="cardOptions"
+  [elementsOptions]="elementsOptions"
+  class="form-control mb-3"
+></ngx-stripe-card>
+<button class="btn btn-primary" type="submit" (click)="createToken()">
+  Confirm payment details
+</button>
+<button class="btn btn-primary" type="button" (click)="createPaymentIntent()">
+  Pay
+</button>
+

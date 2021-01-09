@@ -99,4 +99,12 @@ public interface IAuctionService {
      */
     ContactForm convertContactFormToDTO(ContactFormDTO contactFormDTO, User user);
 
+    /**
+     * Checks if the given {@link AuctionPost} is payable - it is finished AND has a bid
+     *
+     * @param auctionpost {@link AuctionPost} to be checked
+     * @return true if the given {@link AuctionPost} object is payable
+     */
+    Boolean isAuctionPayable(AuctionPost auctionpost);
+
 }
