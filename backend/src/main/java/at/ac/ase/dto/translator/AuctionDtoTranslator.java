@@ -30,6 +30,7 @@ public class AuctionDtoTranslator {
         }
         if (auction.getCreator()!=null) {
             auctionPostSendDTO.setCreatorId(auction.getCreator().getId());
+            auctionPostSendDTO.setCreatorEmail(auction.getCreator().getEmail());
             if (auction.getCreator() instanceof AuctionHouse) {
                 auctionPostSendDTO.setCreatorName(((AuctionHouse) auction.getCreator()).getName());
             } else {

@@ -16,6 +16,7 @@ export class AuctionPost {
   minPrice: number;
   highestBid: number;
   image: string;
+  creatorEmail: string;
 
   constructor(creatorId: number, name: string, category: string, startTime: Date, endTime: Date, country: string,
               city: string, address: string, houseNr: number, minPrice: number, description: string, image: string) {

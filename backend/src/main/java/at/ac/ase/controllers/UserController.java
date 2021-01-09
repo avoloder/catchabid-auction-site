@@ -4,13 +4,16 @@ import at.ac.ase.dto.translator.AuctionHouseDtoTranslator;
 import at.ac.ase.dto.translator.UserDtoTranslator;
 import at.ac.ase.entities.AuctionHouse;
 import at.ac.ase.entities.RegularUser;
+import at.ac.ase.entities.User;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
