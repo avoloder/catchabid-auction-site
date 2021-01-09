@@ -8,6 +8,9 @@ import {
 } from '@stripe/stripe-js';
 import { AuctionPost } from 'src/app/models/auctionpost';
 import { PaymentsService } from 'src/app/services/payments.service';
+import { LoadingSpinnerService } from 'src/app/services/loading-spinner.service';
+import { PaymentIntent } from 'src/app/models/paymentIntent';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-payments',
@@ -41,10 +44,13 @@ export class PaymentsComponent implements OnInit {
 
   stripeTest: FormGroup;
 
+  paymentIntent: PaymentIntent;
+
   constructor(
     private fb: FormBuilder,
     private stripeService: StripeService,
-    private paymentService: PaymentsService) {}
+    private paymentService: PaymentsService,
+    private _loadingSpinnerService: LoadingSpinnerService) {}
 
   ngOnInit(): void {
     this.stripeTest = this.fb.group({
@@ -52,29 +58,50 @@ export class PaymentsComponent implements OnInit {
     });
   }
 
-  createToken(): void {
-    const name = this.stripeTest.get('name').value;
-    this.stripeService
-      .createToken(this.card.element, { name })
-      .subscribe((result) => {
-        if (result.token) {
-          // Use the token
-          console.log(result);
-          console.log(result.token);
-          console.log(result.token.id);
-        } else if (result.error) {
-          // Error creating the token
-          console.log(result.error.message);
-        }
-      });
+  processPayment(): void {
+    this.paymentService.createPaymentIntent(this.auction.id)
+      .pipe(
+        switchMap(
+          (pi) => this.stripeService.confirmCardPayment(pi.clientSecret, {
+            payment_method: {
+              card: this.card.element,
+              billing_details: {
+                name: 'Stefan Puhalo'
+              },
+            },
+          })
+        )
+      )
+      .subscribe(
+        (result) => console.log(result),
+        (error) => console.log(error)
+      );
+
+
+
+
+    // this.stripeService
+    //   .confirmPaymentIntent(this.paymentIntent.clientSecret,
+    //     this.card.element, { name })
+    //   .subscribe((result) => {
+    //     if (result.paymentIntent) {
+    //       console.log(result);
+    //     } else if (result.error) {
+    //       console.log(result.error.message);
+    //     }
+    //   });
   }
 
-  createPaymentIntent(): void  {
-    this.paymentService.createPaymentIntent(
-      this.auction.id).subscribe(
-        (res) => console.log(res),
-        (err) => console.log(err)
-      );
-  }
+  // createPaymentIntent(): void  {
+  //   this.paymentService.createPaymentIntent(
+  //     this.auction.id).subscribe(
+  //       (paymentIntentRes) => {
+  //         console.log(paymentIntentRes)
+  //         this.paymentIntent = paymentIntentRes;
+  //         this._loadingSpinnerService.hide();
+  //       },
+  //       (err) => console.log(err)
+  //     );
+  // }
 
 }

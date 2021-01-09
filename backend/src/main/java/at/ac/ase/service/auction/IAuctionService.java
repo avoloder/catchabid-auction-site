@@ -107,4 +107,12 @@ public interface IAuctionService {
      */
     Boolean isAuctionPayable(AuctionPost auctionpost);
 
+    /**
+     * Method which retrieves all won {@link AuctionPost}
+     *
+     * @param user
+     * @return
+     */
+    List<AuctionPost> getAllWonAuctionPostsForUser(User user);
+
 }

@@ -222,4 +222,10 @@ public class AuctionService implements IAuctionService {
         return Objects.nonNull(auctionpost.getHighestBid()) &&
             auctionpost.getEndTime().isAfter(LocalDateTime.now());
     }
+
+    @Override
+    public List<AuctionPost> getAllWonAuctionPostsForUser(User user) {
+        return auctionRepository.findAllByHighestBidUserIdAndEndTimeGreaterThan(
+            user.getId(), LocalDateTime.now());
+    }
 }

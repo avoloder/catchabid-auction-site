@@ -56,4 +56,13 @@ public interface AuctionRepository extends JpaRepository<AuctionPost, Long>, Auc
      */
     @Query(value = "SELECT distinct country FROM auction_post", nativeQuery = true)
     List<String> getAllCountriesWhereAuctionsExist();
+
+    /**
+     * Get {@link AuctionPost} that the given user has won
+     *
+     * @param userId Id of the user
+     * @param endDate earliest end date of the {@link AuctionPost}
+     * @return List of auction satisfying the given criteria
+     */
+    List<AuctionPost> findAllByHighestBidUserIdAndEndTimeGreaterThan(Long userId, LocalDateTime endDate);
 }
