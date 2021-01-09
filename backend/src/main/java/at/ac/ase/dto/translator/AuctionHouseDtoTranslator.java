@@ -25,4 +25,19 @@ public class AuctionHouseDtoTranslator {
         auctionHouseDTO.setOwnedAuctions(auctionHouse.getOwnedAuctions());
         return auctionHouseDTO;
     }
+
+    public AuctionHouse toAuctionHouse(AuctionHouseDTO houseDTO){
+        AuctionHouse auctionHouse = new AuctionHouse();
+        auctionHouse.setTid(houseDTO.getTid());
+        auctionHouse.setAddress(addressDtoTranslator.toAddress(houseDTO.getAddress()));
+        auctionHouse.setName(houseDTO.getName());
+        auctionHouse.setId(houseDTO.getId());
+        auctionHouse.setActive(houseDTO.getActive());
+        auctionHouse.setOwnedAuctions(houseDTO.getOwnedAuctions());
+        auctionHouse.setPasswordHash(houseDTO.getPasswordHash());
+        auctionHouse.setPhoneNr(houseDTO.getPhoneNr());
+        auctionHouse.setEmail(houseDTO.getEmail());
+        auctionHouse.setOwnedAuctions(houseDTO.getOwnedAuctions());
+        return auctionHouse;
+    }
 }

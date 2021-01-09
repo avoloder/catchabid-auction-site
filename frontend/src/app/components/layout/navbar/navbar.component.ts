@@ -68,6 +68,10 @@ export class NavbarComponent implements OnInit {
     window.location.reload();
   }
 
+  toUserSettings(){
+    this.router.navigate(['/profile']);
+  }
+
   isUserLoggedIn(){
     if(localStorage.getItem('token') !== null){
       this.userName = localStorage.getItem('userName');

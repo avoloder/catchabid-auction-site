@@ -1,0 +1,123 @@
+import {Component, Input, OnInit} from '@angular/core';
+import {User} from "../../models/user";
+import {AuctionHouse} from "../../models/auctionhouse";
+import {UserService} from "../../services/user.service";
+import {ToastrService} from "ngx-toastr";
+import {AuctionsService} from "../../services/auction.service";
+
+@Component({
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.css']
+})
+export class ProfileComponent implements OnInit {
+  user:User | AuctionHouse;
+  updatedUser:User | AuctionHouse;
+  isRegularUser:boolean=true;
+  dropdownList:any = [];
+  selectedPreferences:[]= [];
+  dropdownSettings = {};
+
+  constructor(
+    private toast: ToastrService,
+    private userService: UserService,
+    private auctionsService: AuctionsService,
+    private modalService: NgbModal) {
+    this.ngOnInit();
+  }
+
+  ngOnInit(): void {
+    let email = localStorage.getItem('email')
+    console.log(email)
+
+    this.userService.findByEmail(email).subscribe(
+      fetcheduser => {
+        this.user=fetcheduser;
+        this.updatedUser=fetcheduser;
+
+        if(this.user['firstName'] == undefined && this.user['lastName'] == undefined){
+          this.isRegularUser=false;
+          console.log("to false")
+        }else {
+          this.isRegularUser=true;
+          this.selectedPreferences = (<User>this.user).preferences;
+          console.log("to true")
+        }
+      },
+      error => this.toast.error(error.error.message)
+    )
+    this.auctionsService.getCategories().subscribe(x => {
+
+      console.log("x",x)
+      this.dropdownList = x;
+      console.log("dropL", this.dropdownList)
+    });
+  }
+
+  save(){
+    if (this.isRegularUser){
+      console.log("user")
+      console.log(this.user)
+      console.log(this.updatedUser);
+      console.log(this.selectedPreferences);
+      (<User>this.updatedUser).preferences = this.selectedPreferences;
+      this.userService.updateUser(localStorage.getItem("email"),<User>this.user) .subscribe(
+        data => {
+          this.toast.success("User successfully updated")
+          localStorage.setItem("email",this.updatedUser.email)
+        },
+        error => {
+          this.toast.error(error.error.message);
+        });
+      console.log("user")
+    }else {
+      this.userService.updateHouse(this.user.email, <AuctionHouse>this.user) .subscribe(
+        data => {
+          this.toast.success("Auction House successfully updated")
+        },
+        error => {
+          this.toast.error(error.error.message);
+        });
+      console.log("house")
+    }
+    console.log("Updated")
+  }
+
+  confirmSave() {
+   this.modalService.open(NgbdModalConfirm).result.then((userResponse) => {
+     if (userResponse){
+       this.save();
+     }
+   });
+  }
+
+
+}
+
+import {Type} from '@angular/core';
+import {NgbActiveModal, NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
+
+@Component({
+  selector: 'ngbd-modal-confirm',
+  template: `
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Profile update</h4>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p><strong>Are you sure you want to update your information?</strong></p>
+    <p>All information associated to this user profile will be permanently changed.
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss(false)">Cancel</button>
+    <button type="submit" ngbAutofocus class="btn btn-danger" (click)="modal.close(true)">Ok</button>
+  </div>
+  `
+})
+export class NgbdModalConfirm {
+  constructor(public modal: NgbActiveModal) {}
+}
+
