@@ -7,8 +7,11 @@ import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.payment.IPaymentService;
 import at.ac.ase.util.exceptions.AuctionNotPayableException;
 import at.ac.ase.util.exceptions.ObjectNotFoundException;
+import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +44,19 @@ public class PaymentController {
         return ResponseEntity.ok(
             piToPirTranslator.paymentIntentToPaymentIntentResponse(
                 paymentService.createPaymentIntent(auctionPost)));
+    }
+
+    @PostMapping("/store/{auctionId}")
+    public ResponseEntity storePayment(@PathVariable Long auctionId) {
+        AuctionPost auctionPost =  auctionService
+            .getAuctionPost(auctionId)
+            .orElseThrow(ObjectNotFoundException::new);
+        if (!auctionService.isAuctionPayable(auctionPost)) {
+            throw new AuctionNotPayableException();
+        }
+        auctionPost.setPaymentDate(LocalDateTime.now());
+        auctionService.saveAuction(auctionPost);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

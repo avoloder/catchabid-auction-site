@@ -65,6 +65,7 @@ public abstract class BaseSpringBootTest {
             executeJpql("DELETE FROM Bid");
             executeJpql("DELETE FROM AuctionPost");
             executeJpql("DELETE FROM AuctionHouse");
+            executeSql("DELETE FROM regular_user_preferences");
             executeJpql("DELETE FROM RegularUser");
         });
     }

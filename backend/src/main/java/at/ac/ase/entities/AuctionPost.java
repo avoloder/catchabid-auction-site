@@ -57,7 +57,7 @@ public class AuctionPost {
 
     @OneToOne
     @JoinColumn(name = "bid_id", referencedColumnName = "id")
-    @JsonManagedReference
+    @JsonManagedReference(value = "post_highest_bid")
     private Bid highestBid;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -66,6 +66,9 @@ public class AuctionPost {
         joinColumns = { @JoinColumn(name = "auction_post_id") },
         inverseJoinColumns = { @JoinColumn(name = "user_id") })
     private Set<RegularUser> subscriptions = new HashSet<>();
+
+    @Column
+    private LocalDateTime paymentDate;
 
     public Long getId() {
         return id;
@@ -169,5 +172,13 @@ public class AuctionPost {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public LocalDateTime getPaymentDate() {
+        return paymentDate;
+    }
+
+    public void setPaymentDate(LocalDateTime paymentDate) {
+        this.paymentDate = paymentDate;
     }
 }

@@ -14,7 +14,6 @@ import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
 import at.ac.ase.util.exceptions.ObjectNotFoundException;
-import javax.validation.constraints.NotNull;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.slf4j.Logger;
@@ -42,6 +41,9 @@ public class AuctionService implements IAuctionService {
     private IRegularUserService regularUserService;
 
     @Autowired
+    private IAuctionHouseService auctionHouseService;
+
+    @Autowired
     private ContactFormRepository contactFormRepository;
 
     @Autowired
@@ -49,6 +51,9 @@ public class AuctionService implements IAuctionService {
 
     @Autowired
     private AuctionDtoTranslator auctionDtoTranslator;
+
+    @Autowired
+    private UserRepository userRepository;
 
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private final Validator validator = factory.getValidator();
@@ -60,7 +65,7 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public AuctionPost createAuction(AuctionPost auctionPost) {
+    public AuctionPost saveAuction(AuctionPost auctionPost) {
         return auctionRepository.save(auctionPost);
     }
 
@@ -107,6 +112,7 @@ public class AuctionService implements IAuctionService {
         return auctionDtoTranslator.toDtoList(recentAuctions);
     }
 
+    @Override
     public List<AuctionPostSendDTO> getRecentAuctionsForUser(Integer pageNr, Integer auctionsPerPage, String userEmail, boolean usePreferences) {
         List<Category> preferences = getPreferences(userEmail,usePreferences);
         if (preferences == null || preferences.isEmpty()) {
@@ -130,6 +136,7 @@ public class AuctionService implements IAuctionService {
         return convertAuctionsToDTO(upcomingAuctions);
     }
 
+    @Override
     public List<AuctionPostSendDTO> getUpcomingAuctionsForUser(Integer auctionsPerPage, Integer pageNr, String userEmail, boolean usePreferences) {
         List<Category> preferences = getPreferences(userEmail,usePreferences);
         if (preferences == null || preferences.isEmpty()) {
@@ -218,14 +225,14 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public Boolean isAuctionPayable(AuctionPost auctionpost) {
+    public boolean isAuctionPayable(AuctionPost auctionpost) {
         return Objects.nonNull(auctionpost.getHighestBid()) &&
             auctionpost.getEndTime().isAfter(LocalDateTime.now());
     }
 
     @Override
     public List<AuctionPost> getAllWonAuctionPostsForUser(User user) {
-        return auctionRepository.findAllByHighestBidUserIdAndEndTimeGreaterThan(
+        return auctionRepository.findAllByHighestBidUserIdAndEndTimeLessThan(
             user.getId(), LocalDateTime.now());
     }
 }

@@ -2,6 +2,9 @@ package at.ac.ase.entities;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -48,5 +51,30 @@ public class AuctionHouse extends User {
         this.address = address;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
 
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AuctionHouse that = (AuctionHouse) o;
+
+        return new EqualsBuilder()
+                .append(tid, that.tid)
+                .append(name, that.name)
+                .append(address, that.address)
+                .append(getEmail(),that.getEmail())
+                .append(getPhoneNr(),that.getPhoneNr())
+                .append(getActive(),that.getActive())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(tid)
+                .append(name)
+                .append(address)
+                .toHashCode();
+    }
 }

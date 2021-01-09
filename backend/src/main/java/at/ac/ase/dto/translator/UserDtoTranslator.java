@@ -24,6 +24,24 @@ public class UserDtoTranslator {
         regularUserDTO.setAuctionSubscriptions(regularUser.getAuctionSubscriptions());
         regularUserDTO.setOwnedAuctions(regularUser.getOwnedAuctions());
         regularUserDTO.setRatings(regularUser.getRatings());
+        regularUserDTO.setPreferences(regularUser.getPreferences());
         return regularUserDTO;
+    }
+
+    public RegularUser toRegularUser(RegularUserDTO regularUserDTO){
+        RegularUser regularUser = new RegularUser();
+        regularUser.setId(regularUserDTO.getId());
+        regularUser.setEmail(regularUserDTO.getEmail());
+        regularUser.setAddress(addressDtoTranslator.toAddress(regularUserDTO.getAddress()));
+        regularUser.setActive(regularUserDTO.getActive());
+        regularUser.setFirstName(regularUserDTO.getFirstName());
+        regularUser.setLastName(regularUserDTO.getLastName());
+        regularUser.setPasswordHash(regularUserDTO.getPasswordHash());
+        regularUser.setPhoneNr(regularUserDTO.getPhoneNr());
+        regularUser.setAuctionSubscriptions(regularUserDTO.getAuctionSubscriptions());
+        regularUser.setOwnedAuctions(regularUserDTO.getOwnedAuctions());
+        regularUser.setRatings(regularUserDTO.getRatings());
+        regularUser.setPreferences(regularUserDTO.getPreferences());
+        return regularUser;
     }
 }

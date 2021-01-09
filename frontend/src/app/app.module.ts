@@ -27,20 +27,21 @@ import { BidsModule } from './components/bids/bids.module';
 import {AuctionDetailsComponent} from "./components/auction-details/auction-details.component";
 import {LoadingSpinnerService} from "./services/loading-spinner.service";
 import {NgxSpinnerModule} from "ngx-spinner";
+import { CategoriesPickerComponent } from './components/register/categories-picker/categories-picker/categories-picker.component';
 import {ContactFormComponent} from "./components/auctions/contact-form/contact-form.component";
+import {ProfileModule} from "./components/profile/profile.module";
 
 @NgModule({
   declarations: [
     AppComponent,
-    AppComponent,
     SigninComponent,
     RegisterComponent,
-    SigninComponent,
     ResetPasswordComponent,
     ResetPasswordTokenComponent,
     ForgotPasswordComponent,
     ContactFormComponent,
     AuctionDetailsComponent,
+    CategoriesPickerComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,7 +57,8 @@ import {ContactFormComponent} from "./components/auctions/contact-form/contact-f
     HomeModule,
     CountdownModule,
     BidsModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    ProfileModule
   ],
   providers: [
     AuthGuard,

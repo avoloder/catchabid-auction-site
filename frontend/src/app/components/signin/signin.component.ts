@@ -60,6 +60,7 @@ export class SigninComponent implements OnInit {
               localStorage.setItem('token', data['token']);
               this.userService.findByEmail(this.email).subscribe(
                   user => {
+                    localStorage.setItem('email', user['email']);
                     if(user['firstName'] !== undefined && user['lastName'] !== undefined){
                       let userName = user['firstName'].concat(" ", user['lastName']);
                       localStorage.setItem('userName', userName);
@@ -69,12 +70,12 @@ export class SigninComponent implements OnInit {
                       window.location.reload();
                     }
                   },
-                  error => console.log(error)
+                  error => this.toast.error(error.error.message)
             )},
             error => {
               this.toast.error(error.error.message);
             });
-  }
+    }
 }
 
 

@@ -1,0 +1,11 @@
+<div class="list-group">
+
+  <a *ngFor="let auction of wonAuctions" class="list-group-item list-group-item-action flex-column align-items-start active">
+    <div class="d-flex w-100 justify-content-between">
+      <!--h5 class="mb-1">{{ auction.auctionName }}</h5-->
+      <small>{{ auction.endTime | date: 'yyyy-MM-dd' }}</small>
+    </div>
+    <p class="mb-1">{{ auction.auctionName }}</p>
+    <small>CREATOR: {{ auction.creatorName }}</small>
+  </a>
+</div>

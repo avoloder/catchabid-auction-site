@@ -24,11 +24,11 @@ public class Bid {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JsonBackReference
+    @JsonBackReference(value = "post_highest_bid")
     private AuctionPost auction;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonBackReference
+    @JsonBackReference(value = "user_highest_bid")
     private RegularUser user;
 
     @Column

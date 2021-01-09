@@ -10,23 +10,24 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface AuctionRepository extends JpaRepository<AuctionPost, Long>, AuctionRepositoryCustomQueries {
 
     /**
-     *
-     * @param from
-     * @param pageable
+     * get upcoming auctions from database
+     * @param from earliest starting date of results
+     * @param pageable page of results
      * @return
      */
     List<AuctionPost> findAllByStartTimeGreaterThan(LocalDateTime from, Pageable pageable);
 
     /**
-     *
-     * @param fromStartTime
-     * @param untilEndTime
-     * @param pageable
+     * get active auctions from database
+     * @param fromStartTime latest start date
+     * @param untilEndTime earliest end time
+     * @param pageable page of results
      * @return
      */
     List<AuctionPost> findAllByStartTimeLessThanAndEndTimeGreaterThan(LocalDateTime fromStartTime, LocalDateTime untilEndTime, Pageable pageable);
@@ -64,5 +65,5 @@ public interface AuctionRepository extends JpaRepository<AuctionPost, Long>, Auc
      * @param endDate earliest end date of the {@link AuctionPost}
      * @return List of auction satisfying the given criteria
      */
-    List<AuctionPost> findAllByHighestBidUserIdAndEndTimeGreaterThan(Long userId, LocalDateTime endDate);
+    List<AuctionPost> findAllByHighestBidUserIdAndEndTimeLessThan(Long userId, LocalDateTime endDate);
 }

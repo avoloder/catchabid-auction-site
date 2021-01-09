@@ -37,7 +37,6 @@ export class NavbarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log("on init");
   }
 
   openLoginModal(): void {
@@ -64,8 +63,17 @@ export class NavbarComponent implements OnInit {
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('userName');
+    localStorage.removeItem('email');
     this.userName = null;
     window.location.reload();
+  }
+
+  toUserSettings(){
+    this.router.navigate(['/profile']);
+  }
+
+  toWonAuctions(){
+    this.router.navigate(['/won']);
   }
 
   isUserLoggedIn(){

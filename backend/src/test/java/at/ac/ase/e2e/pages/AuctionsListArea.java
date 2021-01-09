@@ -24,6 +24,10 @@ public class AuctionsListArea extends PageObject{
         return getDriver().findElements(By.className("recent-auction"));
     }
 
+    public List<WebElement> getUpcomingAuctions() {
+        return getDriver().findElements(By.className("upcoming-auction"));
+    }
+
     public String getCreatorText(WebElement auction) {
         return auction.findElement(By.xpath("(article/div[@class='info']/p)[1]")).getText();
     }
@@ -46,6 +50,11 @@ public class AuctionsListArea extends PageObject{
 
     public void waitUntilRecentAuctionsHasMoreThan(int n) {
         waitUntil(ExpectedConditions.numberOfElementsToBeMoreThan(By.className("recent-auction"), n));
+    }
+
+    public void waitUntilRecentAuctionsSizeIs(int n) {
+        waitUntil(ExpectedConditions.numberOfElementsToBeMoreThan(By.className("recent-auction"), n-1));
+        waitUntil(ExpectedConditions.numberOfElementsToBeLessThan(By.className("recent-auction"), n+1));
     }
 
     public void clickLoadMoreUpcomingAuctions() {

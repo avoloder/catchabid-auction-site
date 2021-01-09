@@ -11,7 +11,6 @@ public class AddressDTO {
 
     private String street;
 
-
     private Integer houseNr;
 
     public AddressDTO() {
@@ -47,5 +46,15 @@ public class AddressDTO {
 
     public void setHouseNr(Integer houseNr) {
         this.houseNr = houseNr;
+    }
+
+    @Override
+    public String toString() {
+        return "AddressDTO{" +
+                "country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", houseNr=" + houseNr +
+                '}';
     }
 }
