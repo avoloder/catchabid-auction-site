@@ -11,6 +11,7 @@ import {AuctionFormComponent} from "./auction-form/auction-form.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { AuctionsSearchFormComponent } from './auctions-search-form/auctions-search-form.component';
+import {AuctionCancellationConfirmationComponent} from "../auction-details/auction-cancellation-confirmation/auction-cancellation-confirmation.component";
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { AuctionsSearchFormComponent } from './auctions-search-form/auctions-sea
     AuctionsComponent,
     AuctionCountdownComponent,
     AuctionFormComponent,
-    AuctionsSearchFormComponent
+    AuctionsSearchFormComponent,
+    AuctionCancellationConfirmationComponent
   ],
   imports: [
     CommonModule,

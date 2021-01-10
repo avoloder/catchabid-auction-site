@@ -85,4 +85,8 @@ export class AuctionsService {
   postContactForm(contactForm: ContactForm): Observable<ContactForm> {
     return this.http.post<ContactForm>(this.REST_API_SERVER + api + '/postContactForm', contactForm);
   }
+
+  cancelAuction(auction: AuctionPost): Observable<AuctionPost> {
+    return this.http.post<AuctionPost>(this.REST_API_SERVER + api + '/cancel', auction.id);
+  }
 }

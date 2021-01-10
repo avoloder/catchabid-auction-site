@@ -160,6 +160,10 @@ export class AuctionsListComponent implements OnInit {
     this.refreshAuctions();
   }
 
+  isOwnAuction(auction: AuctionPost) {
+    return auction.creatorId.toString() == localStorage.getItem('userId');
+  }
+
   private refreshAuctions(): void {
     this.pageNumber--; // decrement the pageNumber, so it doesn't load more auctions
     this.auctions = [];

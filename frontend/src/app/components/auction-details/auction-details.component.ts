@@ -5,6 +5,7 @@ import { AuctionsService } from '../../services/auction.service';
 import { BidsComponent } from '../bids/bids.component';
 import { BidsService } from 'src/app/services/bids.service';
 import { Subscription } from 'rxjs';
+import {AuctionCancellationConfirmationComponent} from "./auction-cancellation-confirmation/auction-cancellation-confirmation.component";
 
 @Component({
   selector: 'app-auction-details',
@@ -48,4 +49,31 @@ export class AuctionDetailsComponent implements OnInit {
     this.bidModalClosedSub.unsubscribe();
   }
 
+  cancelAuction(): void {
+    this.modalRef = this.modalService.open(AuctionCancellationConfirmationComponent);
+
+    this.modalRef.result.then((result) => {
+      if (result) {
+        console.log("cancel auction");
+        this.auctionService.cancelAuction(this.auction).subscribe(contactForm => {
+          console.log("auction cancelled successfully")
+        }, error => {
+          console.log("auction cancellation error")
+        });
+      }
+    }
+    );
+  }
+
+  isOwnAuction(): boolean {
+    return this.auction.creatorId.toString() == localStorage.getItem('userId');
+  }
+
+  isActive(): boolean {
+    return this.auction.status == 'ACTIVE';
+  }
+
+  isUpcoming(): boolean {
+    return this.auction.status == 'UPCOMING';
+  }
 }

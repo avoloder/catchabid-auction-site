@@ -57,7 +57,8 @@
                 </app-auction-countdown>
               </div>
               <div class="col-12"  style="margin-bottom: 10px;">
-                <a href="#" (click)="openBidModal(auction)" class="btn btn-primary card-button">Place a bid</a>
+                <a href="#" *ngIf="isActive() && !isOwnAuction()" (click)="openBidModal(auction)" class="btn btn-primary card-button">Place a bid</a>
+                <a href="#" *ngIf="isUpcoming() && isOwnAuction()" (click)="cancelAuction(auction)" class="btn btn-primary card-button">Cancel Auction</a>
               </div>
             </div>
           </div>
