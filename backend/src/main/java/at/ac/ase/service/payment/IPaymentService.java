@@ -7,4 +7,6 @@ public interface IPaymentService {
 
     PaymentIntent createPaymentIntent(AuctionPost auctionPost);
 
+    boolean checkPaymentCharged(String paymentIntentId);
+
 }

@@ -55,5 +55,14 @@ public class PaymentsService implements IPaymentService {
         return null;
     }
 
+    @Override
+    public boolean checkPaymentCharged(String paymentIntentId) {
+        try {
+            PaymentIntent paymentIntent = PaymentIntent.retrieve(paymentIntentId);
+            return paymentIntent.getCharges().getData().get(0).getPaid();
+        } catch (StripeException e) {
+            return false;
+        }
+    }
 
 }

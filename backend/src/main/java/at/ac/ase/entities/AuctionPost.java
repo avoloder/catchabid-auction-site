@@ -1,5 +1,6 @@
 package at.ac.ase.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Type;
 
@@ -67,8 +68,9 @@ public class AuctionPost {
         inverseJoinColumns = { @JoinColumn(name = "user_id") })
     private Set<RegularUser> subscriptions = new HashSet<>();
 
-    @Column
-    private LocalDateTime paymentDate;
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "payment")
+    private Payment payment;
 
     public Long getId() {
         return id;
@@ -174,11 +176,11 @@ public class AuctionPost {
         this.address = address;
     }
 
-    public LocalDateTime getPaymentDate() {
-        return paymentDate;
+    public Payment getPayment() {
+        return payment;
     }
 
-    public void setPaymentDate(LocalDateTime paymentDate) {
-        this.paymentDate = paymentDate;
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 }
