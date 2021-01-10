@@ -227,7 +227,7 @@ public class AuctionService implements IAuctionService {
     @Override
     public boolean isAuctionPayable(AuctionPost auctionpost) {
         return Objects.nonNull(auctionpost.getHighestBid()) &&
-            auctionpost.getEndTime().isAfter(LocalDateTime.now());
+            auctionpost.getEndTime().isBefore(LocalDateTime.now());
     }
 
     @Override

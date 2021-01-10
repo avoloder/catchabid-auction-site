@@ -111,7 +111,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         auctionPost.setCategory(Category.CARS);
         auctionPost.setStatus(Status.ACTIVE);
 
-        auctionService.createAuction(auctionPost);
+        auctionService.saveAuction(auctionPost);
 
         auctionPosts = auctionService.getAllAuctions();
         assertThat(auctionPosts.size(), is(2));
@@ -149,11 +149,11 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     public void testGetUpcomingAuctions() {
         insertTestData("auctions.sql");
         AuctionPost postRecent = createAuction("test@test.com");
-        auctionService.createAuction(postRecent);
+        auctionService.saveAuction(postRecent);
         AuctionPost postUpcoming = createAuction("test1@test.com");
         postUpcoming.setStartTime(LocalDateTime.now().plusMinutes(15));
         postUpcoming.setId(2l);
-        auctionService.createAuction(postUpcoming);
+        auctionService.saveAuction(postUpcoming);
         List<AuctionPostSendDTO> upcoming = auctionService.getUpcomingAuctions(0, 0);
         assertEquals(1, upcoming.size());
         assertEquals(postUpcoming.getId(), upcoming.get(0).getId());

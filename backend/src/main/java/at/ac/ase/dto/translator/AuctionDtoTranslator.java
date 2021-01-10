@@ -54,6 +54,7 @@ public class AuctionDtoTranslator {
         if (auction.getImage() != null) {
             auctionPostSendDTO.setImage(Base64.getEncoder().encodeToString(auction.getImage()));
         }
+        auctionPostSendDTO.setPaid(auction.getPayment() != null);
         return auctionPostSendDTO;
     }
 
