@@ -20,7 +20,8 @@ public class Rating {
     @JsonBackReference
     private RegularUser user;
 
-    public Long getId() {
+
+    public RatingPK getId() {
         return id;
     }
 
@@ -43,5 +44,6 @@ public class Rating {
     public void setUser(RegularUser user) {
         this.user = user;
     }
+
 
 }

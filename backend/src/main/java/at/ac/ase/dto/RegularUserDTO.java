@@ -30,7 +30,7 @@ public class RegularUserDTO {
 
     private Set<Bid> bids = new HashSet<>();
     private Boolean active = true;
-    private Set<Rating> ratings = new HashSet<>();
+    private Set<RatingDTO> ratings = new HashSet<>();
     private Set<AuctionPost> auctionSubscriptions = new HashSet<>();
     private Set<AuctionPost> ownedAuctions = new HashSet<>();
 
@@ -90,11 +90,11 @@ public class RegularUserDTO {
         this.active = active;
     }
 
-    public Set<Rating> getRatings() {
+    public Set<RatingDTO> getRatings() {
         return ratings;
     }
 
-    public void setRatings(Set<Rating> ratings) {
+    public void setRatings(Set<RatingDTO> ratings) {
         this.ratings = ratings;
     }
 

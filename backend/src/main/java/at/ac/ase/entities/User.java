@@ -1,5 +1,6 @@
 package at.ac.ase.entities;
 
+import at.ac.ase.dto.RatingDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -33,7 +34,6 @@ public abstract class User {
 
     @Column
     private String passwordHash;
-
 
     @OneToMany(
         fetch = FetchType.EAGER,
