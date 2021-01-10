@@ -73,14 +73,13 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    @Transactional
     public AuctionPostSendDTO cancelAuction(User user, Long auctionPostId) {
-        AuctionPost auction = auctionRepository.findById(auctionPostId).orElseThrow(ObjectNotFoundException::new);
+        AuctionPost auction = auctionRepository.findById(auctionPostId)
+                .orElseThrow(ObjectNotFoundException::new);
 
         if(!auction.getCreator().getId().equals(user.getId())) {
             throw new AuthorizationException();
         }
-        // TODO discuss when cancellation should be possible
         if(auction.getStatus().equals(Status.UPCOMING)) {
             auction.setStatus(Status.CANCELLED);
         }

@@ -109,7 +109,7 @@ public class AuctionController {
 
     @PostMapping("/cancel")
     public ResponseEntity<Object> cancelAuction(
-            @RequestParam Long auctionPostId,
+            @RequestBody Long auctionPostId,
             @CurrentSecurityContext(expression = "authentication.principal") User user) {
         return ResponseEntity.ok(auctionService.cancelAuction(user, auctionPostId));
     }
