@@ -2,6 +2,7 @@ package at.ac.ase.dto.translator;
 
 import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.AuctionQueryDTO;
+import at.ac.ase.dto.RegularUserDTO;
 import at.ac.ase.entities.AuctionHouse;
 import at.ac.ase.entities.AuctionPost;
 import at.ac.ase.entities.RegularUser;
@@ -11,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -20,7 +23,10 @@ public class AuctionDtoTranslator {
     @Autowired
     private ModelMapper modelMapper;
 
-    public AuctionPostSendDTO toSendDto(AuctionPost auction) {
+    @Autowired
+    private UserDtoTranslator userDtoTranslator;
+
+    public AuctionPostSendDTO toSendDto(AuctionPost auction, boolean subscriptionsRequired) {
 
         AuctionPostSendDTO auctionPostSendDTO = new AuctionPostSendDTO();
         auctionPostSendDTO.setId(auction.getId());
@@ -54,11 +60,24 @@ public class AuctionDtoTranslator {
         if (auction.getImage() != null) {
             auctionPostSendDTO.setImage(Base64.getEncoder().encodeToString(auction.getImage()));
         }
+
+        if(subscriptionsRequired) {
+            Set<RegularUserDTO> subscriptions = new HashSet<>();
+            for (RegularUser user : auction.getSubscriptions()) {
+                subscriptions.add(userDtoTranslator.toRegularUserDTO(user));
+            }
+            auctionPostSendDTO.setSubscriptions(subscriptions);
+        }
+
         return auctionPostSendDTO;
     }
 
     public List<AuctionPostSendDTO> toDtoList(List<AuctionPost> auctions) {
-        return auctions.stream().map(this::toSendDto).collect(Collectors.toList());
+        return auctions.stream().map(n -> toSendDto(n, true)).collect(Collectors.toList());
+    }
+
+    public Set<AuctionPostSendDTO> toDtoSet(Set<AuctionPost> auctions) {
+        return auctions.stream().map(n -> toSendDto(n, false)).collect(Collectors.toSet());
     }
 
     public AuctionPostQuery toEntity(AuctionQueryDTO queryDTO) {

@@ -1,7 +1,7 @@
 INSERT INTO public.regular_user (id, active, email, first_name, last_name, password_hash, phone_nr) VALUES (1, true, 'test@test.com', 'Robert', 'Richard', '9999', '123');
 
-INSERT INTO public.auction_house (id, active, email, name, password_hash, phone_nr) VALUES (2, true, 'test@test.com', 'Alice', '9999', '123');
-INSERT INTO public.auction_house (id, active, email, name, password_hash, phone_nr) VALUES (3, true, 'test2@test.com', 'Bob', '3333', '312');
+INSERT INTO public.auction_house (id, active, email, name, password_hash, phone_nr, tid) VALUES (2, true, 'test@test.com', 'Alice', '9999', '123', '1234567');
+INSERT INTO public.auction_house (id, active, email, name, password_hash, phone_nr, tid) VALUES (3, true, 'test2@test.com', 'Bob', '3333', '312', '7654321');
 
 INSERT INTO public.auction_post (id, city, country, house_nr, street, category, description, end_time, min_price, name, start_time, status, creator, bid_id) VALUES ((10000), null, 'Germany', null, null, 'ELECTRONICS', 'Desktop PC - Intel i7, AMD RX 580 8GB', '2020-01-01 10:00:00', 3, 'Item1', '2020-01-01 00:00:00', 'ACTIVE', 1, null);
 INSERT INTO public.auction_post (id, city, country, house_nr, street, category, description, end_time, min_price, name, start_time, status, creator, bid_id) VALUES (10001, null, 'Austria', null, null, 'MUSIC', 'Bob Marley Tickets', '2020-01-01 12:00:00', 6, 'Item2', '2020-01-01 05:00:00', 'ACTIVE', 2, null);

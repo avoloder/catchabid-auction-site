@@ -64,7 +64,7 @@ public class AuctionPost {
     @JoinTable(
         name = "auction_subscriptions",
         joinColumns = { @JoinColumn(name = "auction_post_id") },
-        inverseJoinColumns = { @JoinColumn(name = "user_id") })
+        inverseJoinColumns = { @JoinColumn(name = "regular_user_id") })
     private Set<RegularUser> subscriptions = new HashSet<>();
 
     public Long getId() {

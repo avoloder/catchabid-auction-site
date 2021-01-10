@@ -124,5 +124,22 @@ public class AuctionController {
         return ResponseEntity.ok(auctionService.postContactForm(contactForm));
     }
 
+    @PostMapping(value = "/subscribe")
+    public ResponseEntity<Object> subscribeToAuction(
+            @RequestBody @Valid AuctionPostSendDTO auctionPostDTO,
+            @CurrentSecurityContext(expression = "authentication.principal") User user) {
 
+        AuctionPost auctionPost = auctionService.toAuctionPostEntity(user, auctionPostDTO);
+        return ResponseEntity.ok(auctionService.subscribeToAuction(auctionPost, user));
+    }
+
+    @PostMapping(value = "/unsubscribe")
+    public ResponseEntity<Object> unsubscribeFromAuction(
+            @RequestBody @Valid AuctionPostSendDTO auctionPostDTO,
+            @CurrentSecurityContext(expression = "authentication.principal") User user) {
+
+        AuctionPost auctionPost = auctionService.toAuctionPostEntity(user, auctionPostDTO);
+
+        return ResponseEntity.ok(auctionService.unsubscribeFromAuction(auctionPost, user));
+    }
 }
