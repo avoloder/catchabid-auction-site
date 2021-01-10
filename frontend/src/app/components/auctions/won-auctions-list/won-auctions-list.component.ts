@@ -6,6 +6,7 @@ import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaymentsComponent } from '../../payments/payments.component';
 import { PaymentsService } from 'src/app/services/payments.service';
 import { Subscription } from 'rxjs';
+import { AuctionDetailsComponent } from '../../auction-details/auction-details.component';
 
 @Component({
   selector: 'app-won-auctions-list',
@@ -21,6 +22,8 @@ export class WonAuctionsListComponent implements OnInit {
   modalRef: NgbModalRef;
 
   paymentModalClosedSub: Subscription;
+
+  auctionDetailsModalClosedSub: Subscription;
 
   constructor(
     private auctionService: AuctionsService,
@@ -54,8 +57,21 @@ export class WonAuctionsListComponent implements OnInit {
   onPaymentModalClosed(): void {
     this.modalRef.close();
     this.paymentModalClosedSub.unsubscribe();
-
     this.getWonAuctions();
   }
+
+  openAuctionDetails(auction: AuctionPost): void{
+    const modal = this.modalService.open(AuctionDetailsComponent,  { size: 'lg', backdrop: 'static' });
+    modal.componentInstance.auction = auction;
+    this.auctionDetailsModalClosedSub = this.paymentService.auctionDetailModalClosed.subscribe(
+      () => this.onAuctionDetailsModalClosed()
+    )
+  }
+
+  onAuctionDetailsModalClosed(): void {
+    this.modalRef.close();
+    this.auctionDetailsModalClosedSub.unsubscribe();
+  }
+
 
 }

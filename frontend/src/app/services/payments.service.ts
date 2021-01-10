@@ -13,6 +13,8 @@ export class PaymentsService {
 
   paymentModalClosed: Subject<void> = new Subject<void>();
 
+  auctionDetailModalClosed: Subject<void> = new Subject<void>();
+
   constructor(
     private http: HttpClient
   ) {
