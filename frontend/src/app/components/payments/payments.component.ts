@@ -24,6 +24,8 @@ export class PaymentsComponent implements OnInit {
 
   @Input() auction: AuctionPost;
 
+  processingPayment = false;
+
   cardOptions: StripeCardElementOptions = {
     style: {
       base: {
@@ -66,6 +68,7 @@ export class PaymentsComponent implements OnInit {
   }
 
   processPayment(): void {
+    this.processingPayment = true;
     this.paymentService.createPaymentIntent(this.auction.id)
       .pipe(
         switchMap(
@@ -93,8 +96,8 @@ export class PaymentsComponent implements OnInit {
         (error) => {
           console.log(error);
           this.toastrService.error('Error processing payment');
-        }
-      );
+        },
+      ).add(() => this.processingPayment = false);
   }
 
   onModalClose(): void {
