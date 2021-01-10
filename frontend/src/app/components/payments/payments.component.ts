@@ -11,6 +11,7 @@ import { PaymentsService } from 'src/app/services/payments.service';
 import { LoadingSpinnerService } from 'src/app/services/loading-spinner.service';
 import { PaymentIntent } from 'src/app/models/paymentIntent';
 import { switchMap } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-payments',
@@ -46,16 +47,22 @@ export class PaymentsComponent implements OnInit {
 
   paymentIntent: PaymentIntent;
 
+  userName: string;
+
   constructor(
     private fb: FormBuilder,
     private stripeService: StripeService,
     private paymentService: PaymentsService,
-    private _loadingSpinnerService: LoadingSpinnerService) {}
+    private toastrService: ToastrService) {}
 
   ngOnInit(): void {
     this.stripeTest = this.fb.group({
       name: ['', [Validators.required]]
     });
+    this.userName = localStorage.getItem('userName');
+    if (this.userName == null) {
+      this.userName = "user";
+    }
   }
 
   processPayment(): void {
@@ -66,42 +73,32 @@ export class PaymentsComponent implements OnInit {
             payment_method: {
               card: this.card.element,
               billing_details: {
-                name: 'Stefan Puhalo'
+                name: this.userName
               },
             },
           })
         )
       )
+      .pipe(
+        switchMap(
+          (ps) => this.paymentService.storePayment(ps.paymentIntent.id, this.auction.id)
+        )
+      )
       .subscribe(
-        (result) => console.log(result),
-        (error) => console.log(error)
+        (result) => {
+          console.log(result);
+          this.toastrService.success('Auction successfully paid.');
+          this.onModalClose();
+        },
+        (error) => {
+          console.log(error);
+          this.toastrService.error('Error processing payment');
+        }
       );
-
-
-
-
-    // this.stripeService
-    //   .confirmPaymentIntent(this.paymentIntent.clientSecret,
-    //     this.card.element, { name })
-    //   .subscribe((result) => {
-    //     if (result.paymentIntent) {
-    //       console.log(result);
-    //     } else if (result.error) {
-    //       console.log(result.error.message);
-    //     }
-    //   });
   }
 
-  // createPaymentIntent(): void  {
-  //   this.paymentService.createPaymentIntent(
-  //     this.auction.id).subscribe(
-  //       (paymentIntentRes) => {
-  //         console.log(paymentIntentRes)
-  //         this.paymentIntent = paymentIntentRes;
-  //         this._loadingSpinnerService.hide();
-  //       },
-  //       (err) => console.log(err)
-  //     );
-  // }
+  onModalClose(): void {
+    this.paymentService.paymentModalClosed.next();
+  }
 
 }

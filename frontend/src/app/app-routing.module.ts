@@ -7,7 +7,6 @@ import { RegisterComponent } from './components/register/register.component';
 import {AuctionsListComponent} from "./components/auctions/auctions-list/auctions-list.component";
 import {ProfileComponent} from "./components/profile/profile.component";
 import {UpdatePasswordComponent} from "./components/profile/update-password/update-password.component";
-import { WonAuctionsListComponent } from './components/auctions/won-auctions-list/won-auctions-list.component';
 
 const routes: Routes = [
   {
@@ -23,12 +22,9 @@ const routes: Routes = [
   },
   {path: 'profile' ,
   component: ProfileComponent,
-
   children: [
     {path:'password',component: UpdatePasswordComponent}
-  ]},
-  { path: 'won' ,
-  component: WonAuctionsListComponent}
+  ]}
 
 ];
 

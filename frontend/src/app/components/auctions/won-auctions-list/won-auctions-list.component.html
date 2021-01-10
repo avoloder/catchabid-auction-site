@@ -1,11 +1,14 @@
 <div class="list-group">
 
-  <a *ngFor="let auction of wonAuctions" class="list-group-item list-group-item-action flex-column align-items-start active">
+  <div *ngFor="let auction of wonAuctions" class="list-group-item list-group-item-action flex-column align-items-start">
     <div class="d-flex w-100 justify-content-between">
       <!--h5 class="mb-1">{{ auction.auctionName }}</h5-->
+      <p class="mb-1">{{ auction.auctionName }}</p>
       <small>{{ auction.endTime | date: 'yyyy-MM-dd' }}</small>
     </div>
-    <p class="mb-1">{{ auction.auctionName }}</p>
-    <small>CREATOR: {{ auction.creatorName }}</small>
-  </a>
+    <div class="d-flex w-100 justify-content-between">
+      <small class="mt-3">CREATOR: {{ auction.creatorName.toUpperCase() }}</small>
+      <button *ngIf="!auction.paid" class="btn btn-primary" type="button" (click)="openPaymentModal(auction)">Pay</button>
+    </div>
+  </div>
 </div>

@@ -2,6 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { AuctionsService } from 'src/app/services/auction.service';
 import { User } from 'src/app/models/user';
 import { AuctionPost } from 'src/app/models/auctionpost';
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PaymentsComponent } from '../../payments/payments.component';
+import { PaymentsService } from 'src/app/services/payments.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-won-auctions-list',
@@ -14,8 +18,14 @@ export class WonAuctionsListComponent implements OnInit {
 
   wonAuctions: AuctionPost[];
 
+  modalRef: NgbModalRef;
+
+  paymentModalClosedSub: Subscription;
+
   constructor(
-    private auctionService: AuctionsService
+    private auctionService: AuctionsService,
+    private modalService: NgbModal,
+    private paymentService: PaymentsService
   ) { }
 
   ngOnInit(): void {
@@ -25,9 +35,27 @@ export class WonAuctionsListComponent implements OnInit {
 
   private getWonAuctions() {
     this.auctionService.getWonAuctions().subscribe(
-      (res) => this.wonAuctions = res,
+      (res) => {
+        this.wonAuctions = res
+      },
       (err) => console.log(err)
     )
+  }
+
+  openPaymentModal(auction: AuctionPost): void {
+    this.modalRef = this.modalService.open(PaymentsComponent);
+    this.modalRef.componentInstance.auction = auction;
+
+    this.paymentModalClosedSub = this.paymentService.paymentModalClosed.subscribe(
+      () => this.onPaymentModalClosed()
+    );
+  }
+
+  onPaymentModalClosed(): void {
+    this.modalRef.close();
+    this.paymentModalClosedSub.unsubscribe();
+
+    this.getWonAuctions();
   }
 
 }

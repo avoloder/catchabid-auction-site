@@ -72,10 +72,6 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/profile']);
   }
 
-  toWonAuctions(){
-    this.router.navigate(['/won']);
-  }
-
   isUserLoggedIn(){
     if(localStorage.getItem('token') !== null){
       this.userName = localStorage.getItem('userName');
