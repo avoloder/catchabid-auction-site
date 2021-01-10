@@ -260,6 +260,7 @@ public class AuctionService implements IAuctionService {
         Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
         subscriptions.add((RegularUser) user);
         auctionPost.setSubscriptions(subscriptions);
+        List<AuctionPost> auctionPosts = getAllAuctions();
         return auctionRepository.save(auctionPost);
     }
 
@@ -268,22 +269,6 @@ public class AuctionService implements IAuctionService {
         Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
         subscriptions.removeIf(subscribedUser -> subscribedUser.getId().equals(user.getId()));
         auctionPost.setSubscriptions(subscriptions);
-        AuctionPost post = auctionRepository.save(auctionPost);
-        return post;
-    }
-
-    @Override
-    @Transactional
-    public void sendAuctionStartedNotification(User user, AuctionPost auctionPost) {
-        try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("noreply.catchabid@gmail.com");
-            message.setTo(user.getEmail());
-            message.setSubject("Auction started");
-            message.setText("Auction " + auctionPost.getName() + " that you subscribed to just started!");
-            emailSender.send(message);
-        }catch (MailException e){
-            throw new EmailNotSentException();
-        }
+        return auctionRepository.save(auctionPost);
     }
 }

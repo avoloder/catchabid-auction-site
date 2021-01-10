@@ -140,11 +140,4 @@ public interface IAuctionService {
      */
     AuctionPost unsubscribeFromAuction(AuctionPost auctionPost, User user);
 
-    /**
-     * Method which send an email to users subscribed to this auction
-     * @param user - logged in user
-     * @param auctionPost - auction post that just started
-     */
-    void sendAuctionStartedNotification(User user, AuctionPost auctionPost);
-
 }

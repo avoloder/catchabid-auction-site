@@ -71,6 +71,7 @@ public class RegisterServiceTest extends BaseIntegrationTest {
         address.setHouseNr(3);
         address.setStreet("Karlsplatz");
         house.setAddress(address);
+        house.setTid("123456789");
 
         registerService.registerHouse(house);
         assertEquals(1, auctionHouseService.getAllHouses().size());

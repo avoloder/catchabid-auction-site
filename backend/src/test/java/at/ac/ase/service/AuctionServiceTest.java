@@ -6,6 +6,7 @@ import at.ac.ase.entities.*;
 import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -27,7 +31,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     @Autowired
     IAuctionHouseService auctionHouseService;
 
-    @After
+    @Before
     public void cleanup() {
         cleanDatabase();
     }
@@ -46,25 +50,25 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         auctions = auctionService.getRecentAuctions(0, 5);
 
         assertThat(auctions.size(), is(5));
-        assertThat(auctions.get(0).getId(), is(11L));
-        assertThat(auctions.get(1).getId(), is(10L));
-        assertThat(auctions.get(2).getId(), is(9L));
-        assertThat(auctions.get(3).getId(), is(8L));
-        assertThat(auctions.get(4).getId(), is(7L));
+        assertThat(auctions.get(0).getId(), is(1L));
+        assertThat(auctions.get(1).getId(), is(2L));
+        assertThat(auctions.get(2).getId(), is(3L));
+        assertThat(auctions.get(3).getId(), is(4L));
+        assertThat(auctions.get(4).getId(), is(5L));
 
         auctions = auctionService.getRecentAuctions(1, 5);
 
         assertThat(auctions.size(), is(5));
         assertThat(auctions.get(0).getId(), is(6L));
-        assertThat(auctions.get(1).getId(), is(5L));
-        assertThat(auctions.get(2).getId(), is(4L));
-        assertThat(auctions.get(3).getId(), is(3L));
-        assertThat(auctions.get(4).getId(), is(2L));
+        assertThat(auctions.get(1).getId(), is(7L));
+        assertThat(auctions.get(2).getId(), is(8L));
+        assertThat(auctions.get(3).getId(), is(9L));
+        assertThat(auctions.get(4).getId(), is(10L));
 
         auctions = auctionService.getRecentAuctions(2, 5);
 
         assertThat(auctions.size(), is(1));
-        assertThat(auctions.get(0).getId(), is(1L));
+        assertThat(auctions.get(0).getId(), is(11L));
     }
 
     @Test
@@ -118,6 +122,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     }
 
     @Test
+    @Transactional
     public void testRecentAuctionsForUser(){
         insertTestData("auctions-filter-preferences.sql");
         List<AuctionPostSendDTO> posts = auctionService.getRecentAuctionsForUser(0,10,"testRegular@test.com",true);
@@ -132,6 +137,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     }
 
     @Test
+    @Transactional
     public void testUpcomingAuctionsForUser(){
         insertTestData("auctions-filter-preferences.sql");
         List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctionsForUser(10,0,"testRegular@test.com",true);
@@ -146,6 +152,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     }
 
     @Test
+    @Transactional
     public void testGetUpcomingAuctions() {
         insertTestData("auctions.sql");
         AuctionPost postRecent = createAuction("test@test.com");
@@ -157,6 +164,76 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         List<AuctionPostSendDTO> upcoming = auctionService.getUpcomingAuctions(0, 0);
         assertEquals(1, upcoming.size());
         assertEquals(postUpcoming.getId(), upcoming.get(0).getId());
+    }
+
+    @Test
+    @Transactional
+    public void testSubscribeToAuction(){
+        insertTestData("multiple-auctions.sql");
+
+        List<AuctionPost> auctionPosts = auctionService.getAllAuctions();
+        assertThat(auctionPosts.size(), is(11));
+
+        AuctionPost auctionPost = createAuction("test@test.com");
+        auctionService.createAuction(auctionPost);
+
+        auctionPosts = auctionService.getAllAuctions();
+        assertThat(auctionPosts.size(), is(12));
+
+        AuctionPost storedAuctionPost = auctionPosts.get(auctionPosts.size()-1);
+        assertThat(storedAuctionPost.getSubscriptions().size(), is(0));
+
+        User user = new RegularUser();
+        user.setId(2L);
+        user.setActive(true);
+        user.setEmail("test@test.com");
+
+        auctionService.subscribeToAuction(auctionPost, user);
+
+        storedAuctionPost = auctionService.getAllAuctions().get(auctionPosts.size()-1);
+
+        assertThat(storedAuctionPost.getSubscriptions().size(), is(1));
+
+        Iterator iterator = storedAuctionPost.getSubscriptions().iterator();
+        RegularUser subscribedUser = (RegularUser)iterator.next();
+        assertThat(subscribedUser.getId(), is(2L));
+        assertTrue(subscribedUser.getActive());
+        assertThat(subscribedUser.getEmail(), is("test@test.com"));
+    }
+
+    @Test
+    @Transactional
+    public void testUnsubscribeFromAuction(){
+        insertTestData("multiple-auctions.sql");
+
+        List<AuctionPost> auctionPosts = auctionService.getAllAuctions();
+        assertThat(auctionPosts.size(), is(11));
+
+        AuctionPost auctionPost = createAuction("test@test.com");
+        auctionService.createAuction(auctionPost);
+
+        auctionPosts = auctionService.getAllAuctions();
+        assertThat(auctionPosts.size(), is(12));
+
+        AuctionPost storedAuctionPost = auctionPosts.get(auctionPosts.size()-1);
+        assertThat(storedAuctionPost.getSubscriptions().size(), is(0));
+
+        User user = new RegularUser();
+        user.setId(2L);
+        user.setActive(true);
+        user.setEmail("test@test.com");
+
+        auctionService.subscribeToAuction(auctionPost, user);
+
+        storedAuctionPost = auctionService.getAllAuctions().get(auctionPosts.size()-1);
+
+        assertThat(storedAuctionPost.getSubscriptions().size(), is(1));
+
+        auctionService.unsubscribeFromAuction(auctionPost, user);
+
+        storedAuctionPost = auctionService.getAllAuctions().get(auctionPosts.size()-1);
+
+        assertThat(storedAuctionPost.getSubscriptions().size(), is(0));
     }
 
     private AuctionPost createAuction(String email) {
