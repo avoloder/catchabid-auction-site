@@ -31,7 +31,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     @Autowired
     IAuctionHouseService auctionHouseService;
 
-    @Before
+    @After
     public void cleanup() {
         cleanDatabase();
     }
