@@ -17,7 +17,7 @@ public class RatingDtoTranslator {
     public RatingDTO toRatingDTO(Rating rating){
         RatingDTO ratingDTO = new RatingDTO();
         ratingDTO.setRating(rating.getRating());
-        ratingDTO.setUser(userDtoTranslator.toRegularUserDTO(rating.getUser()));
+        //ratingDTO.setUser(userDtoTranslator.toRegularUserDTO(rating.getUser()));
         return ratingDTO;
     }
 

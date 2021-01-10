@@ -5,6 +5,7 @@ import { AuctionsService } from '../../services/auction.service';
 import { BidsComponent } from '../bids/bids.component';
 import { BidsService } from 'src/app/services/bids.service';
 import { Subscription } from 'rxjs';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-auction-details',
@@ -20,12 +21,16 @@ export class AuctionDetailsComponent implements OnInit {
 
   bidModalClosedSub: Subscription;
 
+  rating: number;
+
   constructor(
     private modalService : NgbModal,
     private auctionService: AuctionsService,
-    private bidsService: BidsService) { }
+    private bidsService: BidsService, 
+    private userService: UserService) { }
 
   ngOnInit(): void {
+    this.userService.calculateRating(this.auction.creatorEmail).subscribe(x => this.rating = x);
   }
 
 
@@ -47,5 +52,7 @@ export class AuctionDetailsComponent implements OnInit {
     this.modalRef.close();
     this.bidModalClosedSub.unsubscribe();
   }
+
+
 
 }

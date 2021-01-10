@@ -27,8 +27,17 @@
               </div>
               <div class="col-12" style="margin-bottom: 15px;">
                 <p class="h6">Information about creator:</p>
-                <span>{{auction.creatorName}}</span>
-                <br/>
+                <div class="row">
+                  <div class="col-7">
+                    <span>{{auction.creatorName}}</span>
+                  </div>
+                  <div class="col-5" style="text-align: right;">
+                    <i class="fa fa-star" style="color: #ffe234; margin-right:5px"></i>
+                    <span>Rating:
+                      <span>{{rating}}</span>
+                    </span>
+                  </div>
+                </div>
                 <span>
                     {{auction.address}} {{auction.houseNr}},
                     {{auction.city}}  {{auction.country}}
