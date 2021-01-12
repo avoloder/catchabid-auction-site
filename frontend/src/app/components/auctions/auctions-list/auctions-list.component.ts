@@ -133,12 +133,12 @@ export class AuctionsListComponent implements OnInit {
           this.toast.success('You successfully subscribed to this auction');
           this.refreshAuctions();
         },
-        error => this.toast.error('Could not subscribe to this auction') 
+        error => this.toast.error('Could not subscribe to this auction')
       )
     }
   }
 
-  
+
   unsubscribeFromAuction(auction: AuctionPost): void{
     this._dataService.unsubsribeFromAuction(auction).subscribe(
       x => {
@@ -146,7 +146,7 @@ export class AuctionsListComponent implements OnInit {
         this.refreshAuctions();
       },
       error => this.toast.error('Could not unsubscribe from this auction')
-    )  
+    )
   }
 
   openLoginModal(): void {
@@ -182,7 +182,7 @@ export class AuctionsListComponent implements OnInit {
   }
 
   isUserSubscribed(auction: AuctionPost){
-    if (auction.subscriptions.filter(x => x.email == localStorage.getItem('email')).length > 0){
+    if (auction.subscriptions?auction.subscriptions.filter(x => x.email == localStorage.getItem('email')).length > 0:false){
       return true;
     }
     return false;

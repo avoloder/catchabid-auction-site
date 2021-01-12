@@ -63,6 +63,10 @@ public class AuctionService implements IAuctionService {
     @Autowired
     JavaMailSender emailSender;
 
+    @Autowired
+    IRegularUserService userService;
+
+
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private final Validator validator = factory.getValidator();
 
@@ -73,7 +77,7 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public AuctionPost createAuction(AuctionPost auctionPost) {
+    public AuctionPost saveAuction(AuctionPost auctionPost) {
         return auctionRepository.save(auctionPost);
     }
 
@@ -101,7 +105,7 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public AuctionPost toAuctionPostEntity(User user, AuctionPostSendDTO auctionPostDTO) {
+    public AuctionPost toAuctionPostEntity( AuctionPostSendDTO auctionPostDTO) {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         AuctionPost auctionPost = modelMapper.map(auctionPostDTO, AuctionPost.class);
         if (auctionPostDTO.getId() != null) {
@@ -116,7 +120,19 @@ public class AuctionService implements IAuctionService {
         auctionPost.setEndTime(auctionPostDTO.getEndTime());
         auctionPost.setMinPrice(auctionPostDTO.getMinPrice());
         auctionPost.setDescription(auctionPostDTO.getDescription());
-        auctionPost.setCreator(user);
+        Optional<AuctionHouse> auctionHouse = auctionHouseService.getAuctionHouseById(auctionPostDTO.getCreatorId());
+        if (auctionHouse.isPresent()){
+            auctionPost.setCreator(auctionHouse.get());
+        }else{
+            Optional<RegularUser> regularUser = regularUserService.getUserById(auctionPostDTO.getCreatorId());
+            if (regularUser.isPresent()){
+                auctionPost.setCreator(regularUser.get());
+            }else{
+                if (auctionPost.getCreator()==null){
+                    //ERROR Object incomplete
+                }
+            }
+        }
         auctionPost.setImage(Base64.getDecoder().decode(auctionPostDTO.getImage()));
         auctionPost.setAddress(new Address(auctionPostDTO.getCountry(), auctionPostDTO.getCity(),
                 auctionPostDTO.getAddress(), auctionPostDTO.getHouseNr()));
@@ -271,7 +287,6 @@ public class AuctionService implements IAuctionService {
         Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
         subscriptions.add((RegularUser) user);
         auctionPost.setSubscriptions(subscriptions);
-        List<AuctionPost> auctionPosts = getAllAuctions();
         return auctionRepository.save(auctionPost);
     }
 

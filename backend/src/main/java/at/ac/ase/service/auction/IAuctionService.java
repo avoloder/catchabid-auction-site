@@ -77,7 +77,7 @@ public interface IAuctionService {
      * @param auctionPost
      * @return
      */
-    AuctionPost createAuction(AuctionPost auctionPost);
+    AuctionPost saveAuction(AuctionPost auctionPost);
 
     /**
      *
@@ -96,11 +96,10 @@ public interface IAuctionService {
 
     /**
      * Method which translates auction post send DTO to auction post entity
-     * @param user - logged in user
      * @param auctionPostDTO - auction post send DTO received from frontend
      * @return - tranlated auction post entity
      */
-    AuctionPost toAuctionPostEntity(User user, AuctionPostSendDTO auctionPostDTO);
+    AuctionPost toAuctionPostEntity( AuctionPostSendDTO auctionPostDTO);
 
     /**
      * Method which retrieves all auction post's categories

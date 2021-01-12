@@ -110,7 +110,7 @@ public class AuctionController {
                     .orElseThrow(ObjectNotFoundException::new);
         }
         AuctionPost auctionPost = auctionService.toAuctionPostEntity(user, auction);
-        return ResponseEntity.ok(auctionService.createAuction(auctionPost));
+        return ResponseEntity.ok(auctionService.saveAuction(auctionPost));
     }
 
     @GetMapping("/getCategories")
@@ -134,8 +134,7 @@ public class AuctionController {
     public ResponseEntity<Object> subscribeToAuction(
             @RequestBody @Valid AuctionPostSendDTO auctionPostDTO,
             @CurrentSecurityContext(expression = "authentication.principal") User user) {
-
-        AuctionPost auctionPost = auctionService.toAuctionPostEntity(user, auctionPostDTO);
+        AuctionPost auctionPost = auctionService.toAuctionPostEntity( auctionPostDTO);
         return ResponseEntity.ok(auctionService.subscribeToAuction(auctionPost, user));
     }
     @GetMapping("/won")
@@ -151,7 +150,7 @@ public class AuctionController {
             @RequestBody @Valid AuctionPostSendDTO auctionPostDTO,
             @CurrentSecurityContext(expression = "authentication.principal") User user) {
 
-        AuctionPost auctionPost = auctionService.toAuctionPostEntity(user, auctionPostDTO);
+        AuctionPost auctionPost = auctionService.toAuctionPostEntity(  auctionPostDTO);
 
         return ResponseEntity.ok(auctionService.unsubscribeFromAuction(auctionPost, user));
     }

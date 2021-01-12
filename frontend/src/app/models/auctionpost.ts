@@ -20,7 +20,7 @@ export class AuctionPost {
   subscriptions: any[];
 
   constructor(creatorId: number, name: string, category: string, startTime: Date, endTime: Date, country: string,
-              city: string, address: string, houseNr: number, minPrice: number, description: string, image: string, paid?: boolean) {
+              city: string, address: string, houseNr: number, minPrice: number, description: string, image: string, paid?: boolean,subscriptions?:any[]) {
     this.creatorId = creatorId;
     this.name = name;
     this.category = category;
@@ -34,5 +34,6 @@ export class AuctionPost {
     this.description = description;
     this.image = image;
     this.paid = paid;
+    this.subscriptions= subscriptions;
   }
 }
