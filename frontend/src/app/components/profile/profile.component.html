@@ -1,4 +1,4 @@
-<div class="container light-style container-p-y " style="width: 120%">
+<div class="container light-style flex-grow-1 container-p-y " style="width: 120%">
 
   <h4 class="font-weight-bold py-3 mb-4">
     My profile
@@ -15,6 +15,7 @@
           <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-my-auctions">My
             Auctions</a>
           <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-my-bids">My Bids</a>
+          <a class="list-group-item list-group-item-action" data-toggle="list" href="#won-auctions">My Won Auctions</a>
         </div>
       </div>
       <div class="col-md-9 ">
@@ -91,6 +92,9 @@
           <div class="tab-pane fade" id="account-change-password" style="height: 1000px">
             <update-password style="height: 1000px"></update-password>
           </div>
+          <div class="tab-pane fade" id="won-auctions">
+            <app-won-auctions-list></app-won-auctions-list>
+          </div>
           <div class="tab-pane fade" id="account-subscriptions" style="height: 1000px">
             <div class="card-body pb-2">
               <div class="card-body pb-2">
@@ -98,22 +102,22 @@
 
               </div>
 
+              </div>
             </div>
-          </div>
           <div class="tab-pane fade" id="account-my-auctions" style="height: 1000px">
-            <div class="card-body pb-2">
+              <div class="card-body pb-2">
+              </div>
             </div>
-          </div>
           <div class="tab-pane fade" id="account-my-bids" style="height: 1000px">
 
-          </div>
+            </div>
 
+          </div>
         </div>
       </div>
+
+
     </div>
 
 
   </div>
-
-
-</div>

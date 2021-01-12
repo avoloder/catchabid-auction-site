@@ -41,7 +41,7 @@ import {ProfileModule} from "./components/profile/profile.module";
     ForgotPasswordComponent,
     ContactFormComponent,
     AuctionDetailsComponent,
-    CategoriesPickerComponent
+    CategoriesPickerComponent,
   ],
   imports: [
     BrowserModule,

@@ -6,6 +6,7 @@ import { AppRoutingModule } from 'src/app/app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { PaymentsModule } from '../payments/payments.module';
 
 
 
@@ -19,7 +20,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AppRoutingModule,
     BrowserModule,
     ReactiveFormsModule,
-    NgbModule
+    NgbModule,
+    PaymentsModule
   ]
 })
 export class BidsModule { }

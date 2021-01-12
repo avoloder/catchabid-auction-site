@@ -57,7 +57,7 @@
                 </app-auction-countdown>
               </div>
               <div class="col-12"  style="margin-bottom: 10px;">
-                <a href="#" (click)="openBidModal(auction)" class="btn btn-primary card-button">Place a bid</a>
+                <a *ngIf="!isAuctionEnded()" href="#" (click)="openBidModal(auction)" class="btn btn-primary card-button">Place a bid</a>
               </div>
             </div>
           </div>

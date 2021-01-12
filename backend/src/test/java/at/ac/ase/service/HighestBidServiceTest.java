@@ -76,7 +76,7 @@ public class HighestBidServiceTest extends BaseIntegrationTest {
         auctionPost.setMinPrice(500.0);
         auctionPost.setCreator(auctionHouse);
         auctionPost.setName("Expired auction");
-        auctionPost = auctionService.createAuction(auctionPost);
+        auctionPost = auctionService.saveAuction(auctionPost);
 
         assertNotNull(auctionPost.getId());
 

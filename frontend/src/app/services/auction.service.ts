@@ -85,4 +85,8 @@ export class AuctionsService {
   postContactForm(contactForm: ContactForm): Observable<ContactForm> {
     return this.http.post<ContactForm>(this.REST_API_SERVER + api + '/postContactForm', contactForm);
   }
+
+  getWonAuctions(): Observable<AuctionPost[]> {
+    return this.http.get<AuctionPost[]>(this.REST_API_SERVER + api + "/won");
+  }
 }

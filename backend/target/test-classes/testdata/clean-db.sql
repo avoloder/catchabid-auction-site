@@ -1,4 +1,5 @@
 
+DELETE FROM regular_user_preferences;
 DELETE FROM notification;
 DELETE FROM rating;
 DELETE FROM bid;

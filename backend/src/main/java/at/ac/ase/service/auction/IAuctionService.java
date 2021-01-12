@@ -77,7 +77,7 @@ public interface IAuctionService {
      * @param auctionPost
      * @return
      */
-    AuctionPost createAuction(AuctionPost auctionPost);
+    AuctionPost saveAuction(AuctionPost auctionPost);
 
     /**
      *
@@ -115,5 +115,21 @@ public interface IAuctionService {
      * @return
      */
     ContactForm convertContactFormToDTO(ContactFormDTO contactFormDTO, User user);
+
+    /**
+     * Checks if the given {@link AuctionPost} is payable - it is finished AND has a bid
+     *
+     * @param auctionpost {@link AuctionPost} to be checked
+     * @return true if the given {@link AuctionPost} object is payable
+     */
+    boolean isAuctionPayable(AuctionPost auctionpost);
+
+    /**
+     * Method which retrieves all won {@link AuctionPost}
+     *
+     * @param user
+     * @return
+     */
+    List<AuctionPost> getAllWonAuctionPostsForUser(User user);
 
 }

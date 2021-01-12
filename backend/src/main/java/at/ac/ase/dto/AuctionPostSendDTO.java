@@ -39,6 +39,8 @@ public class AuctionPostSendDTO {
 
     private String image;
 
+    private Boolean paid;
+
     public String getImage() {
         return image;
     }
@@ -173,5 +175,13 @@ public class AuctionPostSendDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Boolean getPaid() {
+        return paid;
+    }
+
+    public void setPaid(Boolean paid) {
+        this.paid = paid;
     }
 }

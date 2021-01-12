@@ -65,7 +65,7 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public AuctionPost createAuction(AuctionPost auctionPost) {
+    public AuctionPost saveAuction(AuctionPost auctionPost) {
         return auctionRepository.save(auctionPost);
     }
 
@@ -224,4 +224,15 @@ public class AuctionService implements IAuctionService {
         return contactForm;
     }
 
+    @Override
+    public boolean isAuctionPayable(AuctionPost auctionpost) {
+        return Objects.nonNull(auctionpost.getHighestBid()) &&
+            auctionpost.getEndTime().isBefore(LocalDateTime.now());
+    }
+
+    @Override
+    public List<AuctionPost> getAllWonAuctionPostsForUser(User user) {
+        return auctionRepository.findAllByHighestBidUserIdAndEndTimeLessThan(
+            user.getId(), LocalDateTime.now());
+    }
 }
