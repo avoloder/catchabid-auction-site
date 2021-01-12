@@ -11,7 +11,6 @@ import {AuctionsService} from "../../services/auction.service";
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  user:User | AuctionHouse;
   updatedUser:User | AuctionHouse;
   isRegularUser:boolean=true;
   dropdownList:any = [];
@@ -29,18 +28,19 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     let email = localStorage.getItem('email')
     console.log(email)
+    this.updatedUser=new User();
+    this.updatedUser.address=new Address();
 
     this.userService.findByEmail(email).subscribe(
       fetcheduser => {
-        this.user=fetcheduser;
         this.updatedUser=fetcheduser;
 
-        if(this.user['firstName'] == undefined && this.user['lastName'] == undefined){
+        if(this.updatedUser['firstName'] == undefined && this.updatedUser['lastName'] == undefined){
           this.isRegularUser=false;
           console.log("to false")
         }else {
           this.isRegularUser=true;
-          this.selectedPreferences = (<User>this.user).preferences;
+          this.selectedPreferences = (<User>this.updatedUser).preferences;
           console.log("to true")
         }
       },
@@ -57,11 +57,10 @@ export class ProfileComponent implements OnInit {
   save(){
     if (this.isRegularUser){
       console.log("user")
-      console.log(this.user)
       console.log(this.updatedUser);
       console.log(this.selectedPreferences);
       (<User>this.updatedUser).preferences = this.selectedPreferences;
-      this.userService.updateUser(localStorage.getItem("email"),<User>this.user) .subscribe(
+      this.userService.updateUser(localStorage.getItem("email"),<User>this.updatedUser) .subscribe(
         data => {
           this.toast.success("User successfully updated")
           localStorage.setItem("email",this.updatedUser.email)
@@ -71,7 +70,7 @@ export class ProfileComponent implements OnInit {
         });
       console.log("user")
     }else {
-      this.userService.updateHouse(this.user.email, <AuctionHouse>this.user) .subscribe(
+      this.userService.updateHouse(this.updatedUser.email, <AuctionHouse>this.updatedUser) .subscribe(
         data => {
           this.toast.success("Auction House successfully updated")
         },
@@ -84,11 +83,11 @@ export class ProfileComponent implements OnInit {
   }
 
   confirmSave() {
-   this.modalService.open(NgbdModalConfirm).result.then((userResponse) => {
-     if (userResponse){
-       this.save();
-     }
-   });
+    this.modalService.open(NgbdModalConfirm).result.then((userResponse) => {
+      if (userResponse) {
+        this.save();
+      }
+    });
   }
 
 
@@ -96,6 +95,7 @@ export class ProfileComponent implements OnInit {
 
 import {Type} from '@angular/core';
 import {NgbActiveModal, NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
+import { Address } from 'src/app/models/address';
 
 @Component({
   selector: 'ngbd-modal-confirm',

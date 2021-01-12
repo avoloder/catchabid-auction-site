@@ -28,8 +28,6 @@ public class RegularUserDTO {
     private Set<Bid> bids = new HashSet<>();
     private Boolean active = true;
     private Set<Rating> ratings = new HashSet<>();
-    private Set<AuctionPost> auctionSubscriptions = new HashSet<>();
-    private Set<AuctionPost> ownedAuctions = new HashSet<>();
     private Set<Category> preferences = new HashSet<>();
 
     public Set<Category> getPreferences() {
@@ -102,22 +100,6 @@ public class RegularUserDTO {
 
     public void setRatings(Set<Rating> ratings) {
         this.ratings = ratings;
-    }
-
-    public Set<AuctionPost> getAuctionSubscriptions() {
-        return auctionSubscriptions;
-    }
-
-    public void setAuctionSubscriptions(Set<AuctionPost> auctionSubscriptions) {
-        this.auctionSubscriptions = auctionSubscriptions;
-    }
-
-    public Set<AuctionPost> getOwnedAuctions() {
-        return ownedAuctions;
-    }
-
-    public void setOwnedAuctions(Set<AuctionPost> ownedAuctions) {
-        this.ownedAuctions = ownedAuctions;
     }
 
     public AddressDTO getAddress() {

@@ -21,8 +21,6 @@ public class UserDtoTranslator {
         regularUserDTO.setLastName(regularUser.getLastName());
         regularUserDTO.setPasswordHash(regularUser.getPasswordHash());
         regularUserDTO.setPhoneNr(regularUser.getPhoneNr());
-        regularUserDTO.setAuctionSubscriptions(regularUser.getAuctionSubscriptions());
-        regularUserDTO.setOwnedAuctions(regularUser.getOwnedAuctions());
         regularUserDTO.setRatings(regularUser.getRatings());
         regularUserDTO.setPreferences(regularUser.getPreferences());
         return regularUserDTO;
@@ -38,8 +36,6 @@ public class UserDtoTranslator {
         regularUser.setLastName(regularUserDTO.getLastName());
         regularUser.setPasswordHash(regularUserDTO.getPasswordHash());
         regularUser.setPhoneNr(regularUserDTO.getPhoneNr());
-        regularUser.setAuctionSubscriptions(regularUserDTO.getAuctionSubscriptions());
-        regularUser.setOwnedAuctions(regularUserDTO.getOwnedAuctions());
         regularUser.setRatings(regularUserDTO.getRatings());
         regularUser.setPreferences(regularUserDTO.getPreferences());
         return regularUser;

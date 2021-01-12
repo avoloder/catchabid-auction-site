@@ -23,7 +23,7 @@ export class UpdatePasswordComponent implements OnInit {
                   private modalService: NgbModal,) { }
 
   ngOnInit(): void {
-
+    this.openPane();
     this.showRequestToken=true;
     const togglePassword = document.querySelector('#togglePassword');
     const toggleConfirmPassword = document.querySelector('#toggleConfirmPassword');
@@ -48,12 +48,12 @@ export class UpdatePasswordComponent implements OnInit {
   }
 
   tokenRequest(){
+    this.showRequestToken=false;
+    this.showApproveToken=true;
     console.log("token value ", this.tokenRequested)
     this.passwordManagementService.requestPasswordReset(localStorage.email)
       .subscribe(
         data => {
-        this.showRequestToken=false;
-        this.showApproveToken=true;
         },
         error => {
           this.toast.error(error.error.message);
@@ -88,12 +88,10 @@ export class UpdatePasswordComponent implements OnInit {
         });
 
   }
-
-  confirmChange() {
-    this.modalService.open(NgbdModalConfirm).result.then((userResponse) => {
-      if (userResponse){
-        this.changePassword();
-      }
-    });
+  openPane(){
+    this.showChangeSuccess=false;
+    this.showPasswordChange=false;
+    this.showRequestToken=true;
+    this.showApproveToken=false
   }
 }
