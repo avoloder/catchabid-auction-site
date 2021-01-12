@@ -110,7 +110,7 @@ public class AuctionController {
                     .orElseThrow(ObjectNotFoundException::new);
         }
         AuctionPost auctionPost = auctionService.toAuctionPostEntity(user, auction);
-        return ResponseEntity.ok(auctionService.saveAuction(auctionPost));
+        return ResponseEntity.ok(auctionService.createAuction(auctionPost));
     }
 
     @GetMapping("/getCategories")
@@ -130,6 +130,14 @@ public class AuctionController {
         return ResponseEntity.ok(auctionService.postContactForm(contactForm));
     }
 
+    @PostMapping(value = "/subscribe")
+    public ResponseEntity<Object> subscribeToAuction(
+            @RequestBody @Valid AuctionPostSendDTO auctionPostDTO,
+            @CurrentSecurityContext(expression = "authentication.principal") User user) {
+
+        AuctionPost auctionPost = auctionService.toAuctionPostEntity(user, auctionPostDTO);
+        return ResponseEntity.ok(auctionService.subscribeToAuction(auctionPost, user));
+    }
     @GetMapping("/won")
     public ResponseEntity<List<AuctionPostSendDTO>> getWonAuctionsForUser(
         @CurrentSecurityContext(expression = "authentication.principal") User user) {
@@ -138,4 +146,13 @@ public class AuctionController {
                 auctionService.getAllWonAuctionPostsForUser(user)));
     }
 
+    @PostMapping(value = "/unsubscribe")
+    public ResponseEntity<Object> unsubscribeFromAuction(
+            @RequestBody @Valid AuctionPostSendDTO auctionPostDTO,
+            @CurrentSecurityContext(expression = "authentication.principal") User user) {
+
+        AuctionPost auctionPost = auctionService.toAuctionPostEntity(user, auctionPostDTO);
+
+        return ResponseEntity.ok(auctionService.unsubscribeFromAuction(auctionPost, user));
+    }
 }

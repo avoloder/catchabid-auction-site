@@ -1,8 +1,11 @@
 package at.ac.ase.dto;
 
 import at.ac.ase.entities.Address;
+import at.ac.ase.entities.RegularUser;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AuctionPostSendDTO {
     private Long id;
@@ -40,6 +43,8 @@ public class AuctionPostSendDTO {
     private String image;
 
     private Boolean paid;
+
+    private Set<RegularUserDTO> subscriptions = new HashSet<>();
 
     public String getImage() {
         return image;
@@ -183,5 +188,13 @@ public class AuctionPostSendDTO {
 
     public void setPaid(Boolean paid) {
         this.paid = paid;
+    }
+
+    public Set<RegularUserDTO> getSubscriptions() {
+        return subscriptions;
+    }
+
+    public void setSubscriptions(Set<RegularUserDTO> subscriptions) {
+        this.subscriptions = subscriptions;
     }
 }

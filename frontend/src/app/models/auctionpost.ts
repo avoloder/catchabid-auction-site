@@ -17,10 +17,12 @@ export class AuctionPost {
   highestBid: number;
   image: string;
   paid?: boolean;
+  subscriptions: any[];
 
   constructor(creatorId: number, name: string, category: string, startTime: Date, endTime: Date, country: string,
               city: string, address: string, houseNr: number, minPrice: number, description: string, image: string, paid?: boolean) {
-    this.creatorId = creatorId;    this.name = name;
+    this.creatorId = creatorId;
+    this.name = name;
     this.category = category;
     this.startTime = startTime;
     this.endTime = endTime;

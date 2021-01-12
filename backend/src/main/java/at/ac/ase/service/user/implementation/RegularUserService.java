@@ -3,7 +3,9 @@ package at.ac.ase.service.user.implementation;
 import at.ac.ase.dto.RegularUserDTO;
 import at.ac.ase.dto.translator.UserDtoTranslator;
 import at.ac.ase.entities.Address;
+import at.ac.ase.entities.AuctionPost;
 import at.ac.ase.entities.RegularUser;
+import at.ac.ase.entities.User;
 import at.ac.ase.repository.user.UserRepository;
 import at.ac.ase.service.user.IRegularUserService;
 import at.ac.ase.util.exceptions.EmptyObjectException;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class RegularUserService implements IRegularUserService {
@@ -122,4 +125,5 @@ public class RegularUserService implements IRegularUserService {
 
         return persisted;
     }
+
 }
