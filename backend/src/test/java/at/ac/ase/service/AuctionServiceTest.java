@@ -6,7 +6,6 @@ import at.ac.ase.entities.*;
 import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,10 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -115,7 +112,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         auctionPost.setCategory(Category.CARS);
         auctionPost.setStatus(Status.ACTIVE);
 
-        auctionService.createAuction(auctionPost);
+        auctionService.saveAuction(auctionPost);
 
         auctionPosts = auctionService.getAllAuctions();
         assertThat(auctionPosts.size(), is(2));
@@ -156,11 +153,11 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     public void testGetUpcomingAuctions() {
         insertTestData("auctions.sql");
         AuctionPost postRecent = createAuction("test@test.com");
-        auctionService.createAuction(postRecent);
+        auctionService.saveAuction(postRecent);
         AuctionPost postUpcoming = createAuction("test1@test.com");
         postUpcoming.setStartTime(LocalDateTime.now().plusMinutes(15));
         postUpcoming.setId(2l);
-        auctionService.createAuction(postUpcoming);
+        auctionService.saveAuction(postUpcoming);
         List<AuctionPostSendDTO> upcoming = auctionService.getUpcomingAuctions(0, 0);
         assertEquals(1, upcoming.size());
         assertEquals(postUpcoming.getId(), upcoming.get(0).getId());
@@ -175,7 +172,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         assertThat(auctionPosts.size(), is(11));
 
         AuctionPost auctionPost = createAuction("test@test.com");
-        auctionService.createAuction(auctionPost);
+        auctionService.saveAuction(auctionPost);
 
         auctionPosts = auctionService.getAllAuctions();
         assertThat(auctionPosts.size(), is(12));
@@ -210,7 +207,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         assertThat(auctionPosts.size(), is(11));
 
         AuctionPost auctionPost = createAuction("test@test.com");
-        auctionService.createAuction(auctionPost);
+        auctionService.saveAuction(auctionPost);
 
         auctionPosts = auctionService.getAllAuctions();
         assertThat(auctionPosts.size(), is(12));

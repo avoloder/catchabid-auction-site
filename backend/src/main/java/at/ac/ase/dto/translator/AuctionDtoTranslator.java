@@ -69,6 +69,7 @@ public class AuctionDtoTranslator {
             auctionPostSendDTO.setSubscriptions(subscriptions);
         }
 
+        auctionPostSendDTO.setPaid(auction.getPayment() != null);
         return auctionPostSendDTO;
     }
 

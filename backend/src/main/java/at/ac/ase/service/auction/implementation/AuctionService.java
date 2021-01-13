@@ -24,12 +24,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import javax.validation.*;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -63,6 +60,10 @@ public class AuctionService implements IAuctionService {
     @Autowired
     JavaMailSender emailSender;
 
+    @Autowired
+    IRegularUserService userService;
+
+
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private final Validator validator = factory.getValidator();
 
@@ -73,7 +74,7 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public AuctionPost createAuction(AuctionPost auctionPost) {
+    public AuctionPost saveAuction(AuctionPost auctionPost) {
         return auctionRepository.save(auctionPost);
     }
 
@@ -101,7 +102,7 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public AuctionPost toAuctionPostEntity(User user, AuctionPostSendDTO auctionPostDTO) {
+    public AuctionPost toAuctionPostEntity( AuctionPostSendDTO auctionPostDTO) {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         AuctionPost auctionPost = modelMapper.map(auctionPostDTO, AuctionPost.class);
         if (auctionPostDTO.getId() != null) {
@@ -116,7 +117,19 @@ public class AuctionService implements IAuctionService {
         auctionPost.setEndTime(auctionPostDTO.getEndTime());
         auctionPost.setMinPrice(auctionPostDTO.getMinPrice());
         auctionPost.setDescription(auctionPostDTO.getDescription());
-        auctionPost.setCreator(user);
+        Optional<AuctionHouse> auctionHouse = auctionHouseService.getAuctionHouseById(auctionPostDTO.getCreatorId());
+        if (auctionHouse.isPresent()){
+            auctionPost.setCreator(auctionHouse.get());
+        }else{
+            Optional<RegularUser> regularUser = regularUserService.getUserById(auctionPostDTO.getCreatorId());
+            if (regularUser.isPresent()){
+                auctionPost.setCreator(regularUser.get());
+            }else{
+                if (auctionPost.getCreator()==null){
+                    //ERROR Object incomplete
+                }
+            }
+        }
         auctionPost.setImage(Base64.getDecoder().decode(auctionPostDTO.getImage()));
         auctionPost.setAddress(new Address(auctionPostDTO.getCountry(), auctionPostDTO.getCity(),
                 auctionPostDTO.getAddress(), auctionPostDTO.getHouseNr()));
@@ -256,11 +269,21 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
+    public boolean isAuctionPayable(AuctionPost auctionpost) {
+        return Objects.nonNull(auctionpost.getHighestBid()) &&
+            auctionpost.getEndTime().isBefore(LocalDateTime.now());
+    }
+
+    @Override
+    public List<AuctionPost> getAllWonAuctionPostsForUser(User user) {
+        return auctionRepository.findAllByHighestBidUserIdAndEndTimeLessThan(
+            user.getId(), LocalDateTime.now());
+    }
+    @Override
     public AuctionPost subscribeToAuction(AuctionPost auctionPost, User user) {
         Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
         subscriptions.add((RegularUser) user);
         auctionPost.setSubscriptions(subscriptions);
-        List<AuctionPost> auctionPosts = getAllAuctions();
         return auctionRepository.save(auctionPost);
     }
 
@@ -271,4 +294,17 @@ public class AuctionService implements IAuctionService {
         auctionPost.setSubscriptions(subscriptions);
         return auctionRepository.save(auctionPost);
     }
+
+    public List<AuctionPostSendDTO> getMyAuctions(User user){
+        List<AuctionPost> retrieved = auctionRepository.findALlByCreatorId(user.getId());
+        logger.info("Retrieved these posts " + retrieved );
+        return auctionDtoTranslator.toDtoList(retrieved);
+    }
+
+    public Set<AuctionPostSendDTO> getMySubscriptions(RegularUser user){
+        Set<AuctionPost> retrieved = userService.getUserByEmail(user.getEmail()).getSubscriptions();
+                logger.info("subs"+retrieved);
+        return auctionDtoTranslator.toDtoSet(retrieved);
+    }
+
 }

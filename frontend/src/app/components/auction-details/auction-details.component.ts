@@ -48,4 +48,9 @@ export class AuctionDetailsComponent implements OnInit {
     this.bidModalClosedSub.unsubscribe();
   }
 
+  isAuctionEnded(): boolean {
+    const endDate = new Date(this.auction.endTime);
+    return endDate.getTime() < new Date().getTime();
+  }
+
 }

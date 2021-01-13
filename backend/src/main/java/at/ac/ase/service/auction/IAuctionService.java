@@ -5,13 +5,11 @@ import at.ac.ase.dto.AuctionCreationDTO;
 import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.AuctionQueryDTO;
 import at.ac.ase.dto.ContactFormDTO;
-import at.ac.ase.entities.AuctionPost;
-import at.ac.ase.entities.Category;
-import at.ac.ase.entities.ContactForm;
-import at.ac.ase.entities.User;
+import at.ac.ase.entities.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface IAuctionService {
 
@@ -77,7 +75,7 @@ public interface IAuctionService {
      * @param auctionPost
      * @return
      */
-    AuctionPost createAuction(AuctionPost auctionPost);
+    AuctionPost saveAuction(AuctionPost auctionPost);
 
     /**
      *
@@ -96,11 +94,10 @@ public interface IAuctionService {
 
     /**
      * Method which translates auction post send DTO to auction post entity
-     * @param user - logged in user
      * @param auctionPostDTO - auction post send DTO received from frontend
      * @return - tranlated auction post entity
      */
-    AuctionPost toAuctionPostEntity(User user, AuctionPostSendDTO auctionPostDTO);
+    AuctionPost toAuctionPostEntity( AuctionPostSendDTO auctionPostDTO);
 
     /**
      * Method which retrieves all auction post's categories
@@ -125,6 +122,22 @@ public interface IAuctionService {
     ContactForm convertContactFormToDTO(ContactFormDTO contactFormDTO, User user);
 
     /**
+     * Checks if the given {@link AuctionPost} is payable - it is finished AND has a bid
+     *
+     * @param auctionpost {@link AuctionPost} to be checked
+     * @return true if the given {@link AuctionPost} object is payable
+     */
+    boolean isAuctionPayable(AuctionPost auctionpost);
+
+    /**
+     * Method which retrieves all won {@link AuctionPost}
+     *
+     * @param user
+     * @return
+     */
+    List<AuctionPost> getAllWonAuctionPostsForUser(User user);
+
+    /**
      * Method which subscribes user to specific auction post
      * @param auctionPost - auction post that the user wants to subscribe to
      * @param user - logged in user
@@ -139,5 +152,8 @@ public interface IAuctionService {
      * @return - modified auction post to which the user unsubscribed from
      */
     AuctionPost unsubscribeFromAuction(AuctionPost auctionPost, User user);
+
+    List<AuctionPostSendDTO> getMyAuctions(User user);
+    Set<AuctionPostSendDTO> getMySubscriptions(RegularUser user);
 
 }

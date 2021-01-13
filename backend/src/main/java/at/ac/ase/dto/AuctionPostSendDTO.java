@@ -42,6 +42,8 @@ public class AuctionPostSendDTO {
 
     private String image;
 
+    private Boolean paid;
+
     private Set<RegularUserDTO> subscriptions = new HashSet<>();
 
     public String getImage() {
@@ -178,6 +180,14 @@ public class AuctionPostSendDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Boolean getPaid() {
+        return paid;
+    }
+
+    public void setPaid(Boolean paid) {
+        this.paid = paid;
     }
 
     public Set<RegularUserDTO> getSubscriptions() {

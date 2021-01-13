@@ -1,8 +1,11 @@
 package at.ac.ase.service.bid;
 
+import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.BidDTO;
 import at.ac.ase.entities.Bid;
 import at.ac.ase.entities.User;
+
+import java.util.List;
 
 public interface IBidService {
 
@@ -28,6 +31,8 @@ public interface IBidService {
      * @param bid {@link Bid} object to be stored.
      */
     Bid placeBid(Bid bid);
+
+    List<AuctionPostSendDTO> getMyBids(User user);
 
 
 }

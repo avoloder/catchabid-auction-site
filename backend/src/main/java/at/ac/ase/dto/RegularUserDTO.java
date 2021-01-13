@@ -1,9 +1,6 @@
 package at.ac.ase.dto;
 
-import at.ac.ase.entities.Address;
-import at.ac.ase.entities.AuctionPost;
-import at.ac.ase.entities.Bid;
-import at.ac.ase.entities.Rating;
+import at.ac.ase.entities.*;
 
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
@@ -32,6 +29,15 @@ public class RegularUserDTO {
     private Boolean active = true;
     private Set<Rating> ratings = new HashSet<>();
     private Set<AuctionPostSendDTO> ownedAuctions = new HashSet<>();
+    private Set<Category> preferences = new HashSet<>();
+
+    public Set<Category> getPreferences() {
+        return preferences;
+    }
+
+    public void setPreferences(Set<Category> preferences) {
+        this.preferences = preferences;
+    }
 
     public Long getId() {
         return id;

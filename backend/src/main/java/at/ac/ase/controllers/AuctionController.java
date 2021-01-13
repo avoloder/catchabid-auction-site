@@ -4,8 +4,10 @@ import at.ac.ase.dto.AuctionCreationDTO;
 import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.AuctionQueryDTO;
 import at.ac.ase.dto.ContactFormDTO;
+import at.ac.ase.dto.translator.AuctionDtoTranslator;
 import at.ac.ase.entities.AuctionPost;
 import at.ac.ase.entities.ContactForm;
+import at.ac.ase.entities.RegularUser;
 import at.ac.ase.entities.User;
 import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.implementation.AuctionHouseService;
@@ -27,12 +29,17 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/auctions")
 
 public class AuctionController {
+
     private static final Logger logger = LoggerFactory.getLogger(AuctionController.class);
+
     @Autowired
     private IAuctionService auctionService;
+
     @Autowired
     private AuctionHouseService auctionHouseService;
 
+    @Autowired
+    private AuctionDtoTranslator auctionDtoTranslator;
 
     @GetMapping("upcoming")
     public @ResponseBody
@@ -104,7 +111,7 @@ public class AuctionController {
                     .orElseThrow(ObjectNotFoundException::new);
         }
         AuctionPost auctionPost = auctionService.toAuctionPostEntity(user, auction);
-        return ResponseEntity.ok(auctionService.createAuction(auctionPost));
+        return ResponseEntity.ok(auctionService.saveAuction(auctionPost));
     }
 
     @GetMapping("/getCategories")
@@ -128,9 +135,15 @@ public class AuctionController {
     public ResponseEntity<Object> subscribeToAuction(
             @RequestBody @Valid AuctionPostSendDTO auctionPostDTO,
             @CurrentSecurityContext(expression = "authentication.principal") User user) {
-
-        AuctionPost auctionPost = auctionService.toAuctionPostEntity(user, auctionPostDTO);
+        AuctionPost auctionPost = auctionService.toAuctionPostEntity( auctionPostDTO);
         return ResponseEntity.ok(auctionService.subscribeToAuction(auctionPost, user));
+    }
+    @GetMapping("/won")
+    public ResponseEntity<List<AuctionPostSendDTO>> getWonAuctionsForUser(
+        @CurrentSecurityContext(expression = "authentication.principal") User user) {
+        return ResponseEntity.ok(
+            auctionDtoTranslator.toDtoList(
+                auctionService.getAllWonAuctionPostsForUser(user)));
     }
 
     @PostMapping(value = "/unsubscribe")
@@ -138,8 +151,22 @@ public class AuctionController {
             @RequestBody @Valid AuctionPostSendDTO auctionPostDTO,
             @CurrentSecurityContext(expression = "authentication.principal") User user) {
 
-        AuctionPost auctionPost = auctionService.toAuctionPostEntity(user, auctionPostDTO);
+        AuctionPost auctionPost = auctionService.toAuctionPostEntity(  auctionPostDTO);
 
         return ResponseEntity.ok(auctionService.unsubscribeFromAuction(auctionPost, user));
     }
+
+    @GetMapping(value = "/myAuctions")
+    public ResponseEntity<Object> myAuctions(
+            @CurrentSecurityContext(expression = "authentication.principal") User user) {
+        return ResponseEntity.ok(auctionService.getMyAuctions(user));
+    }
+
+    @GetMapping(value = "/mySubscriptions")
+    public ResponseEntity<Object> mySubscriptions(
+            @CurrentSecurityContext(expression = "authentication.principal") RegularUser user) {
+        return ResponseEntity.ok(auctionService.getMySubscriptions(user));
+    }
+
+
 }

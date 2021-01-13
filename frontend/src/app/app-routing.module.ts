@@ -5,6 +5,8 @@ import { AuctionsComponent } from './components/auctions/auctions.component';
 import { SigninComponent } from './components/signin/signin.component';
 import { RegisterComponent } from './components/register/register.component';
 import {AuctionsListComponent} from "./components/auctions/auctions-list/auctions-list.component";
+import {ProfileComponent} from "./components/profile/profile.component";
+import {UpdatePasswordComponent} from "./components/profile/update-password/update-password.component";
 
 const routes: Routes = [
   {
@@ -16,7 +18,14 @@ const routes: Routes = [
       { path: 'register', component: RegisterComponent},
       { path: '', component: AuctionsListComponent },
     ]
-  }
+
+  },
+  {path: 'profile' ,
+  component: ProfileComponent,
+  children: [
+    {path:'password',component: UpdatePasswordComponent}
+  ]}
+
 ];
 
 
