@@ -44,6 +44,13 @@ public class RegularUser extends User {
     @JsonManagedReference(value = "user_highest_bid")
     private Set<Bid> bids = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "auction_subscriptions",
+            joinColumns = { @JoinColumn(name = "regular_user_id" ) },
+            inverseJoinColumns = { @JoinColumn(name = "auction_post_id") })
+    private Set<AuctionPost> subscriptions = new HashSet<>();
+
     public RegularUser(){}
 
     public Set<Category> getPreferences() {
@@ -87,6 +94,14 @@ public class RegularUser extends User {
     @Override
     public void setBids(Set<Bid> bids) {
         this.bids = bids;
+    }
+
+    public Set<AuctionPost> getSubscriptions() {
+        return subscriptions;
+    }
+
+    public void setSubscriptions(Set<AuctionPost> subscriptions) {
+        this.subscriptions = subscriptions;
     }
 
     @Override

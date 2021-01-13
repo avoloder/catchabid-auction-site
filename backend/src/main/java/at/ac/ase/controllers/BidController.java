@@ -8,10 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/bids")
@@ -29,5 +26,12 @@ public class BidController {
         return ResponseEntity.ok(
             bidService.toBidDTO(
                 bidService.placeBid(bid)));
+    }
+
+    @GetMapping(value = "/myBids")
+    public ResponseEntity<Object> myBids(
+            @CurrentSecurityContext(expression = "authentication.principal") User user) {
+
+        return ResponseEntity.ok(bidService.getMyBids(user));
     }
 }

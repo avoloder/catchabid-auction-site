@@ -20,7 +20,7 @@
       </div>
       <div class="col-md-9 ">
         <div class="tab-content border">
-          <div class="tab-pane fade active show" id="account-general" style="height: 1000px">
+          <div class="tab-pane fade active show" id="account-general"  style="height: 1100px">
             <hr class="border-light m-0">
             <form ngNativeValidate name="form" (ngSubmit)="confirmSave()" class="form-horizontal">
               <!--                  oninput='pass4.setCustomValidity(pass4.value != pass3.value ? "Passwords do not match." : "")'>-->
@@ -89,28 +89,23 @@
               </div>
             </form>
           </div>
-          <div class="tab-pane fade" id="account-change-password" style="height: 1000px">
-            <update-password style="height: 1000px"></update-password>
+          <div class="tab-pane fade" id="account-change-password"  style="height: 1100px">
+            <update-password  style="height: 1100px"></update-password>
           </div>
-          <div class="tab-pane fade" id="won-auctions">
-            <app-won-auctions-list></app-won-auctions-list>
+          <div class="tab-pane fade" id="won-auctions"  style="height: 1100px">
+            <app-profile-auctions-list typeOfAuctions="WINS"></app-profile-auctions-list>
           </div>
-          <div class="tab-pane fade" id="account-subscriptions" style="height: 1000px">
-            <div class="card-body pb-2">
-              <div class="card-body pb-2">
-
-
-              </div>
-
-              </div>
+          <div class="tab-pane fade" id="account-subscriptions"  style="height: 1100px">
+              <app-profile-auctions-list typeOfAuctions="SUBSCRIPTIONS"></app-profile-auctions-list>
             </div>
-          <div class="tab-pane fade" id="account-my-auctions" style="height: 1000px">
-              <div class="card-body pb-2">
-              </div>
-            </div>
-          <div class="tab-pane fade" id="account-my-bids" style="height: 1000px">
+          <div class="tab-pane fade " id="account-my-auctions" style="height: 1100px">
+                <app-profile-auctions-list typeOfAuctions='AUCTIONS'></app-profile-auctions-list>
 
             </div>
+          <div class="tab-pane fade" id="account-my-bids"  style="height: 1100px">
+            <app-profile-auctions-list typeOfAuctions='BIDS'></app-profile-auctions-list>
+
+          </div>
 
           </div>
         </div>

@@ -7,17 +7,21 @@ import { PaymentsComponent } from '../../payments/payments.component';
 import { PaymentsService } from 'src/app/services/payments.service';
 import { Subscription } from 'rxjs';
 import { AuctionDetailsComponent } from '../../auction-details/auction-details.component';
+import {BidsService} from "../../../services/bids.service";
 
 @Component({
-  selector: 'app-won-auctions-list',
-  templateUrl: './won-auctions-list.component.html',
-  styleUrls: ['./won-auctions-list.component.css']
+  selector: 'app-profile-auctions-list',
+  templateUrl: './profile-auctions-list.component.html',
+  styleUrls: ['./profile-auctions-list.component.css']
 })
-export class WonAuctionsListComponent implements OnInit {
+export class ProfileAuctionsListComponent implements OnInit {
 
   @Input() user: User;
 
   wonAuctions: AuctionPost[];
+
+  @Input()
+  typeOfAuctions:string;
 
   modalRef: NgbModalRef;
 
@@ -27,17 +31,57 @@ export class WonAuctionsListComponent implements OnInit {
 
   constructor(
     private auctionService: AuctionsService,
+    private bidsService: BidsService,
     private modalService: NgbModal,
     private paymentService: PaymentsService
   ) { }
 
   ngOnInit(): void {
     console.log('ok');
-    this.getWonAuctions();
+    if (this.typeOfAuctions=='WINS') {
+      this.getWonAuctions();
+    }
+    if (this.typeOfAuctions=='BIDS'){
+    this.getMyBids();
+
+    }
+    if (this.typeOfAuctions=='AUCTIONS'){
+      this.getMyAuctions()
+    }
+    if (this.typeOfAuctions=='SUBSCRIPTIONS'){
+      this.getSubscriptions()
+    }
+
   }
 
   private getWonAuctions() {
     this.auctionService.getWonAuctions().subscribe(
+      (res) => {
+        this.wonAuctions = res
+      },
+      (err) => console.log(err)
+    )
+  }
+
+  private getMyAuctions() {
+    this.auctionService.getMyAuctions().subscribe(
+      (res) => {
+        this.wonAuctions = res
+        console.log(this.wonAuctions)
+      },
+      (err) => console.log(err)
+    )
+  }
+  private getSubscriptions() {
+    this.auctionService.getMySubscriptions().subscribe(
+      (res) => {
+        this.wonAuctions = res
+      },
+      (err) => console.log(err)
+    )
+  }
+  private getMyBids() {
+    this.bidsService.getMyBids().subscribe(
       (res) => {
         this.wonAuctions = res
       },

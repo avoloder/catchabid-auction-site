@@ -101,4 +101,12 @@ export class AuctionsService {
   getWonAuctions(): Observable<AuctionPost[]> {
     return this.http.get<AuctionPost[]>(this.REST_API_SERVER + api + "/won");
   }
+
+  getMyAuctions():Observable<AuctionPost[]>{
+    return this.http.get<AuctionPost[]>(this.REST_API_SERVER+api+'/myAuctions')
+  }
+
+  getMySubscriptions():Observable<AuctionPost[]>{
+    return this.http.get<AuctionPost[]>(this.REST_API_SERVER+api+'/mySubscriptions')
+  }
 }

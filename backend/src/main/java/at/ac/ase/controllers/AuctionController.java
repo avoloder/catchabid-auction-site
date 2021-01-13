@@ -7,6 +7,7 @@ import at.ac.ase.dto.ContactFormDTO;
 import at.ac.ase.dto.translator.AuctionDtoTranslator;
 import at.ac.ase.entities.AuctionPost;
 import at.ac.ase.entities.ContactForm;
+import at.ac.ase.entities.RegularUser;
 import at.ac.ase.entities.User;
 import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.implementation.AuctionHouseService;
@@ -154,4 +155,18 @@ public class AuctionController {
 
         return ResponseEntity.ok(auctionService.unsubscribeFromAuction(auctionPost, user));
     }
+
+    @GetMapping(value = "/myAuctions")
+    public ResponseEntity<Object> myAuctions(
+            @CurrentSecurityContext(expression = "authentication.principal") User user) {
+        return ResponseEntity.ok(auctionService.getMyAuctions(user));
+    }
+
+    @GetMapping(value = "/mySubscriptions")
+    public ResponseEntity<Object> mySubscriptions(
+            @CurrentSecurityContext(expression = "authentication.principal") RegularUser user) {
+        return ResponseEntity.ok(auctionService.getMySubscriptions(user));
+    }
+
+
 }

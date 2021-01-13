@@ -5,13 +5,11 @@ import at.ac.ase.dto.AuctionCreationDTO;
 import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.AuctionQueryDTO;
 import at.ac.ase.dto.ContactFormDTO;
-import at.ac.ase.entities.AuctionPost;
-import at.ac.ase.entities.Category;
-import at.ac.ase.entities.ContactForm;
-import at.ac.ase.entities.User;
+import at.ac.ase.entities.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface IAuctionService {
 
@@ -154,5 +152,8 @@ public interface IAuctionService {
      * @return - modified auction post to which the user unsubscribed from
      */
     AuctionPost unsubscribeFromAuction(AuctionPost auctionPost, User user);
+
+    List<AuctionPostSendDTO> getMyAuctions(User user);
+    Set<AuctionPostSendDTO> getMySubscriptions(RegularUser user);
 
 }
