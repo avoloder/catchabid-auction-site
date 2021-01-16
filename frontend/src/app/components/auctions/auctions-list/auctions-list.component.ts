@@ -133,7 +133,7 @@ export class AuctionsListComponent implements OnInit {
           this.toast.success('You successfully subscribed to this auction');
           this.refreshAuctions();
         },
-        error => this.toast.error('Could not subscribe to this auction')
+        error => this.toast.error(error.error.message)
       )
     }
   }

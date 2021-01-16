@@ -26,7 +26,7 @@ public class PasswordTokenService implements IPasswordTokenService {
 
     @Override
     @Transactional
-    public PasswordResetToken getPasswordResetTokenByToken(String email, int token) {
+    public PasswordResetToken getPasswordResetTokenByToken(String email, long token) {
         RegularUser user = userRepository.findByEmail(email);
         AuctionHouse auctionHouse = auctionHouseRepository.findByEmail(email);
         if(user == null && auctionHouse == null){

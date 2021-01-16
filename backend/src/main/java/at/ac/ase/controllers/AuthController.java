@@ -94,7 +94,7 @@ public class AuthController {
 
     @RequestMapping(value = "/sendResetPasswordToken", method = RequestMethod.POST)
     public ResponseEntity sendResetPasswordToken(@RequestBody Map<String, String> tokenData){
-        int token = Integer.parseInt(tokenData.get("token"));
+        long token = Long.parseLong(tokenData.get("token"));
         String email = tokenData.get("email");
         PasswordResetToken resetToken = tokenService.getPasswordResetTokenByToken(email, token);
         if(resetToken == null){

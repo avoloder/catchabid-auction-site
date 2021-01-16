@@ -14,7 +14,9 @@ import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
 import at.ac.ase.util.exceptions.EmailNotSentException;
+import at.ac.ase.util.exceptions.EmptyObjectException;
 import at.ac.ase.util.exceptions.ObjectNotFoundException;
+import at.ac.ase.util.exceptions.WrongSubscriberException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.slf4j.Logger;
@@ -281,6 +283,9 @@ public class AuctionService implements IAuctionService {
     }
     @Override
     public AuctionPost subscribeToAuction(AuctionPost auctionPost, User user) {
+        if(auctionPost.getCreator().getId().equals(user.getId())) {
+            throw new WrongSubscriberException();
+        }
         Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
         subscriptions.add((RegularUser) user);
         auctionPost.setSubscriptions(subscriptions);

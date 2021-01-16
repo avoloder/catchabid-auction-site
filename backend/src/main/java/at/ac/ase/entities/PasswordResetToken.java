@@ -16,7 +16,7 @@ public class PasswordResetToken {
     private Long id;
 
     @Column
-    private int token;
+    private long token;
 
     @OneToOne(targetEntity = RegularUser.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
@@ -32,7 +32,7 @@ public class PasswordResetToken {
     public PasswordResetToken() {
     }
 
-    public PasswordResetToken(int token, RegularUser user, AuctionHouse auctionHouse) {
+    public PasswordResetToken(long token, RegularUser user, AuctionHouse auctionHouse) {
         this.token = token;
         this.user = user;
         this.auctionHouse = auctionHouse;
@@ -47,11 +47,11 @@ public class PasswordResetToken {
         this.id = id;
     }
 
-    public int getToken() {
+    public long getToken() {
         return token;
     }
 
-    public void setToken(int token) {
+    public void setToken(long token) {
         this.token = token;
     }
 

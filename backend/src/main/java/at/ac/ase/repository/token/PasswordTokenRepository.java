@@ -20,7 +20,7 @@ public interface PasswordTokenRepository extends JpaRepository<PasswordResetToke
      * @return a password reset token for specific user if found, null otherwise
      */
     @Query("SELECT t FROM PasswordResetToken t WHERE t.token = :token AND ((:user is null and t.user is null) or t.user = :user) AND ((:auctionHouse is null and t.auctionHouse is null) or t.auctionHouse = :auctionHouse) AND t.expiryDate > CURRENT_DATE")
-    PasswordResetToken findByToken(@Param(value = "user")RegularUser user, @Param(value = "auctionHouse") AuctionHouse auctionHouse, @Param(value = "token")int token);
+    PasswordResetToken findByToken(@Param(value = "user")RegularUser user, @Param(value = "auctionHouse") AuctionHouse auctionHouse, @Param(value = "token")long token);
 
     /**
      * Method which deletes all out of date password reset tokens for regular user or auction house
