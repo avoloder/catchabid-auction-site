@@ -70,6 +70,7 @@ public class AuctionService implements IAuctionService {
     IRegularUserService userService;
 
 
+
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private final Validator validator = factory.getValidator();
 
@@ -220,9 +221,9 @@ public class AuctionService implements IAuctionService {
             entityQuery.setCategories(getPreferences(entityQuery.getUserEmail(), entityQuery.isUseUserPreferences()));
         }
         List<AuctionPost> foundAuctions = auctionRepository.query(entityQuery);
-        for (AuctionPost a: foundAuctions){
-            if(a.getStartTime().isAfter(LocalDateTime.now())) {
-                scheduleNotificationJob(a);
+        for (AuctionPost auctionPost: foundAuctions){
+            if(auctionPost.getStartTime().isAfter(LocalDateTime.now())) {
+                scheduleNotificationJob(auctionPost);
             }
         }
         logger.info("Size of auctions: " + foundAuctions.size());
@@ -331,6 +332,7 @@ public class AuctionService implements IAuctionService {
                     .withIdentity(jobName, "group1")
                     .build();
             job.getJobDataMap().put("auctionPost", auctionPost);
+            job.getJobDataMap().put("emailSender", emailSender);
 
             Trigger trigger = TriggerBuilder.newTrigger()
                     .withIdentity(triggerName, "group1")
