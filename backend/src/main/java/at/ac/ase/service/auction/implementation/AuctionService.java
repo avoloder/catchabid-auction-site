@@ -13,12 +13,7 @@ import at.ac.ase.repository.auction.ContactFormRepository;
 import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
-import at.ac.ase.util.exceptions.EmailNotSentException;
-import at.ac.ase.util.exceptions.EmptyObjectException;
-import at.ac.ase.util.exceptions.AuctionCancellationException;
-import at.ac.ase.util.exceptions.AuthorizationException;
-import at.ac.ase.util.exceptions.ObjectNotFoundException;
-import at.ac.ase.util.exceptions.WrongSubscriberException;
+import at.ac.ase.util.exceptions.*;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.slf4j.Logger;
@@ -306,6 +301,9 @@ public class AuctionService implements IAuctionService {
     public AuctionPost subscribeToAuction(AuctionPost auctionPost, User user) {
         if(auctionPost.getCreator().getId().equals(user.getId())) {
             throw new WrongSubscriberException();
+        }
+        if(auctionPost.getStatus().equals(Status.CANCELLED)){
+            throw new AuctionCancelledException();
         }
         Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
         subscriptions.add((RegularUser) user);

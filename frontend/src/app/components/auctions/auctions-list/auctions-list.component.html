@@ -43,6 +43,9 @@
               <div class="col-sm-6" *ngIf="auctionsGroup=='UPCOMING' && isUserSubscribed(auction)" style="margin-top: 5px;">
                 <span class="badge badge-secondary" ngbTooltip="You will receive a notification when this auction starts" placement="bottom" style="width: 100%;">SUBSCRIBED </span>
               </div>
+              <div class="col-sm-6" *ngIf="auction.status == 'CANCELLED'" style="margin-top: 5px;">
+                <span class="badge badge-secondary" ngbTooltip="This auction has been cancelled" placement="bottom" style="width: 100%;">CANCELLED </span>
+              </div>
           </div>
         </div>
       </article>
