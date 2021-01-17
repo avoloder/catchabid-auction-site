@@ -70,6 +70,7 @@
             routerLinkActive="active"
             class="dropdown-item"
             (click)="toUserSettings()"
+            style="cursor: pointer"
           >
             <i class="ni ni-settings-gear-65"></i> <span>My Profile</span>
           </a>
@@ -78,7 +79,8 @@
           <a routerLinkActive="active"
              class="dropdown-item"
              style="color: black;"
-             (click)="logout()">
+             (click)="logout()"
+             style="cursor: pointer">
             <i class="ni ni-user-run"></i>
             <span>Logout</span>
           </a>
