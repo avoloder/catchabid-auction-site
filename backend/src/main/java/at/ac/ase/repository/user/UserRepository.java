@@ -17,6 +17,7 @@ public interface UserRepository extends JpaRepository<RegularUser, Long> {
      */
     RegularUser findByEmail(String email);
 
+
     /**
      * Method which updates a user's password
      * @param email an email address of user

@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.security.SecureRandom;
 import java.util.Map;
 import java.util.Random;
 
@@ -82,7 +83,7 @@ public class AuthService implements IAuthService {
     @Transactional
     public void sendPasswordResetToken(User user) {
         PasswordResetToken token;
-        int resetToken = 100000 + new Random().nextInt(900000);
+        long resetToken = (long) Math.abs(1000000000000000L + new SecureRandom().nextFloat() * 9000000000000000L);
         if(user instanceof RegularUser) {
             RegularUser regularUser = (RegularUser) user;
             token = new PasswordResetToken(resetToken, regularUser, null);

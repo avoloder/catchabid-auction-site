@@ -1,5 +1,6 @@
 package at.ac.ase.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -44,7 +45,8 @@ public class RegularUser extends User {
     @JsonManagedReference(value = "user_highest_bid")
     private Set<Bid> bids = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
     @JoinTable(
             name = "auction_subscriptions",
             joinColumns = { @JoinColumn(name = "regular_user_id" ) },

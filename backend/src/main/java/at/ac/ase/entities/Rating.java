@@ -1,15 +1,7 @@
 package at.ac.ase.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -17,8 +9,7 @@ import javax.validation.constraints.NotNull;
 public class Rating {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private RatingPK id;
 
     @Column
     @NotNull
@@ -27,13 +18,14 @@ public class Rating {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     @JsonBackReference
-    private RegularUser user;
+    private User user;
 
-    public Long getId() {
+
+    public RatingPK getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(RatingPK id) {
         this.id = id;
     }
 
@@ -45,12 +37,13 @@ public class Rating {
         this.rating = rating;
     }
 
-    public RegularUser getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(RegularUser user) {
+    public void setUser(User user) {
         this.user = user;
     }
+
 
 }

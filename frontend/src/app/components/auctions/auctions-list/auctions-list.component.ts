@@ -97,6 +97,7 @@ export class AuctionsListComponent implements OnInit {
     query.pageSize   = this.pageSize;
     query.userEmail= localStorage.getItem('email');
     query.useUserPreferences = this.useUserPreferences;
+    query.status = ['ACTIVE', 'UPCOMING'];
 
     if (this.auctionsGroup == "RECENT") {
       query.sortBy = "endTime";
@@ -133,7 +134,7 @@ export class AuctionsListComponent implements OnInit {
           this.toast.success('You successfully subscribed to this auction');
           this.refreshAuctions();
         },
-        error => this.toast.error('Could not subscribe to this auction')
+        error => this.toast.error(error.error.message)
       )
     }
   }
@@ -173,6 +174,10 @@ export class AuctionsListComponent implements OnInit {
      * Refresh auctions after placing a bid
      */
     this.refreshAuctions();
+  }
+
+  isOwnAuction(auction: AuctionPost) {
+    return auction.creatorId.toString() == localStorage.getItem('userId');
   }
 
   private refreshAuctions(): void {

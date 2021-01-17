@@ -61,6 +61,7 @@ export class SigninComponent implements OnInit {
               this.userService.findByEmail(this.email).subscribe(
                   user => {
                     localStorage.setItem('email', user['email']);
+                    localStorage.setItem('userId', user['id'].toString());
                     if(user['firstName'] !== undefined && user['lastName'] !== undefined){
                       let userName = user['firstName'].concat(" ", user['lastName']);
                       localStorage.setItem('userName', userName);

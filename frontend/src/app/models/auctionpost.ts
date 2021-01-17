@@ -16,6 +16,7 @@ export class AuctionPost {
   minPrice: number;
   highestBid: number;
   image: string;
+  creatorEmail: string;
   paid?: boolean;
   subscriptions: any[];
 

@@ -12,6 +12,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { AuctionsSearchFormComponent } from './auctions-search-form/auctions-search-form.component';
 import { ProfileAuctionsListComponent } from './profile-auctions-list/profile-auctions-list.component';
+import {AuctionCancellationConfirmationComponent} from "../auction-details/auction-cancellation-confirmation/auction-cancellation-confirmation.component";
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ProfileAuctionsListComponent } from './profile-auctions-list/profile-au
     AuctionCountdownComponent,
     AuctionFormComponent,
     AuctionsSearchFormComponent,
+    AuctionCancellationConfirmationComponent,
     ProfileAuctionsListComponent
   ],
   imports: [

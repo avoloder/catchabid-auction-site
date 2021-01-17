@@ -21,6 +21,7 @@ export class ProfileComponent implements OnInit {
     private toast: ToastrService,
     private userService: UserService,
     private auctionsService: AuctionsService,
+    private router: Router,
     private modalService: NgbModal) {
     this.ngOnInit();
   }
@@ -64,6 +65,9 @@ export class ProfileComponent implements OnInit {
         data => {
           this.toast.success("User successfully updated")
           localStorage.setItem("email",this.updatedUser.email)
+          let userName = this.updatedUser['firstName'].concat(" ", this.updatedUser['lastName']);
+          localStorage.setItem('userName', userName);
+          this.router.navigate(['']);
         },
         error => {
           this.toast.error(error.error.message);
@@ -96,6 +100,7 @@ export class ProfileComponent implements OnInit {
 import {Type} from '@angular/core';
 import {NgbActiveModal, NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import { Address } from 'src/app/models/address';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngbd-modal-confirm',

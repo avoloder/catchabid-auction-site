@@ -6,6 +6,7 @@ import at.ac.ase.dto.RegularUserDTO;
 import at.ac.ase.entities.AuctionHouse;
 import at.ac.ase.entities.AuctionPost;
 import at.ac.ase.entities.RegularUser;
+import at.ac.ase.entities.Status;
 import at.ac.ase.repository.auction.AuctionPostQuery;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class AuctionDtoTranslator {
         }
         if (auction.getCreator()!=null) {
             auctionPostSendDTO.setCreatorId(auction.getCreator().getId());
+            auctionPostSendDTO.setCreatorEmail(auction.getCreator().getEmail());
             if (auction.getCreator() instanceof AuctionHouse) {
                 auctionPostSendDTO.setCreatorName(((AuctionHouse) auction.getCreator()).getName());
             } else {
@@ -67,6 +69,10 @@ public class AuctionDtoTranslator {
                 subscriptions.add(userDtoTranslator.toRegularUserDTO(user));
             }
             auctionPostSendDTO.setSubscriptions(subscriptions);
+        }
+
+        if(auction.isActive()) {
+            auctionPostSendDTO.setStatus(Status.ACTIVE.name());
         }
 
         auctionPostSendDTO.setPaid(auction.getPayment() != null);

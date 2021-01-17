@@ -23,6 +23,8 @@ export class ProfileAuctionsListComponent implements OnInit {
   @Input()
   typeOfAuctions:string;
 
+  path: string;
+
   modalRef: NgbModalRef;
 
   paymentModalClosedSub: Subscription;
@@ -40,16 +42,20 @@ export class ProfileAuctionsListComponent implements OnInit {
     console.log('ok');
     if (this.typeOfAuctions=='WINS') {
       this.getWonAuctions();
+      this.path="wins";
     }
     if (this.typeOfAuctions=='BIDS'){
     this.getMyBids();
+    this.path="bids";
 
     }
     if (this.typeOfAuctions=='AUCTIONS'){
-      this.getMyAuctions()
+      this.getMyAuctions();
+      this.path="auctions";
     }
     if (this.typeOfAuctions=='SUBSCRIPTIONS'){
-      this.getSubscriptions()
+      this.getSubscriptions();
+      this.path="subscriptions";
     }
 
   }
@@ -104,9 +110,10 @@ export class ProfileAuctionsListComponent implements OnInit {
     this.getWonAuctions();
   }
 
-  openAuctionDetails(auction: AuctionPost): void{
+  openAuctionDetails(auction: AuctionPost, type: string): void{
     const modal = this.modalService.open(AuctionDetailsComponent,  { size: 'lg', backdrop: 'static' });
     modal.componentInstance.auction = auction;
+    modal.componentInstance.path = this.path;
     this.auctionDetailsModalClosedSub = this.paymentService.auctionDetailModalClosed.subscribe(
       () => this.onAuctionDetailsModalClosed()
     )

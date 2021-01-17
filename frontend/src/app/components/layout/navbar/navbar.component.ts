@@ -65,7 +65,7 @@ export class NavbarComponent implements OnInit {
     localStorage.removeItem('userName');
     localStorage.removeItem('email');
     this.userName = null;
-    window.location.reload();
+    this.router.navigate(['']);
   }
 
   toUserSettings(){
@@ -79,6 +79,10 @@ export class NavbarComponent implements OnInit {
     }else{
       return false;
     }
+  }
+
+  navigateHome(){
+    this.router.navigate(['']);
   }
 
   processTextInput($event) {

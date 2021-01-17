@@ -1,5 +1,6 @@
 package at.ac.ase.entities;
 
+import at.ac.ase.dto.RatingDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -16,7 +17,7 @@ import javax.validation.constraints.Size;
 public abstract class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column
@@ -33,7 +34,6 @@ public abstract class User {
 
     @Column
     private String passwordHash;
-
 
     @OneToMany(
         fetch = FetchType.EAGER,

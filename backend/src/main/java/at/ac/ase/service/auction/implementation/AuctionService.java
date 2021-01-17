@@ -13,10 +13,9 @@ import at.ac.ase.repository.auction.ContactFormRepository;
 import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
-import at.ac.ase.util.exceptions.EmailNotSentException;
-import at.ac.ase.util.exceptions.ObjectNotFoundException;
 import com.lowagie.text.DocumentException;
 import org.apache.commons.io.FileUtils;
+import at.ac.ase.util.exceptions.*;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.slf4j.Logger;
@@ -37,6 +36,7 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -90,6 +90,24 @@ public class AuctionService implements IAuctionService {
     @Override
     public AuctionPost saveAuction(AuctionPost auctionPost) {
         return auctionRepository.save(auctionPost);
+    }
+
+    @Override
+    @Transactional
+    public AuctionPostSendDTO cancelAuction(User user, Long auctionPostId) {
+        AuctionPost auction = auctionRepository.findById(auctionPostId)
+                .orElseThrow(ObjectNotFoundException::new);
+
+        if(!auction.getCreator().getId().equals(user.getId())) {
+            throw new AuthorizationException();
+        }
+        if(auction.isUpcoming()) {
+            auction.setStatus(Status.CANCELLED);
+        }
+        else {
+            throw new AuctionCancellationException();
+        }
+        return auctionDtoTranslator.toSendDto(auction, true);
     }
 
     @Override
@@ -295,6 +313,12 @@ public class AuctionService implements IAuctionService {
     }
     @Override
     public AuctionPost subscribeToAuction(AuctionPost auctionPost, User user) {
+        if(auctionPost.getCreator().getId().equals(user.getId())) {
+            throw new WrongSubscriberException();
+        }
+        if(auctionPost.getStatus().equals(Status.CANCELLED)){
+            throw new AuctionCancelledException();
+        }
         Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
         subscriptions.add((RegularUser) user);
         auctionPost.setSubscriptions(subscriptions);

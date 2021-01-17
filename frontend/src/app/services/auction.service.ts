@@ -29,6 +29,7 @@ export class AuctionsService {
       .set("categories", query.categories.join(","))
       .set("searchKeys", query.searchKeys.join(","))
       .set("countries", query.countries.join(","))
+      .set("status", query.status.join(","))
       .set("sortBy", query.sortBy)
       .set("sortOrder", query.sortOrder)
       .set("useUserPreferences", String(query.useUserPreferences))
@@ -108,5 +109,9 @@ export class AuctionsService {
 
   getMySubscriptions():Observable<AuctionPost[]>{
     return this.http.get<AuctionPost[]>(this.REST_API_SERVER+api+'/mySubscriptions')
+  }
+
+  cancelAuction(auction: AuctionPost): Observable<AuctionPost> {
+    return this.http.post<AuctionPost>(this.REST_API_SERVER + api + '/cancel', auction.id);
   }
 }

@@ -4,7 +4,10 @@
     class="list-group-item list-group-item-action flex-column align-items-start">
     <div class="d-flex w-100 justify-content-between">
       <!--h5 class="mb-1">{{ auction.auctionName }}</h5-->
-      <a class="mb-1" style="font-weight: bold; font-size: larger; cursor: pointer;"  (click)="openAuctionDetails(auction)">{{auction.auctionName }}</a>
+      <div>
+        <a class="mb-1" style="font-weight: bold; font-size: larger; cursor: pointer;"  (click)="openAuctionDetails(auction)">{{auction.auctionName }}</a>
+        <span *ngIf="auction.status == 'CANCELLED'" class="badge badge-danger" style="margin-left:5px;"> {{auction.status}} </span>
+      </div>
       <small>{{ auction.endTime | date: 'yyyy-MM-dd' }}</small>
     </div>
     <div class="d-flex w-100 justify-content-between">

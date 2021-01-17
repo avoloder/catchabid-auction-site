@@ -10,5 +10,5 @@ public interface IPasswordTokenService {
      * @param token a password reset token provided by user
      * @return a password reset token for specific user if found, null otherwise
      */
-    PasswordResetToken getPasswordResetTokenByToken(String email, int token);
+    PasswordResetToken getPasswordResetTokenByToken(String email, long token);
 }
