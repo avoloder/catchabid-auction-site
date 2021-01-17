@@ -81,6 +81,10 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  navigateHome(){
+    this.router.navigate(['']);
+  }
+
   processTextInput($event) {
     console.log("processing search query text");
     const searchKeys = this.searchInputText.toString().split(" ");
