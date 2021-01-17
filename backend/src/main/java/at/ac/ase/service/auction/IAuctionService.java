@@ -6,7 +6,9 @@ import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.AuctionQueryDTO;
 import at.ac.ase.dto.ContactFormDTO;
 import at.ac.ase.entities.*;
+import com.lowagie.text.DocumentException;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -155,5 +157,13 @@ public interface IAuctionService {
 
     List<AuctionPostSendDTO> getMyAuctions(User user);
     Set<AuctionPostSendDTO> getMySubscriptions(RegularUser user);
+
+    /**
+     * Method which sends confirmation for won auction to the winner
+     * @param auctionPost - auction post for which one wants to send confirmation
+     * @param user - logged in user
+     * @return - modified auction post to which the user unsubscribed from
+     */
+    AuctionPost sendConfirmation(AuctionPost auctionPost, User user) throws IOException, DocumentException;
 
 }

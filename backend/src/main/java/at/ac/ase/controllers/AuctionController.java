@@ -12,6 +12,7 @@ import at.ac.ase.entities.User;
 import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.implementation.AuctionHouseService;
 import at.ac.ase.util.exceptions.ObjectNotFoundException;
+import com.lowagie.text.DocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -166,6 +168,16 @@ public class AuctionController {
     public ResponseEntity<Object> mySubscriptions(
             @CurrentSecurityContext(expression = "authentication.principal") RegularUser user) {
         return ResponseEntity.ok(auctionService.getMySubscriptions(user));
+    }
+
+    @PostMapping(value = "/sendConfirmation")
+    public ResponseEntity<Object> sendConfirmation(
+            @RequestBody @Valid AuctionPostSendDTO auctionPostDTO,
+            @CurrentSecurityContext(expression = "authentication.principal") User user) throws IOException, DocumentException {
+
+        AuctionPost auctionPost = auctionService.toAuctionPostEntity(auctionPostDTO);
+
+        return ResponseEntity.ok(auctionService.sendConfirmation(auctionPost, user));
     }
 
 

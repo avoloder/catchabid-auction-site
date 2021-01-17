@@ -15,19 +15,33 @@ import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
 import at.ac.ase.util.exceptions.EmailNotSentException;
 import at.ac.ase.util.exceptions.ObjectNotFoundException;
+import com.lowagie.text.DocumentException;
+import org.apache.commons.io.FileUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.validation.*;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -306,5 +320,69 @@ public class AuctionService implements IAuctionService {
                 logger.info("subs"+retrieved);
         return auctionDtoTranslator.toDtoSet(retrieved);
     }
+
+    @Override
+    public AuctionPost sendConfirmation(AuctionPost auctionPost, User user) throws IOException, DocumentException {
+       generatePdfFromHtml(parseThymeleafTemplate(auctionPost));
+       sendConfirmationEmail(new RegularUser());
+        return null;
+    }
+
+    private String parseThymeleafTemplate(AuctionPost auctionPost) throws IOException {
+        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode(TemplateMode.HTML);
+
+        TemplateEngine templateEngine = new TemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver);
+
+        //byte[] fileContent = FileUtils.readFileToByteArray(new File(getClass().getClassLoader().getResource("catchabid-logo.png").getFile()));
+        //String encodedString = Base64.getEncoder().encodeToString(fileContent);
+
+
+        Context context = new Context();
+        context.setVariable("auction", auctionPost);
+        context.setVariable("price", 12.22);
+        //context.setVariable("image", "data:image/png;base64, " + encodedString);
+
+        return templateEngine.process("confirmation", context);
+    }
+
+    private void generatePdfFromHtml(String html) throws IOException, DocumentException {
+        String outputFolder = System.getProperty("user.home") + File.separator + "thymeleaf2.pdf";
+        OutputStream outputStream = new FileOutputStream(outputFolder);
+
+        ITextRenderer renderer = new ITextRenderer();
+        renderer.setDocumentFromString(html);
+        renderer.layout();
+        renderer.createPDF(outputStream);
+
+        outputStream.close();
+    }
+
+    private void sendConfirmationEmail(RegularUser user){
+        try {
+            MimeMessage message = emailSender.createMimeMessage();
+
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setFrom("noreply.catchabid@gmail.com");
+            helper.setTo("mensur_b_7@hotmail.com");
+            helper.setSubject("Confirmation about won auction");
+            helper.setText("Dear " + //user.getFirstName() +
+                    " " + //user.getLastName() +
+                    ", <br/> congratulations on winning an auction. " +
+                    "You can find the official confirmation about the won auction in the attachment. <br/>", true);
+
+            FileSystemResource file = new FileSystemResource(new File(System.getProperty("user.home") + File.separator + "thymeleaf2.pdf"));
+            helper.addAttachment("confirmation.pdf", file);
+
+            emailSender.send(message);
+        } catch (MessagingException e) {
+            throw new EmailNotSentException();
+        }
+    }
+
+
 
 }
