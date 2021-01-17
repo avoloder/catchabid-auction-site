@@ -3,8 +3,11 @@ package at.ac.ase.service;
 import at.ac.ase.basetest.BaseIntegrationTest;
 import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.entities.*;
+import at.ac.ase.repository.auction.AuctionRepository;
 import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.IAuctionHouseService;
+import at.ac.ase.util.exceptions.AuctionCancellationException;
+import at.ac.ase.util.exceptions.AuthorizationException;
 import org.junit.After;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,9 @@ public class AuctionServiceTest extends BaseIntegrationTest {
 
     @Autowired
     IAuctionHouseService auctionHouseService;
+
+    @Autowired
+    AuctionRepository auctionRepository;
 
     @After
     public void cleanup() {
@@ -231,6 +237,37 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         storedAuctionPost = auctionService.getAllAuctions().get(auctionPosts.size()-1);
 
         assertThat(storedAuctionPost.getSubscriptions().size(), is(0));
+    }
+
+    @Test(expected = AuthorizationException.class)
+    public void testCancelAuctionAuthorizationError() {
+        insertTestData("initial-testdata.sql");
+        User user = new AuctionHouse();
+        user.setId(99L);
+        auctionService.cancelAuction(user, 100017L);
+    }
+
+    @Test(expected = AuctionCancellationException.class)
+    public void testCancelAuctionCancellationError() {
+        insertTestData("initial-testdata.sql");
+        User user = new AuctionHouse();
+        user.setId(2L);
+        auctionService.cancelAuction(user, 100016L);
+    }
+
+    @Test
+    public void testCancelAuctionSuccess() {
+        insertTestData("initial-testdata.sql");
+        User user = new AuctionHouse();
+        user.setId(3L);
+
+        AuctionPostSendDTO cancelledAuctionDto = auctionService.cancelAuction(user, 100017L);
+        AuctionPost cancelledAuctionDb = auctionRepository.findById(100017L).orElse(null);
+
+        assertNotNull(cancelledAuctionDto);
+        assertNotNull(cancelledAuctionDb);
+        assertEquals("CANCELLED", cancelledAuctionDto.getStatus());
+        assertEquals(Status.CANCELLED, cancelledAuctionDb.getStatus());
     }
 
     private AuctionPost createAuction(String email) {

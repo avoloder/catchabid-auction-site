@@ -15,6 +15,8 @@ import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
 import at.ac.ase.util.exceptions.EmailNotSentException;
 import at.ac.ase.util.exceptions.EmptyObjectException;
+import at.ac.ase.util.exceptions.AuctionCancellationException;
+import at.ac.ase.util.exceptions.AuthorizationException;
 import at.ac.ase.util.exceptions.ObjectNotFoundException;
 import at.ac.ase.util.exceptions.WrongSubscriberException;
 import org.modelmapper.ModelMapper;
@@ -28,6 +30,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.*;
 import java.time.LocalDateTime;
@@ -78,6 +81,23 @@ public class AuctionService implements IAuctionService {
     @Override
     public AuctionPost saveAuction(AuctionPost auctionPost) {
         return auctionRepository.save(auctionPost);
+    }
+
+    @Override
+    public AuctionPostSendDTO cancelAuction(User user, Long auctionPostId) {
+        AuctionPost auction = auctionRepository.findById(auctionPostId)
+                .orElseThrow(ObjectNotFoundException::new);
+
+        if(!auction.getCreator().getId().equals(user.getId())) {
+            throw new AuthorizationException();
+        }
+        if(auction.getStatus().equals(Status.UPCOMING)) {
+            auction.setStatus(Status.CANCELLED);
+        }
+        else {
+            throw new AuctionCancellationException();
+        }
+        return auctionDtoTranslator.toSendDto(auction);
     }
 
     @Override

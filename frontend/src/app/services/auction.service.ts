@@ -109,4 +109,8 @@ export class AuctionsService {
   getMySubscriptions():Observable<AuctionPost[]>{
     return this.http.get<AuctionPost[]>(this.REST_API_SERVER+api+'/mySubscriptions')
   }
+
+  cancelAuction(auction: AuctionPost): Observable<AuctionPost> {
+    return this.http.post<AuctionPost>(this.REST_API_SERVER + api + '/cancel', auction.id);
+  }
 }

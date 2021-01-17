@@ -78,6 +78,13 @@ public interface IAuctionService {
     AuctionPost saveAuction(AuctionPost auctionPost);
 
     /**
+     * Cancels an auction
+     * @param auctionPostId id of auction to cancel
+     * @return
+     */
+    AuctionPostSendDTO cancelAuction(User user, Long auctionPostId);
+
+    /**
      *
      * @param id
      * @return

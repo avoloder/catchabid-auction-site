@@ -66,7 +66,8 @@
                 </app-auction-countdown>
               </div>
               <div class="col-12"  style="margin-bottom: 10px;">
-                <a *ngIf="!isAuctionEnded() && path != 'auctions'" (click)="openBidModal(auction)" class="btn btn-primary card-button">Place a bid</a>
+                <a *ngIf="!isAuctionEnded() && path != 'auctions' && !isOwnAuction()" (click)="openBidModal(auction)" class="btn btn-primary card-button">Place a bid</a>
+                <a *ngIf="isUpcoming() && isOwnAuction()" (click)="cancelAuction(auction)" class="btn btn-primary card-button">Cancel Auction</a>
                 <div class="row">
                   <div class="col-11">
                     <a *ngIf="path=='wins' && !alreadyRated && calculateDateDiff()" (click)="openRatingModal(auction)" class="btn btn-primary card-button">Rate this user</a>
