@@ -1,5 +1,6 @@
 package at.ac.ase.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Type;
 
@@ -64,8 +65,12 @@ public class AuctionPost {
     @JoinTable(
         name = "auction_subscriptions",
         joinColumns = { @JoinColumn(name = "auction_post_id") },
-        inverseJoinColumns = { @JoinColumn(name = "user_id") })
+        inverseJoinColumns = { @JoinColumn(name = "regular_user_id") })
     private Set<RegularUser> subscriptions = new HashSet<>();
+
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "payment")
+    private Payment payment;
 
     public Long getId() {
         return id;
@@ -169,5 +174,13 @@ public class AuctionPost {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 }

@@ -85,4 +85,28 @@ export class AuctionsService {
   postContactForm(contactForm: ContactForm): Observable<ContactForm> {
     return this.http.post<ContactForm>(this.REST_API_SERVER + api + '/postContactForm', contactForm);
   }
+
+  subscribeToAuction(auctionPost: AuctionPost): Observable<AuctionPost> {
+    return this.http.post<AuctionPost>(this.REST_API_SERVER + api + '/subscribe', auctionPost);
+  }
+
+  unsubsribeFromAuction(auctionPost: AuctionPost): Observable<AuctionPost>{
+    return this.http.post<AuctionPost>(this.REST_API_SERVER + api + '/unsubscribe', auctionPost)
+  }
+
+  getSubscriptionByUserID() {
+    return this.http.get(this.REST_API_SERVER + api + '/getSubscriptionForUser')
+  }
+
+  getWonAuctions(): Observable<AuctionPost[]> {
+    return this.http.get<AuctionPost[]>(this.REST_API_SERVER + api + "/won");
+  }
+
+  getMyAuctions():Observable<AuctionPost[]>{
+    return this.http.get<AuctionPost[]>(this.REST_API_SERVER+api+'/myAuctions')
+  }
+
+  getMySubscriptions():Observable<AuctionPost[]>{
+    return this.http.get<AuctionPost[]>(this.REST_API_SERVER+api+'/mySubscriptions')
+  }
 }

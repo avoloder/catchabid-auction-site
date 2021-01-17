@@ -30,10 +30,10 @@ import {NgxSpinnerModule} from "ngx-spinner";
 import { CategoriesPickerComponent } from './components/register/categories-picker/categories-picker/categories-picker.component';
 import {ContactFormComponent} from "./components/auctions/contact-form/contact-form.component";
 import { RatingComponent } from './components/rating/rating/rating.component';
+import {ProfileModule} from "./components/profile/profile.module";
 
 @NgModule({
   declarations: [
-    AppComponent,
     AppComponent,
     SigninComponent,
     RegisterComponent,
@@ -60,7 +60,8 @@ import { RatingComponent } from './components/rating/rating/rating.component';
     HomeModule,
     CountdownModule,
     BidsModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    ProfileModule
   ],
   providers: [
     AuthGuard,

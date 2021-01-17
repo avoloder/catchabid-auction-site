@@ -46,7 +46,7 @@ public abstract class BaseE2E extends BaseSpringBootTest {
     @BeforeEach
     public void beforeEach() {
         initDriver();
-        driver.manage().timeouts().implicitlyWait(getDefaultTimeout(), TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(getDefaultImplicitWait(), TimeUnit.SECONDS);
         driver.manage().timeouts().setScriptTimeout(getDefaultTimeout(), TimeUnit.SECONDS);
         driver.manage().timeouts().pageLoadTimeout(getDefaultTimeout(), TimeUnit.SECONDS);
     }
@@ -88,6 +88,10 @@ public abstract class BaseE2E extends BaseSpringBootTest {
     }
 
     protected Integer getDefaultTimeout() {
-        return 10;
+        return 5;
+    }
+
+    protected Integer getDefaultImplicitWait() {
+        return 1;
     }
 }

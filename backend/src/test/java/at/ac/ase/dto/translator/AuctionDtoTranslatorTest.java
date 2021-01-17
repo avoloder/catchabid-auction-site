@@ -18,7 +18,7 @@ public class AuctionDtoTranslatorTest {
     @Test
     public void testToDto() {
         AuctionPost entity = createAuctionPost();
-        AuctionPostSendDTO dto = translator.toSendDto(entity);
+        AuctionPostSendDTO dto = translator.toSendDto(entity, true);
         assertEqualValues(dto, entity);
     }
 
@@ -28,7 +28,7 @@ public class AuctionDtoTranslatorTest {
         entity.setCreator(null);
         entity.setHighestBid(null);
 
-        AuctionPostSendDTO dto = translator.toSendDto(entity);
+        AuctionPostSendDTO dto = translator.toSendDto(entity, true);
 
         assertNull(dto.getHighestBid());
         assertNull(dto.getHighestBid());

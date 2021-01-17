@@ -41,13 +41,6 @@ public abstract class User {
         orphanRemoval = true)
     private Set<Rating> ratings = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "auction_subscriptions",
-        joinColumns = { @JoinColumn(name = "user_id") },
-        inverseJoinColumns = { @JoinColumn(name = "auction_post_id") })
-    private Set<AuctionPost> auctionSubscriptions = new HashSet<>();
-
     @OneToMany(
         fetch = FetchType.EAGER,
         mappedBy = "user",
@@ -112,14 +105,6 @@ public abstract class User {
         this.ratings = ratings;
     }
 
-    public Set<AuctionPost> getAuctionSubscriptions() {
-        return auctionSubscriptions;
-    }
-
-    public void setAuctionSubscriptions(Set<AuctionPost> auctionSubscriptions) {
-        this.auctionSubscriptions = auctionSubscriptions;
-    }
-
     public Set<Bid> getBids() {
         return bids;
     }
@@ -145,7 +130,6 @@ public abstract class User {
                 ", phoneNr='" + phoneNr + '\'' +
                 ", passwordHash='" + passwordHash + '\'' +
                 ", ratings=" + ratings +
-                ", auctionSubscriptions=" + auctionSubscriptions +
                 ", bids=" + bids +
                 ", ownedAuctions=" + ownedAuctions +
                 '}';

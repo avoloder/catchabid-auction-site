@@ -18,7 +18,7 @@ public class Rating {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     @JsonBackReference
-    private RegularUser user;
+    private User user;
 
 
     public RatingPK getId() {
@@ -37,11 +37,11 @@ public class Rating {
         this.rating = rating;
     }
 
-    public RegularUser getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(RegularUser user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

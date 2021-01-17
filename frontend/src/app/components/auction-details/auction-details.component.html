@@ -20,7 +20,7 @@
           <div class="col-md-6">
             <div class="row">
               <div class="col-12"  style="margin-bottom: 10px;">
-                <span><i class="fa fa-clock-o"></i> {{auction.startTime | date:"dd.mm.yyyy, hh:mm"}} - {{auction.endTime |  date:"dd.mm.yyyy, hh:mm"}}</span>
+                <span><i class="fa fa-clock-o"></i> {{auction.startTime | date:"dd.MM.yyyy, hh:mm"}} - {{auction.endTime |  date:"dd.MM.yyyy, hh:mm"}}</span>
               </div>
               <div class="col-12"  style="margin-bottom: 10px;">
                 <p class="h6">Category: <span class="badge badge-secondary" style="margin-left:5px;"> {{auction.category}} </span></p>
@@ -66,7 +66,16 @@
                 </app-auction-countdown>
               </div>
               <div class="col-12"  style="margin-bottom: 10px;">
-                <a href="#" (click)="openBidModal(auction)" class="btn btn-primary card-button">Place a bid</a>
+                <a *ngIf="!isAuctionEnded()" (click)="openBidModal(auction)" class="btn btn-primary card-button">Place a bid</a>
+                <div class="row">
+                  <div class="col-11">
+                    <a *ngIf="path=='wins' && !alreadyRated && calculateDateDiff()" (click)="openRatingModal(auction)" class="btn btn-primary card-button">Rate this user</a>
+                    <a *ngIf="path=='wins' && (alreadyRated || !calculateDateDiff())" class="btn btn-secondary card-button" style="background-color: grey;" disabled>User successfully rated</a>
+                  </div>
+                  <div class="col-1" style="margin-top:22px; padding:0px; font-size:20px">
+                    <i *ngIf="path=='wins'" class="fa fa-question-circle" title="You have 30 days from the auction's end to rate the user" aria-hidden="true"></i>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

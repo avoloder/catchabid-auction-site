@@ -3,6 +3,7 @@ import { Subject, Observable, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Bid } from '../models/bid.model';
 import { catchError } from 'rxjs/operators';
+import {AuctionPost} from "../models/auctionpost";
 
 
 @Injectable({
@@ -24,5 +25,9 @@ export class BidsService {
     .pipe(catchError(error => {
       return throwError(error);
     }));
+  }
+
+  getMyBids():Observable<AuctionPost[]> {
+    return this.http.get<AuctionPost[]>(this.api+'/myBids');
   }
 }

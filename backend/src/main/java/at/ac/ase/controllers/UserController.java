@@ -1,6 +1,9 @@
 package at.ac.ase.controllers;
 
+import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.RatingDataDTO;
+import at.ac.ase.dto.AuctionHouseDTO;
+import at.ac.ase.dto.RegularUserDTO;
 import at.ac.ase.dto.translator.AuctionHouseDtoTranslator;
 import at.ac.ase.dto.translator.RatingDtoTranslator;
 import at.ac.ase.dto.translator.UserDtoTranslator;
@@ -68,7 +71,20 @@ public class UserController {
             this.ratingService.setRating(ratingData, user);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (DataAccessException e) {
-            throw new UserAlreadyRatedException();
+            throw e;
+        }
+    }
+
+    @RequestMapping(value = "/checkRated", method = RequestMethod.POST)
+    public ResponseEntity checkIfUserIsRatedAlready(
+            @RequestBody AuctionPostSendDTO auctionPostSendDTO,
+            @CurrentSecurityContext(expression = "authentication.principal") User user){
+        logger.info("Checking if the user is already rated");
+        try{
+            this.ratingService.checkIfUserIsRatedAlready(auctionPostSendDTO, user);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }catch (UserAlreadyRatedException e){
+            throw e;
         }
     }
 
@@ -77,5 +93,18 @@ public class UserController {
         logger.info("Calculating rating for the user " + userData.get("email"));
         Double rating = this.ratingService.calculateRating(userData.get("email"));
         return ResponseEntity.status(HttpStatus.OK).body(rating);
+    }
+    @RequestMapping(value="/updateUser", method = RequestMethod.POST)
+    public ResponseEntity<RegularUser> updateUser(@RequestParam String email, @RequestBody RegularUserDTO user){
+        logger.info("Updating user with the email " + user.getEmail());
+        logger.info("Address Data : " +user.getAddress());
+        return ResponseEntity.status(HttpStatus.OK).body(regularUserService.updateUser(email, user));
+    }
+
+    @RequestMapping(value="/updateHouse", method = RequestMethod.POST)
+    public ResponseEntity updateHouse(@RequestParam String email, @RequestBody AuctionHouseDTO auctionHouse){
+        logger.info("Updating auction house with the email " + auctionHouse.getEmail());
+        auctionHouseService.updateHouse(email, auctionHouse);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

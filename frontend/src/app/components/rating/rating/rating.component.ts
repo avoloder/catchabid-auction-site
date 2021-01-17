@@ -22,7 +22,6 @@ export class RatingComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    console.log(this.auctionPost);
 
   }
 
@@ -37,7 +36,6 @@ export class RatingComponent implements OnInit {
         error => {
           this.toast.error(error.error.message);
         });
-
     } else {
       this.toast.warning("Empty rating can not be submitted");
     }

@@ -36,6 +36,10 @@ public class CatchabidBasePage extends PageObject {
         return initPage(AuctionsListArea.class);
     }
 
+    public AuctionFiltersArea getAuctionsFilterArea() {
+        return initPage(AuctionFiltersArea.class);
+    }
+
     public LoginOverlay clickLoginButton() {
         //TODO actually click button
         return initPage(LoginOverlay.class);

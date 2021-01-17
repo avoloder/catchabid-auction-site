@@ -1,6 +1,8 @@
 package at.ac.ase.service.user;
 
+import at.ac.ase.dto.AuctionHouseDTO;
 import at.ac.ase.entities.AuctionHouse;
+import at.ac.ase.entities.AuctionPost;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,5 +35,12 @@ public interface IAuctionHouseService {
      * @param password a new password
      */
     void changePassword(String email, String password);
+
+    /**
+     * Method which updates an auction house
+     * @param email an email address of auction house that should be updated
+     * @param updatedAuctionHouseDTO updatedAuctionHouse
+     */
+    AuctionHouse updateHouse(String email, AuctionHouseDTO updatedAuctionHouseDTO);
 
 }

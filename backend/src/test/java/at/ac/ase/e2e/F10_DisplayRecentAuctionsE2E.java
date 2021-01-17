@@ -40,17 +40,17 @@ public class F10_DisplayRecentAuctionsE2E extends BaseE2E {
         assertEquals("Created by Testname Testname", auctionsListArea.getCreatorText(auctionCard1));
         assertEquals("Item1", auctionsListArea.getAuctionNameText(auctionCard1));
         assertEquals("3€", auctionsListArea.getPriceText(auctionCard1));
-        assertThat(auctionsListArea.getCountdownTest(auctionCard1), containsString("2h"));
+        assertThat(auctionsListArea.getCountdownTest(auctionCard1), containsString("3h"));
 
         assertEquals("Created by Max", auctionsListArea.getCreatorText(auctionCard2));
         assertEquals("Item2", auctionsListArea.getAuctionNameText(auctionCard2));
         assertEquals("6€", auctionsListArea.getPriceText(auctionCard2));
-        assertThat(auctionsListArea.getCountdownTest(auctionCard2), containsString("4h"));
+        assertThat(auctionsListArea.getCountdownTest(auctionCard2), containsString("5h"));
 
         assertEquals("Created by Max", auctionsListArea.getCreatorText(auctionCard3));
         assertEquals("Item3", auctionsListArea.getAuctionNameText(auctionCard3));
         assertEquals("99€", auctionsListArea.getPriceText(auctionCard3));
-        assertThat(auctionsListArea.getCountdownTest(auctionCard3), containsString("6h"));
+        assertThat(auctionsListArea.getCountdownTest(auctionCard3), containsString("7h"));
 
     }
 

@@ -1,5 +1,6 @@
 package at.ac.ase.service.user;
 
+import at.ac.ase.dto.RegularUserDTO;
 import at.ac.ase.entities.RegularUser;
 
 import java.util.List;
@@ -28,9 +29,17 @@ public interface IRegularUserService {
     void changePassword(String email, String password);
 
     /**
-     * Method which retrieves an auction house based on its id
+     * Method which retrieves a user based on its id
      * @param id of an auction house
      * @return auction house if found
      */
     Optional<RegularUser> getUserById(Long id);
+
+    /**
+     * Method which updates user based on a given object
+     * @param email original email - in case email in user is changed
+     * @param user updated user object
+     * @return updated RegularUser
+     */
+    RegularUser updateUser(String email, RegularUserDTO user);
 }

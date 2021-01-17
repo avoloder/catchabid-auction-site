@@ -70,7 +70,7 @@ public class BidServiceTest extends BaseIntegrationTest {
         auctionPost.setMinPrice(100.0);
         auctionPost.setCreator(auctionHouse);
         auctionPost.setName("Expired auction");
-        auctionPost = auctionService.createAuction(auctionPost);
+        auctionPost = auctionService.saveAuction(auctionPost);
 
         assertNotNull(auctionPost.getId());
 
@@ -102,7 +102,7 @@ public class BidServiceTest extends BaseIntegrationTest {
         auctionPost.setMinPrice(100.0);
         auctionPost.setCreator(auctionHouse);
         auctionPost.setName("Active auction");
-        auctionService.createAuction(auctionPost);
+        auctionService.saveAuction(auctionPost);
 
         assertNotNull(auctionPost.getId());
 
@@ -134,7 +134,7 @@ public class BidServiceTest extends BaseIntegrationTest {
         auctionPost.setMinPrice(100.0);
         auctionPost.setCreator(auctionHouse);
         auctionPost.setName("Active auction");
-        auctionService.createAuction(auctionPost);
+        auctionService.saveAuction(auctionPost);
 
         assertNotNull(auctionPost.getId());
 

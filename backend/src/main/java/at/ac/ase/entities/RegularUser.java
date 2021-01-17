@@ -1,6 +1,8 @@
 package at.ac.ase.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -41,6 +43,13 @@ public class RegularUser extends User {
     )
     @JsonManagedReference(value = "user_highest_bid")
     private Set<Bid> bids = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "auction_subscriptions",
+            joinColumns = { @JoinColumn(name = "regular_user_id" ) },
+            inverseJoinColumns = { @JoinColumn(name = "auction_post_id") })
+    private Set<AuctionPost> subscriptions = new HashSet<>();
 
     public RegularUser(){}
 
@@ -85,5 +94,44 @@ public class RegularUser extends User {
     @Override
     public void setBids(Set<Bid> bids) {
         this.bids = bids;
+    }
+
+    public Set<AuctionPost> getSubscriptions() {
+        return subscriptions;
+    }
+
+    public void setSubscriptions(Set<AuctionPost> subscriptions) {
+        this.subscriptions = subscriptions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RegularUser that = (RegularUser) o;
+
+        return new EqualsBuilder()
+                .append(preferences, that.preferences)
+                .append(getEmail(),that.getEmail())
+                .append(firstName, that.firstName)
+                .append(lastName, that.lastName)
+                .append(address, that.address)
+                .append(bids, that.bids)
+                .append(getPhoneNr(), that.getPhoneNr())
+                .append(getActive(), that.getActive())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(preferences)
+                .append(firstName)
+                .append(lastName)
+                .append(address)
+                .append(bids)
+                .toHashCode();
     }
 }
