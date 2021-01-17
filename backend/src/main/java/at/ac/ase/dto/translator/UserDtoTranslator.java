@@ -1,7 +1,12 @@
 package at.ac.ase.dto.translator;
 
+import at.ac.ase.dto.RatingDTO;
 import at.ac.ase.dto.RegularUserDTO;
+import at.ac.ase.entities.AuctionPost;
+import at.ac.ase.entities.Rating;
 import at.ac.ase.entities.RegularUser;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +17,14 @@ public class UserDtoTranslator {
     private AddressDtoTranslator addressDtoTranslator;
 
     @Autowired
+    private RatingDtoTranslator ratingDtoTranslator;
+
+    @Autowired
     private AuctionDtoTranslator auctionDtoTranslator;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
 
     public RegularUserDTO toRegularUserDTO(RegularUser regularUser){
         RegularUserDTO regularUserDTO = new RegularUserDTO();
@@ -25,7 +37,7 @@ public class UserDtoTranslator {
         regularUserDTO.setPasswordHash(regularUser.getPasswordHash());
         regularUserDTO.setPhoneNr(regularUser.getPhoneNr());
         regularUserDTO.setOwnedAuctions(auctionDtoTranslator.toDtoSet(regularUser.getOwnedAuctions()));
-        regularUserDTO.setRatings(regularUser.getRatings());
+        regularUserDTO.setRatings(ratingDtoTranslator.toDtoSet(regularUser.getRatings()));
         regularUserDTO.setPreferences(regularUser.getPreferences());
         return regularUserDTO;
     }
@@ -40,8 +52,9 @@ public class UserDtoTranslator {
         regularUser.setLastName(regularUserDTO.getLastName());
         regularUser.setPasswordHash(regularUserDTO.getPasswordHash());
         regularUser.setPhoneNr(regularUserDTO.getPhoneNr());
-        regularUser.setRatings(regularUserDTO.getRatings());
+        //regularUser.setRatings(regularUserDTO.getRatings());
         regularUser.setPreferences(regularUserDTO.getPreferences());
         return regularUser;
     }
+
 }

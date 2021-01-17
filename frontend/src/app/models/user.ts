@@ -9,4 +9,5 @@ export class User {
     phoneNr: string;
     address: Address;
     preferences: [];
+    ratings: [];
 }

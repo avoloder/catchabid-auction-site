@@ -29,6 +29,7 @@ import {LoadingSpinnerService} from "./services/loading-spinner.service";
 import {NgxSpinnerModule} from "ngx-spinner";
 import { CategoriesPickerComponent } from './components/register/categories-picker/categories-picker/categories-picker.component';
 import {ContactFormComponent} from "./components/auctions/contact-form/contact-form.component";
+import { RatingComponent } from './components/rating/rating/rating.component';
 import {ProfileModule} from "./components/profile/profile.module";
 
 @NgModule({
@@ -36,12 +37,14 @@ import {ProfileModule} from "./components/profile/profile.module";
     AppComponent,
     SigninComponent,
     RegisterComponent,
+    SigninComponent,
     ResetPasswordComponent,
     ResetPasswordTokenComponent,
     ForgotPasswordComponent,
     ContactFormComponent,
     AuctionDetailsComponent,
     CategoriesPickerComponent,
+    RatingComponent
   ],
   imports: [
     BrowserModule,

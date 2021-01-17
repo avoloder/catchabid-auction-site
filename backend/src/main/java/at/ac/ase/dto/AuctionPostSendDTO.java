@@ -14,6 +14,8 @@ public class AuctionPostSendDTO {
 
     private Long creatorId;
 
+    private String creatorEmail;
+
     private String category;
 
     private String status;
@@ -180,6 +182,14 @@ public class AuctionPostSendDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getCreatorEmail() {
+        return creatorEmail;
+    }
+
+    public void setCreatorEmail(String creatorEmail) {
+        this.creatorEmail = creatorEmail;
     }
 
     public Boolean getPaid() {
