@@ -87,7 +87,7 @@ public class AuctionService implements IAuctionService {
         if(!auction.getCreator().getId().equals(user.getId())) {
             throw new AuthorizationException();
         }
-        if(auction.getStatus().equals(Status.UPCOMING)) {
+        if(auction.isUpcoming()) {
             auction.setStatus(Status.CANCELLED);
         }
         else {

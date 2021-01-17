@@ -97,6 +97,7 @@ export class AuctionsListComponent implements OnInit {
     query.pageSize   = this.pageSize;
     query.userEmail= localStorage.getItem('email');
     query.useUserPreferences = this.useUserPreferences;
+    query.status = ['ACTIVE', 'UPCOMING'];
 
     if (this.auctionsGroup == "RECENT") {
       query.sortBy = "endTime";

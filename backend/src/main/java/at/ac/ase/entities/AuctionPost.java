@@ -183,4 +183,13 @@ public class AuctionPost {
     public void setPayment(Payment payment) {
         this.payment = payment;
     }
+
+    public boolean isUpcoming() {
+        return this.status == Status.UPCOMING && startTime.isAfter(LocalDateTime.now());
+    }
+
+    public boolean isActive() {
+        return (this.status == Status.UPCOMING || this.status == Status.ACTIVE)
+                && startTime.isBefore(LocalDateTime.now()) && endTime.isAfter(LocalDateTime.now());
+    }
 }

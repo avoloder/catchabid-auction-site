@@ -11,6 +11,7 @@ public class AuctionPostQuery {
     List<String> searchKeys = new ArrayList<>();
     List<Category> categories = new ArrayList<>();
     List<String> countries = new ArrayList<>();
+    List<String> status = new ArrayList<>();
     LocalDateTime auctionsStartFrom;
     LocalDateTime auctionsStartUntil;
     LocalDateTime auctionsEndFrom;
@@ -140,5 +141,13 @@ public class AuctionPostQuery {
 
     public boolean isEmptySearch(){
         return searchKeys.isEmpty() && categories.isEmpty() && countries.isEmpty();
+    }
+
+    public List<String> getStatus() {
+        return status;
+    }
+
+    public void setStatus(List<String> status) {
+        this.status = status;
     }
 }

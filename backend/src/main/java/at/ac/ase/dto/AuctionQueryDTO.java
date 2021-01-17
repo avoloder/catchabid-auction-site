@@ -12,6 +12,7 @@ public class AuctionQueryDTO {
     List<String> searchKeys = new ArrayList<>();
     List<Category> categories = new ArrayList<>();
     List<String> countries = new ArrayList<>();
+    List<String> status = new ArrayList<>();
     LocalDateTime auctionsStartFrom;
     LocalDateTime auctionsStartUntil;
     LocalDateTime auctionsEndFrom;
@@ -143,4 +144,11 @@ public class AuctionQueryDTO {
         this.useUserPreferences = useUserPreferences;
     }
 
+    public List<String> getStatus() {
+        return status;
+    }
+
+    public void setStatus(List<String> status) {
+        this.status = status;
+    }
 }

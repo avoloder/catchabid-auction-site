@@ -29,6 +29,7 @@ export class AuctionsService {
       .set("categories", query.categories.join(","))
       .set("searchKeys", query.searchKeys.join(","))
       .set("countries", query.countries.join(","))
+      .set("status", query.status.join(","))
       .set("sortBy", query.sortBy)
       .set("sortOrder", query.sortOrder)
       .set("useUserPreferences", String(query.useUserPreferences))
