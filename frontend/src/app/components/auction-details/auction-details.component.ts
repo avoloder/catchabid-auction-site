@@ -31,7 +31,6 @@ export class AuctionDetailsComponent implements OnInit {
 
   onModalClose(): void {
     this.modalService.dismissAll();
-    this.auctionService.auctionDetailModalClosed.next();
   }
 
   openBidModal(auction: AuctionPost): void {
