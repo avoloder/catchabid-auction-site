@@ -84,6 +84,7 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
+    @Transactional
     public AuctionPostSendDTO cancelAuction(User user, Long auctionPostId) {
         AuctionPost auction = auctionRepository.findById(auctionPostId)
                 .orElseThrow(ObjectNotFoundException::new);
@@ -97,7 +98,7 @@ public class AuctionService implements IAuctionService {
         else {
             throw new AuctionCancellationException();
         }
-        return auctionDtoTranslator.toSendDto(auction);
+        return auctionDtoTranslator.toSendDto(auction, true);
     }
 
     @Override
