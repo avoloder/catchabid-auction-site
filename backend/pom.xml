@@ -59,7 +59,7 @@
                 </dependencies>
                 <configuration>
                     <driver>org.postgresql.Driver</driver>
-                    <url>jdbc:postgresql://localhost:5432/catchabidDb</url>
+                    <url>jdbc:postgresql://localhost:5432/catchabid_db</url>
                     <username>catchabid</username>
                     <password>7PjJKSh7QpRQj9Tw</password>
                 </configuration>

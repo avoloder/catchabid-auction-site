@@ -2,6 +2,7 @@ export class AuctionSearchQuery {
   categories: string[] = [];
   searchKeys: string[] = [];
   countries: string[] = [];
+  status: string[] = [];
   auctionsStartFrom: Date;
   auctionsStartUntil: Date;
   auctionsEndFrom : Date;

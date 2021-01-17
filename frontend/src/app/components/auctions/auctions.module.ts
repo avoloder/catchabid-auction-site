@@ -21,7 +21,7 @@ import {AuctionCancellationConfirmationComponent} from "../auction-details/aucti
     AuctionCountdownComponent,
     AuctionFormComponent,
     AuctionsSearchFormComponent,
-    AuctionCancellationConfirmationComponent
+    AuctionCancellationConfirmationComponent,
     ProfileAuctionsListComponent
   ],
   imports: [

@@ -25,6 +25,9 @@
               <div class="col-12"  style="margin-bottom: 10px;">
                 <p class="h6">Category: <span class="badge badge-secondary" style="margin-left:5px;"> {{auction.category}} </span></p>
               </div>
+              <div *ngIf="auction.status == 'CANCELLED'" class="col-12"  style="margin-bottom: 10px;">
+                <p class="h6">Status: <span class="badge badge-danger" style="margin-left:5px;"> {{auction.status}} </span></p>
+              </div>
               <div class="col-12" style="margin-bottom: 15px;">
                 <p class="h6">Information about creator:</p>
                 <div class="row">

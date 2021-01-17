@@ -99,7 +99,8 @@ export class AuctionDetailsComponent implements OnInit {
         if (result) {
           console.log("cancel auction");
           this.auctionService.cancelAuction(this.auction).subscribe(contactForm => {
-            console.log("auction cancelled successfully")
+            this.auction.status = 'CANCELLED';
+            console.log("auction cancelled successfully");
           }, error => {
             console.log("auction cancellation error")
           });

@@ -77,6 +77,22 @@ public class AuctionRepositoryCustomQueriesImpl implements AuctionRepositoryCust
 
 
         /*
+         * status values
+         */
+
+        if (!auctionQuery.getStatus().isEmpty()) {
+
+            List<Predicate> predicatesOr = new ArrayList<>();
+
+            for (String status : auctionQuery.getStatus()) {
+                predicatesOr.add(cb.equal(root.get("status"), Status.valueOf(status)));
+            }
+            predicatesAnd.add(cb.or(predicatesOr.toArray(new Predicate[predicatesOr.size()])));
+        }
+
+
+
+        /*
          * search key filtering for creator name, auction name and description
          */
 
