@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import {AuctionsService} from '../../../services/auction.service';
 import {AuctionsSearchService} from "../../../services/auctions-search.service";
 import {ContactFormComponent} from "../../auctions/contact-form/contact-form.component";
+import { NotificationsService } from 'src/app/services/notifications.service';
 
 @Component({
   selector: 'app-navbar',
@@ -33,10 +34,12 @@ export class NavbarComponent implements OnInit {
     private modalService: NgbModal,
     private auctionsService: AuctionsService,
     private router: Router,
-    private auctionsSearchService: AuctionsSearchService
+    private auctionsSearchService: AuctionsSearchService,
+    private notificationsService: NotificationsService
   ) { }
 
   ngOnInit(): void {
+    this.loadNotifications();
   }
 
   openLoginModal(): void {
@@ -93,5 +96,12 @@ export class NavbarComponent implements OnInit {
   clearTestInput() {
     this.searchInputText = "";
     this.auctionsSearchService.updateSearchKeys([]);
+  }
+
+  private loadNotifications() {
+    this.notificationsService.getNotifications().subscribe(
+      (res) => console.log(res),
+      (err) => console.log(err)
+    )
   }
 }
