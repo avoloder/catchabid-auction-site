@@ -120,15 +120,23 @@ public interface IAuctionService {
      */
     List<String> getCountriesWhereAuctionsExist();
 
-    ContactForm postContactForm(ContactForm contactForm);
+    /**
+     *
+     * @param auctionId
+     * @param user
+     * @param contactForm
+     * @return
+     */
+    AuctionPostSendDTO postContactForm(Long auctionId, User user, ContactForm contactForm);
+
+    ContactFormDTO getContactForm(Long auctionPostId, User user);
 
     /**
      *
      * @param contactFormDTO
-     * @param user
      * @return
      */
-    ContactForm convertContactFormToDTO(ContactFormDTO contactFormDTO, User user);
+    ContactForm convertContactFormToDTO(ContactFormDTO contactFormDTO);
 
     /**
      * Checks if the given {@link AuctionPost} is payable - it is finished AND has a bid

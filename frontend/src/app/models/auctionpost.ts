@@ -18,6 +18,7 @@ export class AuctionPost {
   image: string;
   creatorEmail: string;
   paid?: boolean;
+  contactFormSubmitted?: boolean;
   subscriptions: any[];
 
   constructor(creatorId: number, name: string, category: string, startTime: Date, endTime: Date, country: string,

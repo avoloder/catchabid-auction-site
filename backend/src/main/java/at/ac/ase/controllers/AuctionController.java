@@ -133,11 +133,17 @@ public class AuctionController {
             @RequestBody ContactFormDTO contactFormDTO,
             @CurrentSecurityContext(expression = "authentication.principal") User user) {
 
-        ContactForm contactForm = auctionService.convertContactFormToDTO(contactFormDTO, user);
+        ContactForm contactForm = auctionService.convertContactFormToDTO(contactFormDTO);
 
-        auctionService.postContactForm(contactForm);
+        return ResponseEntity.ok(auctionService.postContactForm(contactFormDTO.getAuctionPostId(), user, contactForm));
+    }
 
-        return ResponseEntity.ok(auctionService.postContactForm(contactForm));
+    @GetMapping(value = "/getContactForm")
+    public ResponseEntity<ContactFormDTO> getContactForm(
+            @RequestParam(required = false) Long auctionPostId,
+            @CurrentSecurityContext(expression = "authentication.principal") User user) {
+
+        return ResponseEntity.ok(auctionService.getContactForm(auctionPostId, user));
     }
 
     @PostMapping(value = "/subscribe")

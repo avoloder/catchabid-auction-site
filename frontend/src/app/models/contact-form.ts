@@ -1,5 +1,3 @@
-import {Address} from './address';
-
 export class ContactForm {
   id: number;
   auctionPostId: number;

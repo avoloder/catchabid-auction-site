@@ -67,7 +67,7 @@
         font-weight: bold;
     }
 	
-	#item-owner {
+	.item-owner {
 	text-align-last: end;
 	}
 	
@@ -116,12 +116,11 @@
                     <table>
                         <tr>
                             <td class="title">
-                              <img th:src="@{classpath:static/images/catchabid-logo.png}" style="width:100%; max-width:300px;"/>
+                              <img th:src="@{https://i.ibb.co/4TdMFSk/catchabid-logo.png}" style="width:100%; max-width:300px;"/>
                             </td>
                             
-                            <td>
-                                Auction #: 123<br/>
-                                Created: January 1, 2015
+                            <td th:utext="'Auction #: ' + ${auction.id} + '<br/>' + 'Created: ' +
+                            ${created}">
                             </td>
                         </tr>
                     </table>
@@ -132,25 +131,28 @@
                 <td colspan="2">
                     <table>
                         <tr>
-                            <td>
-								<b>Bidder:</b><br/>
-                                Sparksuite, Inc.<br/>
-                                12345 Sunny Road<br/>
-                                Sunnyville, CA 12345
+                            <td th:utext="'<b>Bidder:</b><br/>' + ${auction.highestBid.user.firstName} + ' ' + ${auction.highestBid.user.lastName} + '<br/>' +
+                            ${auction.highestBid.user.address.street} + ' ' + ${auction.highestBid.user.address.houseNr} + '<br/>' +
+                            ${auction.highestBid.user.address.city} + ', ' + ${auction.highestBid.user.address.country} + '<br/>' +
+                            ${auction.highestBid.user.email}">
                             </td>
-							
-							<td>
-							<b>Ship to:</b><br/>
-                                Acme Corp.<br/>
-                                John Doe<br/>
-                                john@example.com
+
+                            <td th:utext="'<b>Ship to:</b><br/>' + ${auction.contactForm.firstName} + ' ' + ${auction.contactForm.lastName} + '<br/>' +
+                            ${auction.contactForm.address.street} + ' ' + ${auction.contactForm.address.houseNr} + '<br/>' +
+                            ${auction.contactForm.address.city} + ', ' + ${auction.contactForm.address.country} + '<br/>' +
+                            ${auction.contactForm.email}">
                             </td>
-                            
-                            <td id="item-owner">
-								<b>Item owner:</b><br/>
-                                Acme Corp.<br/>
-                                John Doe<br/>
-                                john@example.com
+
+                            <td class="item-owner" th:if="${user == 'auctionHouse'}" th:utext="'<b>Item owner:</b><br/>' + ${auction.creator.name} + '<br/>' +
+                            ${auction.creator.address.street} + ' ' + ${auction.creator.address.houseNr} + '<br/>' +
+                            ${auction.creator.address.city} + ', ' + ${auction.creator.address.country} + '<br/>' +
+                            ${auction.creator.email}">
+                            </td>
+
+                            <td class="item-owner" th:if="${user == 'regularUser'}" th:utext="'<b>Item owner:</b><br/>' + ${auction.creator.firstName} + ' ' + ${auction.creator.lastName} + '<br/>' +
+                            ${auction.creator.address.street} + ' ' + ${auction.creator.address.houseNr} + '<br/>' +
+                            ${auction.creator.address.city} + ', ' + ${auction.creator.address.country} + '<br/>' +
+                            ${auction.creator.email}">
                             </td>
                         </tr>
                     </table>
@@ -171,14 +173,14 @@
                 <td th:text="${auction.name}">
                 </td>
                 
-                <td th:text="'$' + ${price}">
+                <td th:text="'€' + ${auction.highestBid.offer}">
                 </td>
             </tr>
             
             <tr class="total">
                 <td></td>
                 
-                <td th:text="'Total: $' + ${price}">
+                <td th:text="'Total: €' + ${auction.highestBid.offer}">
                 </td>
             </tr>
         </table>

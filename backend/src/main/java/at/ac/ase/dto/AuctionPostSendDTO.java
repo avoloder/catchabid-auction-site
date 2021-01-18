@@ -46,6 +46,8 @@ public class AuctionPostSendDTO {
 
     private Boolean paid;
 
+    private Boolean contactFormSubmitted;
+
     private Set<RegularUserDTO> subscriptions = new HashSet<>();
 
     public String getImage() {
@@ -198,6 +200,14 @@ public class AuctionPostSendDTO {
 
     public void setPaid(Boolean paid) {
         this.paid = paid;
+    }
+
+    public Boolean getContactFormSubmitted() {
+        return contactFormSubmitted;
+    }
+
+    public void setContactFormSubmitted(Boolean contactFormSubmitted) {
+        this.contactFormSubmitted = contactFormSubmitted;
     }
 
     public Set<RegularUserDTO> getSubscriptions() {

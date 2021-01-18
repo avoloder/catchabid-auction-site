@@ -9,7 +9,6 @@ import at.ac.ase.entities.*;
 import at.ac.ase.repository.auction.AuctionPostQuery;
 import at.ac.ase.repository.auction.AuctionRepository;
 import at.ac.ase.repository.user.UserRepository;
-import at.ac.ase.repository.auction.ContactFormRepository;
 import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
@@ -42,7 +41,9 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.validation.*;
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -60,16 +61,10 @@ public class AuctionService implements IAuctionService {
     private IAuctionHouseService auctionHouseService;
 
     @Autowired
-    private ContactFormRepository contactFormRepository;
-
-    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
     private AuctionDtoTranslator auctionDtoTranslator;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     JavaMailSender emailSender;
@@ -278,10 +273,18 @@ public class AuctionService implements IAuctionService {
         return new ArrayList<>();
     }
 
-    public ContactForm postContactForm(ContactForm contactForm) {
+    public AuctionPostSendDTO postContactForm(Long auctionId, User user, ContactForm contactForm) {
+        AuctionPost auction = auctionRepository.findById(auctionId)
+                .orElseThrow(ObjectNotFoundException::new);
+
+        if (!auction.getHighestBid().getUser().getId().equals(user.getId())) {
+            throw new AuthorizationException();
+        }
         Set<ConstraintViolation<ContactForm>> violations = validator.validate(contactForm);
+
         if (violations.isEmpty()) {
-            return contactFormRepository.save(contactForm);
+            auction.setContactForm(contactForm);
+            return auctionDtoTranslator.toSendDto(saveAuction(auction), true);
         } else {
             for (ConstraintViolation<ContactForm> violation : violations) {
                 throw new ValidationException(violation.getMessage());
@@ -290,13 +293,30 @@ public class AuctionService implements IAuctionService {
         }
     }
 
-    public ContactForm convertContactFormToDTO(ContactFormDTO contactFormDTO, User user) {
+    public ContactFormDTO getContactForm(Long auctionPostId, User user) {
+        AuctionPost auction = auctionRepository.findById(auctionPostId)
+                .orElseThrow(ObjectNotFoundException::new);
+
+        if (!auction.getCreator().getId().equals(user.getId())) {
+            throw new AuthorizationException();
+        }
+
+        return convertDTOToContactForm(auction.getContactForm(), auctionPostId);
+    }
+
+    private ContactFormDTO convertDTOToContactForm(ContactForm contactForm, Long auctionPostId) {
+        ContactFormDTO contactFormDTO = modelMapper.map(contactForm, ContactFormDTO.class);
+        contactFormDTO.setCountry(contactForm.getAddress().getCountry());
+        contactFormDTO.setCity(contactForm.getAddress().getCity());
+        contactFormDTO.setStreet(contactForm.getAddress().getStreet());
+        contactFormDTO.setHouseNr(contactForm.getAddress().getHouseNr());
+        contactFormDTO.setAuctionPostId(auctionPostId);
+        return contactFormDTO;
+    }
+
+    public ContactForm convertContactFormToDTO(ContactFormDTO contactFormDTO) {
         ContactForm contactForm = modelMapper.map(contactFormDTO, ContactForm.class);
-
         contactForm.setAddress(new Address(contactFormDTO.getCountry(), contactFormDTO.getCity(), contactFormDTO.getStreet(), contactFormDTO.getHouseNr()));
-        contactForm.setUser(user);
-        auctionRepository.findById(contactFormDTO.getAuctionPostId()).ifPresent(contactForm::setAuctionPost);
-
         return contactForm;
     }
 
@@ -348,8 +368,8 @@ public class AuctionService implements IAuctionService {
     @Override
     public AuctionPost sendConfirmation(AuctionPost auctionPost, User user) throws IOException, DocumentException {
        generatePdfFromHtml(parseThymeleafTemplate(auctionPost));
-       sendConfirmationEmail(new RegularUser());
-        return null;
+       sendConfirmationEmail(auctionPost.getContactForm());
+       return null;
     }
 
     private String parseThymeleafTemplate(AuctionPost auctionPost) throws IOException {
@@ -360,14 +380,17 @@ public class AuctionService implements IAuctionService {
         TemplateEngine templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(templateResolver);
 
-        //byte[] fileContent = FileUtils.readFileToByteArray(new File(getClass().getClassLoader().getResource("catchabid-logo.png").getFile()));
-        //String encodedString = Base64.getEncoder().encodeToString(fileContent);
-
+        DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String dateString = formatDate.format(auctionPost.getEndTime());
 
         Context context = new Context();
         context.setVariable("auction", auctionPost);
-        context.setVariable("price", 12.22);
-        //context.setVariable("image", "data:image/png;base64, " + encodedString);
+        context.setVariable("created", dateString);
+        if (auctionPost.getCreator() instanceof RegularUser) {
+            context.setVariable("user", "regularUser");
+        } else {
+            context.setVariable("user", "auctionHouse");
+        }
 
         return templateEngine.process("confirmation", context);
     }
@@ -384,17 +407,15 @@ public class AuctionService implements IAuctionService {
         outputStream.close();
     }
 
-    private void sendConfirmationEmail(RegularUser user){
+    private void sendConfirmationEmail(ContactForm contactForm){
         try {
             MimeMessage message = emailSender.createMimeMessage();
 
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-
             helper.setFrom("noreply.catchabid@gmail.com");
-            helper.setTo("mensur_b_7@hotmail.com");
+            helper.setTo(contactForm.getEmail());
             helper.setSubject("Confirmation about won auction");
-            helper.setText("Dear " + //user.getFirstName() +
-                    " " + //user.getLastName() +
+            helper.setText("Dear " + contactForm.getFirstName() + " " + contactForm.getLastName() +
                     ", <br/> congratulations on winning an auction. " +
                     "You can find the official confirmation about the won auction in the attachment. <br/>", true);
 
