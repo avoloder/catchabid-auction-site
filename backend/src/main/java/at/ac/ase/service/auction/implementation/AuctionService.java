@@ -11,6 +11,7 @@ import at.ac.ase.repository.auction.AuctionRepository;
 import at.ac.ase.repository.user.UserRepository;
 import at.ac.ase.repository.auction.ContactFormRepository;
 import at.ac.ase.service.auction.IAuctionService;
+import at.ac.ase.service.notification.INotificationService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
 import at.ac.ase.util.AuctionStatusNotificationJob;
@@ -69,6 +70,8 @@ public class AuctionService implements IAuctionService {
     @Autowired
     IRegularUserService userService;
 
+    @Autowired
+    INotificationService notificationService;
 
 
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -333,6 +336,8 @@ public class AuctionService implements IAuctionService {
                     .build();
             job.getJobDataMap().put("auctionPost", auctionPost);
             job.getJobDataMap().put("emailSender", emailSender);
+            job.getJobDataMap().put("notificationService", notificationService);
+            job.getJobDataMap().put("auctionService", this);
 
             Trigger trigger = TriggerBuilder.newTrigger()
                     .withIdentity(triggerName, "group1")
