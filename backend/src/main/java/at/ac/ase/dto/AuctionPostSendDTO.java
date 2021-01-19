@@ -16,6 +16,8 @@ public class AuctionPostSendDTO {
 
     private String creatorEmail;
 
+    private Boolean creatorVerified;
+
     private String category;
 
     private String status;
@@ -206,5 +208,13 @@ public class AuctionPostSendDTO {
 
     public void setSubscriptions(Set<RegularUserDTO> subscriptions) {
         this.subscriptions = subscriptions;
+    }
+
+    public Boolean getCreatorVerified() {
+        return creatorVerified;
+    }
+
+    public void setCreatorVerified(Boolean creatorVerified) {
+        this.creatorVerified = creatorVerified;
     }
 }

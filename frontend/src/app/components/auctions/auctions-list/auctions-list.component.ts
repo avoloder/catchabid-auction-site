@@ -11,6 +11,7 @@ import {AuctionSearchQuery} from "../../../models/auctionSearchQuery";
 import { AuctionsSearchService } from 'src/app/services/auctions-search.service';
 import { LoadingSpinnerService } from 'src/app/services/loading-spinner.service';
 import { ToastrService } from 'ngx-toastr';
+import { UserService } from 'src/app/services/user.service';
 
 
 @Component({
@@ -26,10 +27,13 @@ export class AuctionsListComponent implements OnInit {
 
   auctionDetailsModalClosedSub: Subscription;
 
+  isVerifed = false;
+
   constructor(
     private _dataService: AuctionsService,
     private bidsService: BidsService,
     private modalService: NgbModal,
+    private userService: UserService,
     private toast: ToastrService,
     private _auctionsSearchService: AuctionsSearchService,
     private _loadingSpinnerService: LoadingSpinnerService) {
@@ -177,6 +181,7 @@ export class AuctionsListComponent implements OnInit {
   }
 
   isOwnAuction(auction: AuctionPost) {
+    console.log(auction.creatorVerified);
     return auction.creatorId.toString() == localStorage.getItem('userId');
   }
 
@@ -192,5 +197,4 @@ export class AuctionsListComponent implements OnInit {
     }
     return false;
   }
-
 }

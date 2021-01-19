@@ -23,6 +23,7 @@ public class AuctionHouseDtoTranslator {
         auctionHouseDTO.setPhoneNr(auctionHouse.getPhoneNr());
         auctionHouseDTO.setEmail(auctionHouse.getEmail());
         auctionHouseDTO.setOwnedAuctions(auctionHouse.getOwnedAuctions());
+        auctionHouseDTO.setVerifed(auctionHouse.getVerified());
         return auctionHouseDTO;
     }
 
@@ -38,6 +39,7 @@ public class AuctionHouseDtoTranslator {
         auctionHouse.setPhoneNr(houseDTO.getPhoneNr());
         auctionHouse.setEmail(houseDTO.getEmail());
         auctionHouse.setOwnedAuctions(houseDTO.getOwnedAuctions());
+        auctionHouse.setVerified(houseDTO.getVerifed());
         return auctionHouse;
     }
 }

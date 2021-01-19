@@ -67,6 +67,13 @@ public class RatingService implements IRatingService {
             rating.setId(ratingPK);
             RegularUser regularUser = userRepository.findByEmail(ratingData.getAuctionPost().getCreatorEmail());
             if (regularUser != null){
+                Double userRating = calculateRating(regularUser.getEmail());
+                if(regularUser.getRatings().size() >= 15 && userRating >= 4.0){
+                    if(!regularUser.getVerified()) {
+                        regularUser.setVerified(true);
+                        userRepository.save(regularUser);
+                    }
+                }
                 rating.setUser(regularUser);
             } else {
                 AuctionHouse auctionHouse = auctionHouseRepository.findByEmail(ratingData.getAuctionPost().getCreatorEmail());
