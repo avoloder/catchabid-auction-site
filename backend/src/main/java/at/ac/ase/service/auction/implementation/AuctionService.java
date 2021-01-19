@@ -11,14 +11,18 @@ import at.ac.ase.repository.auction.AuctionRepository;
 import at.ac.ase.repository.user.UserRepository;
 import at.ac.ase.repository.auction.ContactFormRepository;
 import at.ac.ase.service.auction.IAuctionService;
+import at.ac.ase.service.notification.INotificationService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
+import at.ac.ase.util.AuctionStatusNotificationJob;
 import at.ac.ase.util.exceptions.EmailNotSentException;
 import at.ac.ase.util.exceptions.EmptyObjectException;
 import at.ac.ase.util.exceptions.ObjectNotFoundException;
 import at.ac.ase.util.exceptions.WrongSubscriberException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +35,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.*;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -64,6 +69,9 @@ public class AuctionService implements IAuctionService {
 
     @Autowired
     IRegularUserService userService;
+
+    @Autowired
+    INotificationService notificationService;
 
 
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -216,6 +224,11 @@ public class AuctionService implements IAuctionService {
             entityQuery.setCategories(getPreferences(entityQuery.getUserEmail(), entityQuery.isUseUserPreferences()));
         }
         List<AuctionPost> foundAuctions = auctionRepository.query(entityQuery);
+        for (AuctionPost auctionPost: foundAuctions){
+            if(auctionPost.getStartTime().isAfter(LocalDateTime.now())) {
+                scheduleNotificationJob(auctionPost);
+            }
+        }
         logger.info("Size of auctions: " + foundAuctions.size());
         return auctionDtoTranslator.toDtoList(foundAuctions);
     }
@@ -312,4 +325,33 @@ public class AuctionService implements IAuctionService {
         return auctionDtoTranslator.toDtoSet(retrieved);
     }
 
+    private void scheduleNotificationJob(AuctionPost auctionPost){
+        try {
+            SchedulerFactory schedFact = new StdSchedulerFactory();
+            Scheduler sched = schedFact.getScheduler();
+            String jobName = auctionPost.getId().toString();
+            String triggerName = "trigger-" + auctionPost.getId();
+            JobDetail job = JobBuilder.newJob(AuctionStatusNotificationJob.class)
+                    .withIdentity(jobName, "group1")
+                    .build();
+            job.getJobDataMap().put("auctionPost", auctionPost);
+            job.getJobDataMap().put("emailSender", emailSender);
+            job.getJobDataMap().put("notificationService", notificationService);
+            job.getJobDataMap().put("auctionService", this);
+
+            Trigger trigger = TriggerBuilder.newTrigger()
+                    .withIdentity(triggerName, "group1")
+                    .startAt(java.util.Date
+                            .from(auctionPost.getStartTime().atZone(ZoneId.systemDefault())
+                                    .toInstant()))
+                    .forJob(jobName, "group1")
+                    .build();
+
+            sched.scheduleJob(job, trigger);
+            sched.start();
+
+        }catch (SchedulerException e){
+            logger.error(e.getMessage());
+        }
+    }
 }
