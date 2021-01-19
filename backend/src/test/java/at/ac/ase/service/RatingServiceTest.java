@@ -10,12 +10,15 @@ import at.ac.ase.repository.user.RatingRepository;
 import at.ac.ase.repository.user.UserRepository;
 import at.ac.ase.service.auction.implementation.AuctionService;
 import at.ac.ase.service.user.rating.implementation.RatingService;
+import at.ac.ase.util.exceptions.InvalidRatingDataException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
@@ -47,15 +50,61 @@ public class RatingServiceTest extends BaseIntegrationTest {
 
     @Test
     @Transactional
-    public void testSetRating(){
+    public void testSetValidRating(){
         List<AuctionPostSendDTO> auctions = auctionService.getRecentAuctions(0, 0);
         RegularUser regularUser = userRepository.findByEmail("test@test.com");
         RatingDataDTO ratingDataDTO = new RatingDataDTO();
-        ratingDataDTO.setAuctionPost(auctions.get(0));
+        AuctionPostSendDTO auctionPostSendDTO = auctions.get(0);
+        auctionPostSendDTO.setEndTime(LocalDateTime.now());
+        ratingDataDTO.setAuctionPost(auctionPostSendDTO);
+        System.out.println(auctions.get(0).getEndTime());
         ratingDataDTO.setRatingValue(4);
 
         assertThat(ratingRepository.findAll().size(), is(0));
         ratingService.setRating(ratingDataDTO, regularUser);
         assertThat(ratingRepository.findAll().size(), is(1));
     }
+
+    @Test(expected = InvalidRatingDataException.class)
+    @Transactional
+    public void testSetRatingTooHigh(){
+        List<AuctionPostSendDTO> auctions = auctionService.getRecentAuctions(0, 0);
+        RegularUser regularUser = userRepository.findByEmail("test@test.com");
+        RatingDataDTO ratingDataDTO = new RatingDataDTO();
+        AuctionPostSendDTO auctionPostSendDTO = auctions.get(0);
+        auctionPostSendDTO.setEndTime(LocalDateTime.now());
+        ratingDataDTO.setAuctionPost(auctionPostSendDTO);
+        ratingDataDTO.setRatingValue(6);
+        ratingService.setRating(ratingDataDTO, regularUser);
+    }
+
+    @Test(expected = InvalidRatingDataException.class)
+    @Transactional
+    public void testSetRatingInvalidRange(){
+        LocalDateTime date = LocalDateTime.of(2020, Month.DECEMBER,17,6,30,40,50000);
+        List<AuctionPostSendDTO> auctions = auctionService.getRecentAuctions(0, 0);
+        RegularUser regularUser = userRepository.findByEmail("test@test.com");
+        RatingDataDTO ratingDataDTO = new RatingDataDTO();
+        AuctionPostSendDTO auctionPostSendDTO = auctions.get(0);
+        auctionPostSendDTO.setEndTime(date);
+        ratingDataDTO.setAuctionPost(auctionPostSendDTO);
+        ratingDataDTO.setRatingValue(4);
+        ratingService.setRating(ratingDataDTO, regularUser);
+    }
+
+    @Test
+    @Transactional
+    public void testSetRatingValidRange(){
+        LocalDateTime date = LocalDateTime.of(2020, Month.DECEMBER,20,6,30,40,50000);
+        List<AuctionPostSendDTO> auctions = auctionService.getRecentAuctions(0, 0);
+        RegularUser regularUser = userRepository.findByEmail("test@test.com");
+        RatingDataDTO ratingDataDTO = new RatingDataDTO();
+        AuctionPostSendDTO auctionPostSendDTO = auctions.get(0);
+        auctionPostSendDTO.setEndTime(date);
+        ratingDataDTO.setAuctionPost(auctionPostSendDTO);
+        ratingDataDTO.setRatingValue(4);
+        ratingService.setRating(ratingDataDTO, regularUser);
+    }
+
+
 }

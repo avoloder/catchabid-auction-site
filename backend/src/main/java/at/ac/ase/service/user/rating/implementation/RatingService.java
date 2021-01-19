@@ -7,10 +7,14 @@ import at.ac.ase.repository.user.AuctionHouseRepository;
 import at.ac.ase.repository.user.RatingRepository;
 import at.ac.ase.repository.user.UserRepository;
 import at.ac.ase.service.user.rating.IRatingService;
+import at.ac.ase.util.exceptions.InvalidRatingDataException;
 import at.ac.ase.util.exceptions.UserAlreadyRatedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -57,17 +61,35 @@ public class RatingService implements IRatingService {
 
     @Override
     public void setRating(RatingDataDTO ratingData, User user) {
-        RatingPK ratingPK = new RatingPK(ratingData.getAuctionPost().getId(), user.getId());
-        Rating rating = new Rating();
-        rating.setId(ratingPK);
-        RegularUser regularUser = userRepository.findByEmail(ratingData.getAuctionPost().getCreatorEmail());
-        if (regularUser != null){
-            rating.setUser(regularUser);
+        if(validateRatingData(ratingData)){
+            RatingPK ratingPK = new RatingPK(ratingData.getAuctionPost().getId(), user.getId());
+            Rating rating = new Rating();
+            rating.setId(ratingPK);
+            RegularUser regularUser = userRepository.findByEmail(ratingData.getAuctionPost().getCreatorEmail());
+            if (regularUser != null){
+                rating.setUser(regularUser);
+            } else {
+                AuctionHouse auctionHouse = auctionHouseRepository.findByEmail(ratingData.getAuctionPost().getCreatorEmail());
+                rating.setUser(auctionHouse);
+            }
+            rating.setRating(ratingData.getRatingValue());
+            ratingRepository.save(rating);
         } else {
-            AuctionHouse auctionHouse = auctionHouseRepository.findByEmail(ratingData.getAuctionPost().getCreatorEmail());
-            rating.setUser(auctionHouse);
+            throw new InvalidRatingDataException();
         }
-        rating.setRating(ratingData.getRatingValue());
-        ratingRepository.save(rating);
+    }
+
+    private boolean validateRatingData(RatingDataDTO ratingDataDTO){
+        boolean correctRatingValue = false;
+        boolean correctTimePeriod = false;
+        if (ratingDataDTO.getRatingValue() <= 5 && ratingDataDTO.getRatingValue() >= 1){
+            correctRatingValue = true;
+        }
+        LocalDateTime now = LocalDateTime.now();
+        Duration duration = Duration.between(ratingDataDTO.getAuctionPost().getEndTime(), now);
+        if(duration.toDays() <= 30){
+            correctTimePeriod = true;
+        }
+        return correctRatingValue && correctTimePeriod;
     }
 }

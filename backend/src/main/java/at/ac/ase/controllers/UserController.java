@@ -67,12 +67,8 @@ public class UserController {
             @RequestBody RatingDataDTO ratingData,
             @CurrentSecurityContext(expression = "authentication.principal") User user){
         logger.info("Setting rating for user");
-        try{
-            this.ratingService.setRating(ratingData, user);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (DataAccessException e) {
-            throw e;
-        }
+        this.ratingService.setRating(ratingData, user);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @RequestMapping(value = "/checkRated", method = RequestMethod.POST)
