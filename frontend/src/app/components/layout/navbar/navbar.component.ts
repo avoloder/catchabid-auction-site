@@ -7,8 +7,10 @@ import { AuctionFormComponent } from '../../auctions/auction-form/auction-form.c
 import { Router } from '@angular/router';
 import {AuctionsService} from '../../../services/auction.service';
 import {AuctionsSearchService} from "../../../services/auctions-search.service";
-import {ContactFormComponent} from "../../auctions/contact-form/contact-form.component";
 import { NotificationsService } from 'src/app/services/notifications.service';
+import * as Stomp from 'stompjs';
+import { UserService } from 'src/app/services/user.service';
+import { SigninService } from 'src/app/services/signin.service';
 
 @Component({
   selector: 'app-navbar',
@@ -30,16 +32,33 @@ export class NavbarComponent implements OnInit {
 
   searchInputText: string;
 
+  webSocket: WebSocket;
+  client: Stomp.Client;
+
   constructor(
     private modalService: NgbModal,
     private auctionsService: AuctionsService,
     private router: Router,
     private auctionsSearchService: AuctionsSearchService,
-    private notificationsService: NotificationsService
+    private notificationsService: NotificationsService,
   ) { }
 
   ngOnInit(): void {
     this.loadNotifications();
+    this.webSocket = new WebSocket('ws://localhost:8080/notification');
+    this.client = Stomp.over(this.webSocket);
+    this.openWebSocket();
+  }
+
+  openWebSocket() {
+    console.log(this.userName);
+    this.client.connect({}, () => {
+      this.client.subscribe('/1/queue/notification',
+      (notification: any) => {
+        console.log(notification);
+      });
+    });
+
   }
 
   openLoginModal(): void {

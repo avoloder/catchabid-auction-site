@@ -25,6 +25,9 @@ public class NotificationController {
     @Autowired
     private NotificationDTOTranslator notificationDTOTranslator;
 
+    @Autowired
+    private NotificationWebSocketController webSocketController;
+
     @GetMapping
     public ResponseEntity<Object> getNotificationsForRegularUser(
         @CurrentSecurityContext(expression = "authentication.principal") User user) {
@@ -32,6 +35,8 @@ public class NotificationController {
         RegularUserNotification notification = new RegularUserNotification();
         notification.setReceiver((RegularUser) user);
         notification.setInfo("Test");
+
+        webSocketController.sendNotification(user, notification);
         notificationService.saveNotification(notification);
         return ResponseEntity.ok(
             notificationDTOTranslator.toDtoList(notificationService.getNotificationsForUser(user)));
