@@ -6,7 +6,9 @@ import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.AuctionQueryDTO;
 import at.ac.ase.dto.ContactFormDTO;
 import at.ac.ase.entities.*;
+import com.lowagie.text.DocumentException;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -118,15 +120,23 @@ public interface IAuctionService {
      */
     List<String> getCountriesWhereAuctionsExist();
 
-    ContactForm postContactForm(ContactForm contactForm);
+    /**
+     *
+     * @param auctionId
+     * @param user
+     * @param contactForm
+     * @return
+     */
+    AuctionPostSendDTO postContactForm(Long auctionId, User user, ContactForm contactForm);
+
+    ContactFormDTO getContactForm(Long auctionPostId, User user);
 
     /**
      *
      * @param contactFormDTO
-     * @param user
      * @return
      */
-    ContactForm convertContactFormToDTO(ContactFormDTO contactFormDTO, User user);
+    ContactForm convertContactFormToDTO(ContactFormDTO contactFormDTO);
 
     /**
      * Checks if the given {@link AuctionPost} is payable - it is finished AND has a bid
@@ -162,5 +172,13 @@ public interface IAuctionService {
 
     List<AuctionPostSendDTO> getMyAuctions(User user);
     Set<AuctionPostSendDTO> getMySubscriptions(RegularUser user);
+
+    /**
+     * Method which sends confirmation for won auction to the winner
+     * @param auctionPost - auction post for which one wants to send confirmation
+     * @param user - logged in user
+     * @return - modified auction post to which the user unsubscribed from
+     */
+    AuctionPost sendConfirmation(AuctionPost auctionPost, User user) throws IOException, DocumentException;
 
 }

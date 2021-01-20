@@ -76,6 +76,9 @@ public class AuctionDtoTranslator {
         }
 
         auctionPostSendDTO.setPaid(auction.getPayment() != null);
+
+        auctionPostSendDTO.setContactFormSubmitted(auction.getContactForm() != null);
+
         return auctionPostSendDTO;
     }
 

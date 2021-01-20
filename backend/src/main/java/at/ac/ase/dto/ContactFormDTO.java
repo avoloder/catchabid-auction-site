@@ -7,6 +7,10 @@ public class ContactFormDTO {
 
     private Long auctionPostId;
 
+    private String firstName;
+
+    private String lastName;
+
     private String phoneNr;
 
     private String email;
@@ -18,6 +22,8 @@ public class ContactFormDTO {
     private String street;
 
     private Integer houseNr;
+
+    private String remark;
 
     public Long getId() {
         return id;
@@ -33,6 +39,22 @@ public class ContactFormDTO {
 
     public void setAuctionPostId(Long auctionPostId) {
         this.auctionPostId = auctionPostId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getPhoneNr() {
@@ -81,5 +103,27 @@ public class ContactFormDTO {
 
     public void setHouseNr(Integer houseNr) {
         this.houseNr = houseNr;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    @Override
+    public String toString() {
+        return "ContactFormDTO{" +
+                "id=" + id +
+                ", auctionPostId=" + auctionPostId +
+                ", phoneNr='" + phoneNr + '\'' +
+                ", email='" + email + '\'' +
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", houseNr=" + houseNr +
+                '}';
     }
 }

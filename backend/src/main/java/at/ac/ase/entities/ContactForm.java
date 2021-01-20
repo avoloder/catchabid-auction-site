@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "auctionProperty")})
+@Table
 public class ContactForm {
 
     @Id
@@ -13,13 +13,12 @@ public class ContactForm {
     private Long id;
 
     @NotNull
-    @OneToOne
-    @JoinColumn(name="auctionProperty")
-    private AuctionPost auctionPost;
+    @Column
+    private String firstName;
 
     @NotNull
-    @OneToOne
-    private User user;
+    @Column
+    private String lastName;
 
     @NotNull
     @Embedded
@@ -35,6 +34,9 @@ public class ContactForm {
     @Column
     private String email;
 
+    @Column(length = 1500)
+    private String remark;
+
     public Long getId() {
         return id;
     }
@@ -43,20 +45,20 @@ public class ContactForm {
         this.id = id;
     }
 
-    public AuctionPost getAuctionPost() {
-        return auctionPost;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setAuctionPost(AuctionPost auctionPost) {
-        this.auctionPost = auctionPost;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public User getUser() {
-        return user;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public Address getAddress() {
@@ -83,12 +85,18 @@ public class ContactForm {
         this.email = email;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     @Override
     public String toString() {
         return "ContactForm{" +
                 "id=" + id +
-                ", auctionPost=" + auctionPost +
-                ", user=" + user +
                 ", address=" + address +
                 ", phoneNr='" + phoneNr + '\'' +
                 ", email='" + email + '\'' +

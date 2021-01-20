@@ -9,26 +9,41 @@ import at.ac.ase.entities.*;
 import at.ac.ase.repository.auction.AuctionPostQuery;
 import at.ac.ase.repository.auction.AuctionRepository;
 import at.ac.ase.repository.user.UserRepository;
-import at.ac.ase.repository.auction.ContactFormRepository;
 import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
+import com.lowagie.text.DocumentException;
+import org.apache.commons.io.FileUtils;
 import at.ac.ase.util.exceptions.*;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.validation.*;
+import java.io.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,16 +61,10 @@ public class AuctionService implements IAuctionService {
     private IAuctionHouseService auctionHouseService;
 
     @Autowired
-    private ContactFormRepository contactFormRepository;
-
-    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
     private AuctionDtoTranslator auctionDtoTranslator;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     JavaMailSender emailSender;
@@ -264,10 +273,18 @@ public class AuctionService implements IAuctionService {
         return new ArrayList<>();
     }
 
-    public ContactForm postContactForm(ContactForm contactForm) {
+    public AuctionPostSendDTO postContactForm(Long auctionId, User user, ContactForm contactForm) {
+        AuctionPost auction = auctionRepository.findById(auctionId)
+                .orElseThrow(ObjectNotFoundException::new);
+
+        if (!auction.getHighestBid().getUser().getId().equals(user.getId())) {
+            throw new AuthorizationException();
+        }
         Set<ConstraintViolation<ContactForm>> violations = validator.validate(contactForm);
+
         if (violations.isEmpty()) {
-            return contactFormRepository.save(contactForm);
+            auction.setContactForm(contactForm);
+            return auctionDtoTranslator.toSendDto(saveAuction(auction), true);
         } else {
             for (ConstraintViolation<ContactForm> violation : violations) {
                 throw new ValidationException(violation.getMessage());
@@ -276,13 +293,30 @@ public class AuctionService implements IAuctionService {
         }
     }
 
-    public ContactForm convertContactFormToDTO(ContactFormDTO contactFormDTO, User user) {
+    public ContactFormDTO getContactForm(Long auctionPostId, User user) {
+        AuctionPost auction = auctionRepository.findById(auctionPostId)
+                .orElseThrow(ObjectNotFoundException::new);
+
+        if (!auction.getCreator().getId().equals(user.getId())) {
+            throw new AuthorizationException();
+        }
+
+        return convertDTOToContactForm(auction.getContactForm(), auctionPostId);
+    }
+
+    private ContactFormDTO convertDTOToContactForm(ContactForm contactForm, Long auctionPostId) {
+        ContactFormDTO contactFormDTO = modelMapper.map(contactForm, ContactFormDTO.class);
+        contactFormDTO.setCountry(contactForm.getAddress().getCountry());
+        contactFormDTO.setCity(contactForm.getAddress().getCity());
+        contactFormDTO.setStreet(contactForm.getAddress().getStreet());
+        contactFormDTO.setHouseNr(contactForm.getAddress().getHouseNr());
+        contactFormDTO.setAuctionPostId(auctionPostId);
+        return contactFormDTO;
+    }
+
+    public ContactForm convertContactFormToDTO(ContactFormDTO contactFormDTO) {
         ContactForm contactForm = modelMapper.map(contactFormDTO, ContactForm.class);
-
         contactForm.setAddress(new Address(contactFormDTO.getCountry(), contactFormDTO.getCity(), contactFormDTO.getStreet(), contactFormDTO.getHouseNr()));
-        contactForm.setUser(user);
-        auctionRepository.findById(contactFormDTO.getAuctionPostId()).ifPresent(contactForm::setAuctionPost);
-
         return contactForm;
     }
 
@@ -330,5 +364,70 @@ public class AuctionService implements IAuctionService {
                 logger.info("subs"+retrieved);
         return auctionDtoTranslator.toDtoSet(retrieved);
     }
+
+    @Override
+    public AuctionPost sendConfirmation(AuctionPost auctionPost, User user) throws IOException, DocumentException {
+       generatePdfFromHtml(parseThymeleafTemplate(auctionPost));
+       sendConfirmationEmail(auctionPost.getContactForm());
+       return null;
+    }
+
+    private String parseThymeleafTemplate(AuctionPost auctionPost) throws IOException {
+        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode(TemplateMode.HTML);
+
+        TemplateEngine templateEngine = new TemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver);
+
+        DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String dateString = formatDate.format(auctionPost.getEndTime());
+
+        Context context = new Context();
+        context.setVariable("auction", auctionPost);
+        context.setVariable("created", dateString);
+        if (auctionPost.getCreator() instanceof RegularUser) {
+            context.setVariable("user", "regularUser");
+        } else {
+            context.setVariable("user", "auctionHouse");
+        }
+
+        return templateEngine.process("confirmation", context);
+    }
+
+    private void generatePdfFromHtml(String html) throws IOException, DocumentException {
+        String outputFolder = System.getProperty("user.home") + File.separator + "thymeleaf2.pdf";
+        OutputStream outputStream = new FileOutputStream(outputFolder);
+
+        ITextRenderer renderer = new ITextRenderer();
+        renderer.setDocumentFromString(html);
+        renderer.layout();
+        renderer.createPDF(outputStream);
+
+        outputStream.close();
+    }
+
+    private void sendConfirmationEmail(ContactForm contactForm){
+        try {
+            MimeMessage message = emailSender.createMimeMessage();
+
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom("noreply.catchabid@gmail.com");
+            helper.setTo(contactForm.getEmail());
+            helper.setSubject("Confirmation about won auction");
+            helper.setText("Dear " + contactForm.getFirstName() + " " + contactForm.getLastName() +
+                    ", <br/> congratulations on winning an auction. " +
+                    "You can find the official confirmation about the won auction in the attachment. <br/>", true);
+
+            FileSystemResource file = new FileSystemResource(new File(System.getProperty("user.home") + File.separator + "thymeleaf2.pdf"));
+            helper.addAttachment("confirmation.pdf", file);
+
+            emailSender.send(message);
+        } catch (MessagingException e) {
+            throw new EmailNotSentException();
+        }
+    }
+
+
 
 }

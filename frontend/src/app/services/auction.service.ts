@@ -15,6 +15,7 @@ const api = 'api/auctions';
 export class AuctionsService {
   auctionFormModalClosed: Subject<void> = new Subject<void>();
   auctionDetailModalClosed: Subject<void> = new Subject<void>();
+  contactFormModalClosed: Subject<void> = new Subject<void>();
 
   private REST_API_SERVER: string = "http://localhost:8080/";
 
@@ -87,6 +88,12 @@ export class AuctionsService {
     return this.http.post<ContactForm>(this.REST_API_SERVER + api + '/postContactForm', contactForm);
   }
 
+  getContactForm(auctionPost: AuctionPost): Observable<ContactForm> {
+    const params = new HttpParams()
+      .set('auctionPostId', auctionPost.id.toString());
+    return this.http.get<ContactForm>(this.REST_API_SERVER + api + '/getContactForm', {params});
+  }
+
   subscribeToAuction(auctionPost: AuctionPost): Observable<AuctionPost> {
     return this.http.post<AuctionPost>(this.REST_API_SERVER + api + '/subscribe', auctionPost);
   }
@@ -113,5 +120,9 @@ export class AuctionsService {
 
   cancelAuction(auction: AuctionPost): Observable<AuctionPost> {
     return this.http.post<AuctionPost>(this.REST_API_SERVER + api + '/cancel', auction.id);
+  }
+
+  sendConfirmation(auctionPost: AuctionPost): Observable<AuctionPost>{
+    return this.http.post<AuctionPost>(this.REST_API_SERVER + api + '/sendConfirmation', auctionPost);
   }
 }
