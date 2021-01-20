@@ -14,6 +14,13 @@ public class RegisterOverlay extends PageObject{
         return getDriver().findElement(By.id("title")).getText();
     }
 
+    public String getOverlayTitle1(){
+        return getDriver().findElement(By.id("title1")).getText();
+    }
+    public void insertName(String name) { getDriver().findElement(By.name("name")).sendKeys(name); }
+
+    public void insertTid(String tid) { getDriver().findElement(By.name("tid")).sendKeys(tid); }
+
     public void insertFirstName(String firstName){
         getDriver().findElement(By.name("firstName")).sendKeys(firstName);
     }
@@ -26,6 +33,10 @@ public class RegisterOverlay extends PageObject{
         getDriver().findElement(By.name("email")).sendKeys(email);
     }
 
+    public void insertBusinessEmail(String email) {
+        getDriver().findElement(By.name("businessEmail")).sendKeys(email);
+    }
+
     public void insertPassword(String password) {
         WebElement passwordField;
         if(getDriver().findElements(By.name("pass3")).stream().count()!=0){
@@ -34,6 +45,14 @@ public class RegisterOverlay extends PageObject{
             passwordField = getDriver().findElement(By.name("pass"));
         }
         passwordField.sendKeys(password);
+    }
+
+    public void insertPasswordAuction(String password){
+        getDriver().findElement(By.name("pass")).sendKeys(password);
+    }
+
+    public void insertRepeatPasswordAuction(String password){
+        getDriver().findElement(By.name("pass2")).sendKeys(password);
     }
 
     public void insertRepeatPassword(String password) {
@@ -74,7 +93,40 @@ public class RegisterOverlay extends PageObject{
         getDriver().findElement(By.name("terms")).click();
     }
 
+    public void clickAgreeWithTermsAndConditionsAuction(){
+        getDriver().findElement(By.name("termsAuction")).click();
+    }
+
     public void clickNextButton(){
         getDriver().findElement(By.xpath("//button[contains(text(),'Next')]")).click();
     }
+
+    public void clickAuctionHouseTab() { getDriver().findElement(By.id("auction-house-tab")).click(); }
+
+    public void clickRegisterButton() { getDriver().findElement(By.xpath("//button[contains(text(),'Register')]")).click(); }
+
+    public void insertCountryAuction(String country) {
+        getDriver().findElement(By.name("countryAuction")).sendKeys(country);
+    }
+
+    public void insertCityAuction(String city) {
+        getDriver().findElement(By.name("cityAuction")).sendKeys(city);
+    }
+
+    public void insertStreetAuction(String street) {
+        getDriver().findElement(By.name("streetAuction")).sendKeys(street);
+    }
+
+    public void insertHouseNumberAuction(int houseNumber) {
+        getDriver().findElement(By.name("houseNrAuction")).sendKeys(String.valueOf(houseNumber));
+    }
+
+    public void insertAreaCodeAuction(int areaCode) {
+        getDriver().findElement(By.name("areaCodeAuction")).sendKeys(String.valueOf(areaCode));
+    }
+
+    public void insertPhoneNumberAuction(String phoneNumber) {
+        getDriver().findElement(By.name("phoneNumberAuction")).sendKeys(phoneNumber);
+    }
+
 }
