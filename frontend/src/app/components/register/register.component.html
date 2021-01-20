@@ -127,7 +127,7 @@
                     </div>
                     <div class="col-xs-12 col-sm-8 col-md-8">
                         <div class="form-group">
-                            <input name="phoneNumber" [(ngModel)]="model.phoneNumber" class="form-control" style="padding-left: 8px;" placeholder="Phone Number" type="number"  minlength="8" maxlength="16" required>
+                            <input name="phoneNumber" [(ngModel)]="model.phoneNumber" class="form-control" style="padding-left: 8px;" placeholder="Phone Number" type="number" min="0" max="9999999999999999" required>
                         </div>
                     </div>
                 </div>

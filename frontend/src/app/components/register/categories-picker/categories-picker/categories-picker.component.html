@@ -1,7 +1,14 @@
 <div>
     <article class="card-body">
-        <h3 class="card-title text-center mb-2">Your interests</h3>
-            <hr>
+        <div class="row">
+            <div class="col-2">
+                <i class="fa fa-arrow-left" (click)="goBack()" style="font-size: 30px; margin-top: 3px; margin-left: 10px;" aria-hidden="true"></i>
+            </div>
+            <div class="col-10">
+                <h3 class="card-title text-center mb-2" style="margin-right:70px;">Your interests</h3>
+            </div>
+        </div>
+        <hr>
         <span id="title">Select your preferences (optional)</span>
         <form id="form-control" (ngSubmit)="registerUser()" [formGroup]="form">
             <label  name="category-label" class="category"

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Route } from '@angular/compiler/src/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SigninComponent } from '../signin/signin.component';
@@ -6,6 +6,7 @@ import { RegisterService } from '../../services/register.service';
 import { Address } from 'src/app/models/address';
 import { ToastrService } from 'ngx-toastr';
 import { CategoriesPickerComponent } from './categories-picker/categories-picker/categories-picker.component';
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'app-register',
@@ -16,6 +17,9 @@ export class RegisterComponent implements OnInit  {
 
   model: any = {};
   address: Address = new Address();
+  
+  @Input() 
+  public user: User;
 
   constructor(
       private registerService: RegisterService,
@@ -63,6 +67,16 @@ export class RegisterComponent implements OnInit  {
           // toggle the eye slash icon
           this.classList.toggle('fa-eye-slash');
       });
+
+      if (this.user){
+        this.model.firstName = this.user.firstName;
+        this.model.lastName = this.user.lastName;
+        this.model.email = this.user.email;
+        this.model.country = this.user.address.country;
+        this.model.city = this.user.address.city;
+        this.model.street = this.user.address.street;
+        this.model.houseNr = this.user.address.houseNr;
+      }
   }
 
   onModalClose(){
