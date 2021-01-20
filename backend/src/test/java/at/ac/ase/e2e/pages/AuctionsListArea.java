@@ -57,7 +57,28 @@ public class AuctionsListArea extends PageObject{
         waitUntil(ExpectedConditions.numberOfElementsToBeLessThan(By.className("recent-auction"), n+1));
     }
 
+    public void clickSubscribeToAuction(WebElement auction){
+        auction.findElement(By.xpath(".//..//div[contains(text(),'SUBSCRIBE')]")).click();
+    }
+
+    public void clickUnsubscribeFromAuction(WebElement auction){
+        auction.findElement(By.xpath(".//..//div[contains(text(),'UNSUBSCRIBE')]")).click();
+    }
+
+    public void clickShowDetails(WebElement auction){
+        auction.findElement(By.xpath(".//..//div[contains(text(),'SHOW DETAILS')]")).click();
+    }
+
+    public String getSubscribedBadge(WebElement auction){
+        return auction.findElement(By.xpath("//span[contains(text(),'SUBSCRIBED')]")).getText();
+    }
+
     public void clickLoadMoreUpcomingAuctions() {
         loadMoreUpcomingAuctionsButton.click();
     }
+
+    public AuctionDetailsOverlay getAuctionDetailsOverlay() {
+        return initPage(AuctionDetailsOverlay.class);
+    }
+
 }
