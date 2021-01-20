@@ -29,7 +29,7 @@ public class Notification {
     private String info;
 
     @Column
-    private Boolean seen = false;
+    private Boolean seen;
 
     @Column
     private Date date = new Date();

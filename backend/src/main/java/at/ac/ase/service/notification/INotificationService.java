@@ -4,7 +4,6 @@ import at.ac.ase.entities.Notification;
 
 import at.ac.ase.entities.User;
 import java.util.List;
-import java.util.Optional;
 
 public interface INotificationService {
 
