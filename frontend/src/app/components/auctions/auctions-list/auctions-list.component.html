@@ -22,7 +22,9 @@
               </a>
           </div>
         <div class="info">
-          <p class="card-text-small font-weight-500 color-grey-subtext">Created by {{auction.creatorName}} </p>
+          <p class="card-text-small font-weight-500 color-grey-subtext">Created by {{auction.creatorName}} 
+            <i *ngIf="auction.creatorVerified" class="fa fa-check-circle" style="color:dodgerblue"></i>
+          </p>
           <p class="card-text-large font-weight-500 text-truncate">{{auction.auctionName}}</p>
           <p class="card-text-small font-weight-500 color-grey-subtext">CURRENT BID</p>
           <p class="card-text-large price-new font-weight-500" *ngIf="auction.highestBid==undefined">{{auction.minPrice}}€</p>
