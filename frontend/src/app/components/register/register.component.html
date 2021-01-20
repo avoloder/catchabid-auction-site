@@ -12,7 +12,7 @@
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="regularuser" role="tabpanel" aria-labelledby="regular-user-tab">
         <article class="card-body">
-            <h3 class="card-title text-center mb-2" style="color:#5271ff">Register</h3>
+            <h3  id="title" class="card-title text-center mb-2" style="color:#5271ff">Register</h3>
             <hr>
             <form ngNativeValidate name="form" (ngSubmit)="openCategories()" class="form-horizontal" oninput='pass4.setCustomValidity(pass4.value != pass3.value ? "Passwords do not match." : "")'>
                 <div class="form-group">
@@ -127,7 +127,7 @@
                     </div>
                     <div class="col-xs-12 col-sm-8 col-md-8">
                         <div class="form-group">
-                            <input name="phoneNumbe" [(ngModel)]="model.phoneNumber" class="form-control" style="padding-left: 8px;" placeholder="Phone Number" type="number"  minlength="8" maxlength="16" required>
+                            <input name="phoneNumber" [(ngModel)]="model.phoneNumber" class="form-control" style="padding-left: 8px;" placeholder="Phone Number" type="number"  minlength="8" maxlength="16" required>
                         </div>
                     </div>
                 </div>

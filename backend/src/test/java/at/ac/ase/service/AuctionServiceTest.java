@@ -7,7 +7,9 @@ import at.ac.ase.repository.auction.AuctionRepository;
 import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.util.exceptions.AuctionCancellationException;
+import at.ac.ase.util.exceptions.AuctionCancelledException;
 import at.ac.ase.util.exceptions.AuthorizationException;
+import at.ac.ase.util.exceptions.WrongSubscriberException;
 import org.junit.After;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,7 +110,6 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         assertNotNull(auctionHouse);
         assertThat(auctionPosts.size(), is(1));
 
-
         auctionPost.setName("TestAuction");
         auctionPost.setDescription("TestDesc");
         auctionPost.setMinPrice(10.0);
@@ -158,15 +159,20 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     @Transactional
     public void testGetUpcomingAuctions() {
         insertTestData("auctions.sql");
-        AuctionPost postRecent = createAuction("test@test.com");
-        auctionService.saveAuction(postRecent);
-        AuctionPost postUpcoming = createAuction("test1@test.com");
-        postUpcoming.setStartTime(LocalDateTime.now().plusMinutes(15));
-        postUpcoming.setId(2l);
-        auctionService.saveAuction(postUpcoming);
+
         List<AuctionPostSendDTO> upcoming = auctionService.getUpcomingAuctions(0, 0);
+        assertEquals(0, upcoming.size());
+
+        AuctionPost auctionPost =auctionService.getAllAuctions().get(0);
+        auctionPost.setStartTime(LocalDateTime.now().plusHours(2));
+        auctionPost.setEndTime(LocalDateTime.now().plusHours(12));
+        auctionPost.setStatus(Status.UPCOMING);
+
+        auctionService.saveAuction(auctionPost);
+
+        upcoming = auctionService.getUpcomingAuctions(0, 0);
         assertEquals(1, upcoming.size());
-        assertEquals(postUpcoming.getId(), upcoming.get(0).getId());
+        assertEquals(auctionPost.getId(), upcoming.get(0).getId());
     }
 
     @Test
@@ -177,14 +183,8 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         List<AuctionPost> auctionPosts = auctionService.getAllAuctions();
         assertThat(auctionPosts.size(), is(11));
 
-        AuctionPost auctionPost = createAuction("test@test.com");
-        auctionService.saveAuction(auctionPost);
-
-        auctionPosts = auctionService.getAllAuctions();
-        assertThat(auctionPosts.size(), is(12));
-
-        AuctionPost storedAuctionPost = auctionPosts.get(auctionPosts.size()-1);
-        assertThat(storedAuctionPost.getSubscriptions().size(), is(0));
+        AuctionPost auctionPost = auctionPosts.get(0);
+        assertThat(auctionPost.getSubscriptions().size(), is(0));
 
         User user = new RegularUser();
         user.setId(2L);
@@ -193,11 +193,11 @@ public class AuctionServiceTest extends BaseIntegrationTest {
 
         auctionService.subscribeToAuction(auctionPost, user);
 
-        storedAuctionPost = auctionService.getAllAuctions().get(auctionPosts.size()-1);
+        auctionPost = auctionService.getAllAuctions().get(0);
 
-        assertThat(storedAuctionPost.getSubscriptions().size(), is(1));
+        assertThat(auctionPost.getSubscriptions().size(), is(1));
 
-        Iterator iterator = storedAuctionPost.getSubscriptions().iterator();
+        Iterator iterator = auctionPost.getSubscriptions().iterator();
         RegularUser subscribedUser = (RegularUser)iterator.next();
         assertThat(subscribedUser.getId(), is(2L));
         assertTrue(subscribedUser.getActive());
@@ -212,14 +212,8 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         List<AuctionPost> auctionPosts = auctionService.getAllAuctions();
         assertThat(auctionPosts.size(), is(11));
 
-        AuctionPost auctionPost = createAuction("test@test.com");
-        auctionService.saveAuction(auctionPost);
-
-        auctionPosts = auctionService.getAllAuctions();
-        assertThat(auctionPosts.size(), is(12));
-
-        AuctionPost storedAuctionPost = auctionPosts.get(auctionPosts.size()-1);
-        assertThat(storedAuctionPost.getSubscriptions().size(), is(0));
+        AuctionPost auctionPost = auctionPosts.get(0);
+        assertThat(auctionPost.getSubscriptions().size(), is(0));
 
         User user = new RegularUser();
         user.setId(2L);
@@ -228,15 +222,56 @@ public class AuctionServiceTest extends BaseIntegrationTest {
 
         auctionService.subscribeToAuction(auctionPost, user);
 
-        storedAuctionPost = auctionService.getAllAuctions().get(auctionPosts.size()-1);
+        auctionPost = auctionService.getAllAuctions().get(0);
 
-        assertThat(storedAuctionPost.getSubscriptions().size(), is(1));
+        assertThat(auctionPost.getSubscriptions().size(), is(1));
 
         auctionService.unsubscribeFromAuction(auctionPost, user);
 
-        storedAuctionPost = auctionService.getAllAuctions().get(auctionPosts.size()-1);
+        auctionPost = auctionService.getAllAuctions().get(0);
 
-        assertThat(storedAuctionPost.getSubscriptions().size(), is(0));
+        assertThat(auctionPost.getSubscriptions().size(), is(0));
+    }
+
+    @Test(expected = WrongSubscriberException.class)
+    @Transactional
+    public void testSubscribeToAuctionWrongSubscriberError(){
+        insertTestData("multiple-auctions.sql");
+
+        List<AuctionPost> auctionPosts = auctionService.getAllAuctions();
+        assertThat(auctionPosts.size(), is(11));
+
+        AuctionPost auctionPost = auctionPosts.get(1);
+        assertThat(auctionPost.getSubscriptions().size(), is(0));
+
+        User user = new RegularUser();
+        user.setId(2L);
+        user.setActive(true);
+        user.setEmail("test@test.com");
+
+        auctionService.subscribeToAuction(auctionPost, user);
+    }
+
+    @Test(expected = AuctionCancelledException.class)
+    @Transactional
+    public void testSubscribeToAuctionAuctionCancelledError(){
+        insertTestData("multiple-auctions.sql");
+
+        List<AuctionPost> auctionPosts = auctionService.getAllAuctions();
+        assertThat(auctionPosts.size(), is(11));
+
+        AuctionPost auctionPost = auctionPosts.get(0);
+        assertThat(auctionPost.getSubscriptions().size(), is(0));
+
+        auctionPost.setStatus(Status.CANCELLED);
+        auctionService.saveAuction(auctionPost);
+
+        User user = new RegularUser();
+        user.setId(2L);
+        user.setActive(true);
+        user.setEmail("test@test.com");
+
+        auctionService.subscribeToAuction(auctionPost, user);
     }
 
     @Test(expected = AuthorizationException.class)

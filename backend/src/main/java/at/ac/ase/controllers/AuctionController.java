@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.web.bind.annotation.*;
 
@@ -145,6 +146,7 @@ public class AuctionController {
         AuctionPost auctionPost = auctionService.toAuctionPostEntity( auctionPostDTO);
         return ResponseEntity.ok(auctionService.subscribeToAuction(auctionPost, user));
     }
+
     @GetMapping("/won")
     public ResponseEntity<List<AuctionPostSendDTO>> getWonAuctionsForUser(
         @CurrentSecurityContext(expression = "authentication.principal") User user) {

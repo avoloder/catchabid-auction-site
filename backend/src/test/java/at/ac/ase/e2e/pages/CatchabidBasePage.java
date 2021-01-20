@@ -1,8 +1,11 @@
 package at.ac.ase.e2e.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * Represents Base Catchabid Page
@@ -32,6 +35,18 @@ public class CatchabidBasePage extends PageObject {
         return footerCopyrightLink;
     }
 
+    public WebElement getUsername(String username){
+        return getDriver().findElement(By.xpath("//nav//button[contains(text(),'" + username + "')]"));
+    }
+
+    public WebElement getLoginButton() {
+        return getDriver().findElement(By.xpath("//a[contains(text(),'Login')]"));
+    }
+
+    public WebElement getRegisterButton() {
+        return getDriver().findElement(By.xpath("//a[contains(text(),'Register')]"));
+    }
+
     public AuctionsListArea getAuctionsListArea() {
         return initPage(AuctionsListArea.class);
     }
@@ -40,8 +55,11 @@ public class CatchabidBasePage extends PageObject {
         return initPage(AuctionFiltersArea.class);
     }
 
-    public LoginOverlay clickLoginButton() {
-        //TODO actually click button
-        return initPage(LoginOverlay.class);
+    public void clickLoginButton() {
+        getLoginButton().click();
+    }
+
+    public void clickRegisterButton(){
+        getRegisterButton().click();
     }
 }
