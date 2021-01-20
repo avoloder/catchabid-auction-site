@@ -9,8 +9,7 @@ import {AuctionsService} from '../../../services/auction.service';
 import {AuctionsSearchService} from "../../../services/auctions-search.service";
 import { NotificationsService } from 'src/app/services/notifications.service';
 import * as Stomp from 'stompjs';
-import { UserService } from 'src/app/services/user.service';
-import { SigninService } from 'src/app/services/signin.service';
+import { Notification } from 'src/app/models/notification';
 
 @Component({
   selector: 'app-navbar',
@@ -35,6 +34,12 @@ export class NavbarComponent implements OnInit {
   webSocket: WebSocket;
   client: Stomp.Client;
 
+  notifications: Notification[];
+
+  email: string;
+
+  notficationsOpened: boolean;
+
   constructor(
     private modalService: NgbModal,
     private auctionsService: AuctionsService,
@@ -44,6 +49,9 @@ export class NavbarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.email = localStorage.getItem('email');
+    this.notifications = [];
+    this.notficationsOpened = false;
     this.loadNotifications();
     this.webSocket = new WebSocket('ws://localhost:8080/notification');
     this.client = Stomp.over(this.webSocket);
@@ -51,14 +59,22 @@ export class NavbarComponent implements OnInit {
   }
 
   openWebSocket() {
-    console.log(this.userName);
-    this.client.connect({}, () => {
-      this.client.subscribe('/1/queue/notification',
-      (notification: any) => {
-        console.log(notification);
+    if (this.email) {
+      this.client.connect({
+        email: this.email
+      }, () => {
+        this.client.subscribe('/user/queue/notification',
+        (notRes: any) => {
+          console.log(notRes);
+          console.log(notRes.body);
+          console.log(JSON.parse(notRes.body));
+          this.notifications.push(JSON.parse(notRes.body));
+          console.log(this.notifications.length);
+        });
       });
-    });
-
+    } else {
+      console.log('Unable to subscribe to notifications');
+    }
   }
 
   openLoginModal(): void {
@@ -119,8 +135,36 @@ export class NavbarComponent implements OnInit {
 
   private loadNotifications() {
     this.notificationsService.getNotifications().subscribe(
-      (res) => console.log(res),
+      (res) => this.notifications = res,
       (err) => console.log(err)
     )
   }
+
+  checkIfSomeUnseen(): boolean {
+    if (this.notifications) {
+      return this.notifications.some(n => !n.seen);
+    } else {
+      return false;
+    }
+  }
+
+  onNotificationsToggle() {
+    this.notficationsOpened = !this.notficationsOpened;
+    if (!this.notficationsOpened) {
+      this.notifications.forEach((n, index) => {
+        if (!n.seen) {
+          n.seen = true;
+
+          this.notificationsService.updateNotificationsSeen(n).subscribe(
+            () => {
+              console.log('Notification with info ', n.info, ' successfully updated');
+            },
+            () => {
+              console.log('Error by updating notifications');
+            });
+        }
+      });
+    }
+  }
+
 }

@@ -53,6 +53,44 @@
           Create an auction post
         </a>
       </li>
+      <li #notificationDropdown="ngbDropdown"
+        class="nav-item dropdown" ngbDropdown (openChange)="onNotificationsToggle()" placement="bottom-right">
+        <a class="nav-link dropdown-toggle" role="button" ngbDropdownToggle>
+          <i class="fa fa-bell"></i><span *ngIf="checkIfSomeUnseen()" class="sec counter counter-lg dot"></span>
+        </a>
+
+        <div
+          class="dropdown-menu dropdown-menu-xl dropdown-menu-right py-0 overflow-hidden"
+          ngbDropdownMenu style="width: 400px;"
+        >
+          <div class="px-3 py-3">
+            <h6 class="text-sm text-muted m-0">
+              NOTIFICATIONS
+            </h6>
+          </div>
+          <ul class=" list-group list-group-flush" data-toggle="checklist">
+            <li *ngFor="let n of notifications; index as i"
+                [ngStyle]="!n.seen && {'background-color':'rgb(236, 241, 255)'}" title={{n.info}}
+                class="checklist-entry list-group-item flex-column align-items-start py-4 px-4"
+            >
+              <div class="row">
+                <div class="col-10 checklist-info">
+                  <h6 class="checklist-title mb-0">{{n.info}}</h6>
+                  <small>
+                    <a href="javascript:void(0)">
+                      <i class="fa fa-calendar"> </i>
+                      <span class=" text-muted"> {{n.date | date: 'yyyy-MM-dd'}}</span>
+                    </a>
+                  </small>
+                </div>
+                <div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </li>
+
       <li class="nav-item dropdown" ngbDropdown placement="bottom-right">
         <button class="profile"
                 ngbDropdownToggle>
