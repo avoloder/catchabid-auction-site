@@ -2,6 +2,7 @@ package at.ac.ase.basetest;
 
 
 import at.ac.ase.e2e.pages.CatchabidBasePage;
+import at.ac.ase.e2e.pages.LoginOverlay;
 import io.github.bonigarcia.seljup.SeleniumJupiter;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
@@ -81,6 +82,10 @@ public abstract class BaseE2E extends BaseSpringBootTest {
 
     protected CatchabidBasePage getCatchabidPage() {
         return PageFactory.initElements(driver, CatchabidBasePage.class);
+    }
+
+    protected LoginOverlay getLoginOverlayPage() {
+        return PageFactory.initElements(driver, LoginOverlay.class);
     }
 
     protected WebDriver getDriver() {
