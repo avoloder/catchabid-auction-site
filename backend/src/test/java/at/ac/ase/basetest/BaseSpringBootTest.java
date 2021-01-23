@@ -63,12 +63,11 @@ public abstract class BaseSpringBootTest {
             executeJpql("DELETE FROM Rating");
             executeJpql("UPDATE AuctionPost SET bid_id = NULL WHERE bid_id IS NOT NULL");
             executeJpql("DELETE FROM Bid");
+            executeSql("DELETE FROM auction_subscriptions");
             executeJpql("DELETE FROM AuctionPost");
             executeJpql("DELETE FROM AuctionHouse");
             executeSql("DELETE FROM regular_user_preferences");
-            executeSql("DELETE FROM auction_subscriptions");
             executeJpql("DELETE FROM RegularUser");
-
         });
     }
 

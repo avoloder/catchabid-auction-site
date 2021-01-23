@@ -12,7 +12,7 @@
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="regularuser" role="tabpanel" aria-labelledby="regular-user-tab">
         <article class="card-body">
-            <h3 class="card-title text-center mb-2" style="color:#5271ff">Register</h3>
+            <h3  id="title" class="card-title text-center mb-2" style="color:#5271ff">Register</h3>
             <hr>
             <form ngNativeValidate name="form" (ngSubmit)="openCategories()" class="form-horizontal" oninput='pass4.setCustomValidity(pass4.value != pass3.value ? "Passwords do not match." : "")'>
                 <div class="form-group">
@@ -127,7 +127,7 @@
                     </div>
                     <div class="col-xs-12 col-sm-8 col-md-8">
                         <div class="form-group">
-                            <input name="phoneNumbe" [(ngModel)]="model.phoneNumber" class="form-control" style="padding-left: 8px;" placeholder="Phone Number" type="number"  minlength="8" maxlength="16" required>
+                            <input name="phoneNumber" [(ngModel)]="model.phoneNumber" class="form-control" style="padding-left: 8px;" placeholder="Phone Number" type="number" min="0" max="9999999999999999" required>
                         </div>
                     </div>
                 </div>
@@ -143,7 +143,7 @@
     </div>
     <div class="tab-pane fade" id="auctionhouse" role="tabpanel" aria-labelledby="auction-house-tab">
         <article class="card-body">
-            <h3 class="card-title text-center mb-2" style="color:#5271ff">Register</h3>
+            <h3 id="title1" class="card-title text-center mb-2" style="color:#5271ff">Register</h3>
             <hr>
             <form ngNativeValidate name="form" (ngSubmit)="registerAuctionHouse()" class="form-horizontal" oninput='pass2.setCustomValidity(pass2.value != pass.value ? "Passwords do not match." : "")'>
                 <div class="form-group">
@@ -167,7 +167,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-envelope fa"></i> </span>
                         </div>
-                        <input name="email" [(ngModel)]="model.email" class="form-control" style="padding-left: 5px;" placeholder="Bussines Email Address" type="text" required>
+                        <input name="businessEmail" [(ngModel)]="model.email" class="form-control" style="padding-left: 5px;" placeholder="Bussines Email Address" type="text" required>
                     </div>
                 </div>
                 <div class="row">
@@ -209,7 +209,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-flag"></i> </span>
                                 </div>
-                                <input name="country" class="form-control" [(ngModel)]="model.country" style="padding-left: 5px;" placeholder="Country" type="text" required>
+                                <input name="countryAuction" class="form-control" [(ngModel)]="model.country" style="padding-left: 5px;" placeholder="Country" type="text" required>
                             </div>
                         </div>
                     </div>
@@ -219,7 +219,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-map-marker"></i> </span>
                                 </div>
-                                <input name="city" class="form-control" [(ngModel)]="model.city" style="padding-left: 5px;" placeholder="City" type="text" required>
+                                <input name="cityAuction" class="form-control" [(ngModel)]="model.city" style="padding-left: 5px;" placeholder="City" type="text" required>
                             </div>
                         </div>
                     </div>
@@ -231,7 +231,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-map-pin"></i> </span>
                                 </div>
-                                <input name="address" class="form-control" [(ngModel)]="model.street" style="padding-left: 5px;" placeholder="Address" type="text" required>
+                                <input name="streetAuction" class="form-control" [(ngModel)]="model.street" style="padding-left: 5px;" placeholder="Address" type="text" required>
                             </div>
                         </div>
                     </div>
@@ -241,7 +241,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-home"></i> </span>
                                 </div>
-                                <input name="houseNumber" class="form-control" [(ngModel)]="model.houseNr" style="padding-left: 5px;" placeholder="House no." min="1" type="number" required>
+                                <input name="houseNrAuction" class="form-control" [(ngModel)]="model.houseNr" style="padding-left: 5px;" placeholder="House no." min="1" type="number" required>
                             </div>
                         </div>
                     </div>
@@ -253,17 +253,17 @@
                                 <div class="input-group-prepend">
                                 <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
                             </div>
-                            <input name="areaCode" [(ngModel)]="model.areaCode" class="form-control" style="padding-left: 5px;" placeholder="+43" type="text" required>
+                            <input name="areaCodeAuction" [(ngModel)]="model.areaCode" class="form-control" style="padding-left: 5px;" placeholder="+43" type="text" required>
                             </div>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-8 col-md-8">
                         <div class="form-group">
-                            <input name="phoneNumber" class="form-control" [(ngModel)]="model.phoneNumber" style="padding-left: 8px;" placeholder="Bussines Phone Number" type="number" minlength="8" maxlength="16" required>
+                            <input name="phoneNumberAuction" class="form-control" [(ngModel)]="model.phoneNumber" style="padding-left: 8px;" placeholder="Bussines Phone Number" type="number" minlength="8" maxlength="16" required>
                         </div>
                     </div>
                 </div>
-                <label style="font-size: 14px;"><input type="checkbox" name="terms" required> I agree with the <a href="#">Terms and Conditions</a>.</label>
+                <label style="font-size: 14px;"><input type="checkbox" name="termsAuction" required> I agree with the <a href="#">Terms and Conditions</a>.</label>
                 <div class="form-group" >
                     <button type="submit" class="btn btn-primary btn-lg btn-block login-button mt-4" style="background-color: #5271ff">Register</button>
                 </div>

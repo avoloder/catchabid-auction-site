@@ -8,6 +8,7 @@ import { Address } from 'src/app/models/address';
 import { User } from 'src/app/models/user';
 import { AuctionsService } from 'src/app/services/auction.service';
 import { RegisterService } from 'src/app/services/register.service';
+import { RegisterComponent } from '../../register.component';
 
 @Component({
   selector: 'app-categories-picker',
@@ -76,6 +77,11 @@ export class CategoriesPickerComponent implements OnInit {
                error => {
                  this.toast.error(error.error.message);
                });
+  }
+
+  goBack(){
+    const model = this.modalService.open(RegisterComponent);
+    model.componentInstance.user = this.user;
   }
 
 }
