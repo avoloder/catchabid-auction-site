@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -48,6 +47,7 @@ public class StatisticsService implements IStatisticsService {
         Set<Bid> bids = retrievedUser.getBids();
 
         bids.forEach(x -> addStatistics(statistics, x));
+        logger.info("Bids statistics: "+ statistics);
 
         return statistics;
     }
@@ -76,23 +76,30 @@ public class StatisticsService implements IStatisticsService {
 
         wins.forEach(x -> addStatistics(statistics, x));
 
+        logger.info("Wins statistics: "+ statistics);
+
         return statistics;
     }
 
     @Override
-    public Map<String, Integer> getBidsWinsRatio(User user) {
+    public Map<String, Double> getBidsWinsRatio(User user) {
         User retrievedUser = regularUserService.getUserByEmail(user.getEmail());
         if (retrievedUser == null) {
             return new HashMap<>();
         }
-        Map<String, Integer> statistics = new HashMap<>();
+        Map<String, Double> statistics = new HashMap<>();
         Set<Bid> bids = retrievedUser.getBids();
-
+        if (bids.isEmpty()){
+            return new HashMap<>();
+        }
+        double bidsCount=bids.stream().collect(Collectors.groupingBy(Bid::getAuction)).keySet().size();
         Stream<Bid> wins = bids.stream().filter(x -> x.getId().equals(x.getAuction().getHighestBid().getId()) && x.getAuction().getEndTime().isBefore(LocalDateTime.now()));
-        int winsCount = wins.toArray().length;
-        statistics.put("wins", winsCount);
-        int lossCount = bids.stream().collect(Collectors.groupingBy(Bid::getAuction)).keySet().size() - winsCount;
-        statistics.put("loss", lossCount);
+        double winsCount = wins.toArray().length;
+        statistics.put("wins", ((winsCount*100)/bidsCount));
+        double lossCount = bids.stream().collect(Collectors.groupingBy(Bid::getAuction)).keySet().size() - winsCount;
+        statistics.put("bids", ((lossCount*100)/bidsCount));
+        logger.info("Wins ratio: "+ statistics);
+
         return statistics;
     }
 
@@ -110,6 +117,7 @@ public class StatisticsService implements IStatisticsService {
             int count= posts.stream().mapToInt(x -> bidService.getAuctionBids(x).size()).sum();
             auctionsPopularityByCategory.put(k.name(),count/posts.size());
         }
+        logger.info("Auction popularity: "+ auctionsPopularityByCategory);
 
         return auctionsPopularityByCategory;
     }
@@ -125,11 +133,20 @@ public class StatisticsService implements IStatisticsService {
         Map<String, Double> auctionsByCategoryCount = new HashMap<>();
         for (Category k : auctionsByCategory.keySet()) {
             List<AuctionPost> posts = auctionsByCategory.get(k);
-            AtomicReference<Double> price= new AtomicReference<>(0.0);
-            posts.forEach(x-> price.updateAndGet(v -> v + (x.getHighestBid().getOffer() - x.getMinPrice())));
-            auctionsByCategoryCount.put(k.name(),price.get()/posts.size());
+            if (posts!=null && !posts.isEmpty() ){
+                double price= 0.0;
+                for(AuctionPost post : posts){
+                    if (post.getHighestBid()!=null){
+                        price+=post.getHighestBid().getOffer()-post.getMinPrice();
+                    }
+                }
+                auctionsByCategoryCount.put(k.name(),price/posts.size());
+            }
+
 
         }
+        logger.info("Auction succcess: "+ auctionsByCategoryCount);
+
         return auctionsByCategoryCount;
     }
 

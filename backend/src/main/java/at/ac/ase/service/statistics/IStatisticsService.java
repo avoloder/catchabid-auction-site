@@ -24,7 +24,7 @@ public interface IStatisticsService {
      * @param user - for which we check
      * @return map of counts for bids and wins
      */
-    Map<String,Integer> getBidsWinsRatio(User user);
+    Map<String,Double> getBidsWinsRatio(User user);
 
     /**
      * How popular (average bids per auction) are the auctions per category

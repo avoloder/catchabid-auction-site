@@ -1,0 +1,99 @@
+<div class="container light-style flex-grow-1 container-p-y toast-bottom-full-width" style="width: 120%; height: 800px">
+  <h3 class="font-weight-bold py-3 mb-4">My statistics </h3>
+  <div class="card-body">
+
+    <div>
+      <div *ngIf="!showBidsStatistics">
+        <h4 style="color: #182c83;font-size: 120%; margin-bottom: 30px;">My Bid Statistics </h4>
+      </div>
+
+      <div class="container d-inline-flex justify-container-center">
+        <div *ngIf="!showBidsChart">
+          <div class="card" style="display: block; margin-right: 15px;margin-bottom: 15px;">
+            <div class="card-body">
+              <p class="card-title">Bids per Category</p>
+              <canvas baseChart
+                      [data]="doughnutChartBidsData"
+                      [options]="options"
+                      [colors]="chartColors"
+                      [labels]="doughnutChartBidsLabels"
+                      [chartType]="doughnutChartType"></canvas>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!showWinsChart">
+          <div class="card" style="display: block; margin-right: 15px;margin-bottom: 15px;">
+            <div class="card-body">
+              <p>Wins per Category</p>
+              <canvas baseChart
+                      [data]="doughnutChartWinsData"
+                      [options]="options"
+                      [legend]="{position: 'bottom'}"
+                      [colors]="chartColors"
+                      [labels]="doughnutChartWinsLabels"
+                      [chartType]="doughnutChartType"></canvas>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!showRatioChart">
+          <div class="card" style="display: block; margin-right: 15px;margin-bottom: 15px;">
+            <div class="card-body">
+              <p class="card-title">Wins ratio</p>
+              <div>
+                <div class="chartTitle">
+                  {{myRatio}}
+                </div>
+                <canvas baseChart
+                        [data]="doughnutChartRatioData"
+                        [labels]="doughnutChartRatioLabels"
+                        [chartType]="doughnutChartType"
+                        [colors]="chartColorsTwo"
+                        [plugins]="doughnutChartPlugins"
+                        [legend]="false"
+                        [options]="{cutoutPercentage: 80}"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div *ngIf="!showAuctionStatistics">
+        <h4 style="color: #182c83;font-size: 120%; margin-bottom: 30px;">My Auction Statistics </h4>
+      </div>
+      <div class="container d-inline-flex justify-container-center">
+        <div *ngIf="!showPopularity">
+          <div class="card" style="display: block;margin-bottom: 15px;margin-right: 15px">
+            <div class="card-body">
+              <p class="card-title">Popularity of Auctions per Category</p>
+              <canvas baseChart
+                      [data]="barChartPopularityData"
+                      [labels]="barChartPopularityLabels"
+                      [options]="barChartOptions"
+                      [chartType]="barChartType"
+                      [colors]="chartColors"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!showSuccess">
+          <div class="card" style="display: block; margin-bottom: 15px;margin-right: 15px">
+            <div class="card-body">
+              <p class="card-title">Success of Auctions per Category</p>
+              <canvas baseChart
+                      [data]="barChartSuccessData"
+                      [labels]="barChartSuccessLabels"
+                      [options]="barChartOptions"
+                      [colors]="chartColors"
+                      [chartType]="barChartType"></canvas>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div *ngIf="showSuccess && showPopularity && showRatioChart && showBidsChart && showWinsChart">
+      <p class="card-text font-italic text-md-center">You have no bids or auctions yet to create statistics</p>
+    </div>
+  </div>
+</div>

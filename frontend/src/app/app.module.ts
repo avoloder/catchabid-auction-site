@@ -31,6 +31,8 @@ import {CategoriesPickerComponent} from './components/register/categories-picker
 import {ContactFormComponent} from "./components/auctions/contact-form/contact-form.component";
 import { RatingComponent } from './components/rating/rating/rating.component';
 import {ProfileModule} from "./components/profile/profile.module";
+import {StatisticsComponent} from './components/statistics/statistics.component';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,8 @@ import {ProfileModule} from "./components/profile/profile.module";
     ContactFormComponent,
     AuctionDetailsComponent,
     CategoriesPickerComponent,
-    RatingComponent
+    RatingComponent,
+    StatisticsComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +64,8 @@ import {ProfileModule} from "./components/profile/profile.module";
     CountdownModule,
     BidsModule,
     NgxSpinnerModule,
-    ProfileModule
+    ProfileModule,
+    ChartsModule
   ],
   providers: [
     AuthGuard,

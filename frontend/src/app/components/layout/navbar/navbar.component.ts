@@ -71,6 +71,9 @@ export class NavbarComponent implements OnInit {
   toUserSettings(){
     this.router.navigate(['/profile']);
   }
+  toAuctionStatiststics(){
+    this.router.navigate(['/statistics']);
+  }
 
   isUserLoggedIn(){
     if(localStorage.getItem('token') !== null){

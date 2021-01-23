@@ -33,7 +33,7 @@ public class StatisticsServiceTest extends BaseIntegrationTest {
 
     @After
     public void cleanup() {
-        cleanDatabase();
+//        cleanDatabase();
     }
 
     @Test
@@ -99,11 +99,11 @@ public class StatisticsServiceTest extends BaseIntegrationTest {
         if (!user.isPresent()){
             Assert.fail("user not found, but should exist");
         }
-        Map<String,Integer> statistics = statisticsService.getBidsWinsRatio(user.get());
+        Map<String,Double> statistics = statisticsService.getBidsWinsRatio(user.get());
 
-        Assertions.assertEquals(2,statistics.size());
-        Assertions.assertEquals(2,statistics.get("wins"));
-        Assertions.assertEquals(1,statistics.get("loss"));
+        Assertions.assertEquals(2.0,statistics.size());
+        Assertions.assertEquals(66.6,statistics.get("wins"));
+        Assertions.assertEquals(33.3,statistics.get("loss"));
 
     }
     @Test
@@ -125,9 +125,9 @@ public class StatisticsServiceTest extends BaseIntegrationTest {
         if (!user.isPresent()){
             Assert.fail("user not found, but should exist");
         }
-        Map<String,Integer> statistics = statisticsService.getBidsWinsRatio(user.get());
+        Map<String,Double> statistics = statisticsService.getBidsWinsRatio(user.get());
         Assert.assertFalse(statistics.isEmpty());
-        Assert.assertEquals(2,statistics.get("loss").intValue());
+        Assert.assertEquals(100.0,statistics.get("loss").intValue());
 
     }
 

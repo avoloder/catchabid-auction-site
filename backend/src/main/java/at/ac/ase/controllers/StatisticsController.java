@@ -32,7 +32,7 @@ public class StatisticsController {
         return ResponseEntity.status(HttpStatus.OK).body(service.getWinsStatistics(user));
     }
     @GetMapping("winBidRatio")
-    public ResponseEntity<Map<String,Integer>> winBidRatio( @CurrentSecurityContext(expression = "authentication.principal")User user) {
+    public ResponseEntity<Map<String,Double>> winBidRatio( @CurrentSecurityContext(expression = "authentication.principal")User user) {
         logger.info("Get bid statistics for user with email " + user.getEmail());
         return ResponseEntity.status(HttpStatus.OK).body(service.getBidsWinsRatio(user));
     }
