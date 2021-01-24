@@ -37,7 +37,8 @@
                   <div class="col-5" style="text-align: right;">
                     <i class="fa fa-star" style="color: #ffe234; margin-right:5px"></i>
                     <span>Rating:
-                      <span>{{rating}}</span>
+                      <span *ngIf="isRatingSet()">{{rating}}</span>
+                      <span *ngIf="!isRatingSet()">—</span>
                     </span>
                   </div>
                 </div>
