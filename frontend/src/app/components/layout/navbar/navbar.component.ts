@@ -34,7 +34,7 @@ export class NavbarComponent implements OnInit {
   webSocket: WebSocket;
   client: Stomp.Client;
 
-  notifications: Notification[];
+  notifications: Notification[] = [];
 
   email: string;
 
@@ -50,7 +50,6 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.email = localStorage.getItem('email');
-    this.notifications = [];
     this.notficationsOpened = false;
     this.loadNotifications();
     this.webSocket = new WebSocket('ws://localhost:8080/notification');
@@ -75,6 +74,7 @@ export class NavbarComponent implements OnInit {
           console.log(newNotification);
           this.notifications.push(newNotification);
           console.log(this.notifications.length);
+          console.log(this.notifications[0]);
         });
       });
     } else {
@@ -140,12 +140,17 @@ export class NavbarComponent implements OnInit {
 
   private loadNotifications() {
     this.notificationsService.getNotifications().subscribe(
-      (res) => this.notifications = res,
+      (res) => {
+        if (res) {
+          res.forEach(n => this.notifications.push(n))
+        }
+      },
       (err) => console.log(err)
     )
   }
 
   checkIfSomeUnseen(): boolean {
+    console.log(this.notifications);
     if (this.notifications) {
       return this.notifications.some(n => !n.seen);
     } else {
@@ -156,6 +161,7 @@ export class NavbarComponent implements OnInit {
   onNotificationsToggle() {
     this.notficationsOpened = !this.notficationsOpened;
     if (!this.notficationsOpened) {
+      console.log(this.notifications);
       this.notifications.forEach((n, index) => {
         if (!n.seen) {
           n.seen = true;

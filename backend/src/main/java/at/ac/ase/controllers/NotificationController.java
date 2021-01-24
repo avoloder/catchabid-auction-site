@@ -40,7 +40,7 @@ public class NotificationController {
         notification.setInfo("Your bid has won the auction 'Camera Nixon 395!'");
         notification.setSeen(false);
         webSocketController.sendNotification(user, notification);
-        // notificationService.saveNotification(notification);
+        notificationService.saveNotification(notification);
 
         return ResponseEntity.ok().build();
    //         notificationDTOTranslator.toDtoList(notificationService.getNotificationsForUser(user)));
