@@ -52,7 +52,7 @@ public class RatingServiceTest extends BaseIntegrationTest {
     @Transactional
     public void testSetValidRating(){
         List<AuctionPostSendDTO> auctions = auctionService.getRecentAuctions(0, 0);
-        RegularUser regularUser = userRepository.findByEmail("test@test.com");
+        RegularUser regularUser = userRepository.findByEmail("testUser@test.com");
         RatingDataDTO ratingDataDTO = new RatingDataDTO();
         AuctionPostSendDTO auctionPostSendDTO = auctions.get(0);
         auctionPostSendDTO.setEndTime(LocalDateTime.now());
@@ -95,9 +95,9 @@ public class RatingServiceTest extends BaseIntegrationTest {
     @Test
     @Transactional
     public void testSetRatingValidRange(){
-        LocalDateTime date = LocalDateTime.of(2020, Month.DECEMBER,20,6,30,40,50000);
+        LocalDateTime date = LocalDateTime.now();
         List<AuctionPostSendDTO> auctions = auctionService.getRecentAuctions(0, 0);
-        RegularUser regularUser = userRepository.findByEmail("test@test.com");
+        RegularUser regularUser = userRepository.findByEmail("testUser@test.com");
         RatingDataDTO ratingDataDTO = new RatingDataDTO();
         AuctionPostSendDTO auctionPostSendDTO = auctions.get(0);
         auctionPostSendDTO.setEndTime(date);

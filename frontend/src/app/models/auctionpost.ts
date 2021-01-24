@@ -20,6 +20,7 @@ export class AuctionPost {
   paid?: boolean;
   contactFormSubmitted?: boolean;
   subscriptions: any[];
+  creatorVerified: boolean;
 
   constructor(creatorId: number, name: string, category: string, startTime: Date, endTime: Date, country: string,
               city: string, address: string, houseNr: number, minPrice: number, description: string, image: string, paid?: boolean,subscriptions?:any[]) {

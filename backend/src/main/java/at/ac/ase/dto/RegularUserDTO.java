@@ -22,6 +22,8 @@ public class RegularUserDTO {
     @NotNull
     private String email;
 
+    private Boolean isVerified;
+
 
     private AddressDTO address;
 
@@ -125,5 +127,13 @@ public class RegularUserDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Boolean getVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(Boolean verified) {
+        isVerified = verified;
     }
 }

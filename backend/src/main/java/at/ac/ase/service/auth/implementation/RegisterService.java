@@ -34,6 +34,7 @@ public class RegisterService implements IRegisterService {
     @Override
     public AuctionHouse registerHouse(AuctionHouse ahouse) {
         ahouse.setPasswordHash(passwordEncoder.encode(ahouse.getPasswordHash()));
+        ahouse.setVerified(true);
         return auctionHouseRepository.save(ahouse);
     }
 
