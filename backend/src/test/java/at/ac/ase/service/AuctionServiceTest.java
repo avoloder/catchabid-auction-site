@@ -305,6 +305,78 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         assertEquals(Status.CANCELLED, cancelledAuctionDb.getStatus());
     }
 
+    @Test(expected = AuthorizationException.class)
+    public void testPostContactFormFalseUserError() {
+        insertTestData("initial-testdata.sql");
+
+        User user = new AuctionHouse();
+        user.setId(5L);
+
+        auctionService.postContactForm(100010L, user, createContactForm());
+    }
+
+    @Test
+    public void testPostContactFormSuccess() {
+        insertTestData("initial-testdata.sql");
+
+        User user = new AuctionHouse();
+        user.setId(3L);
+
+        AuctionPost auctionPost = auctionRepository.findById(100010L).orElse(null);
+
+        assertNotNull(auctionPost);
+        assertNull(auctionPost.getContactForm());
+
+        AuctionPostSendDTO auctionPostSendDTO = auctionService.postContactForm(100010L, user, createContactForm());
+
+        assertNotNull(auctionPostSendDTO.getContactFormSubmitted());
+        assertTrue(auctionPostSendDTO.getContactFormSubmitted());
+
+        auctionPost = auctionRepository.findById(100010L).orElse(null);
+
+        assertNotNull(auctionPost);
+        assertNotNull(auctionPost.getContactForm());
+    }
+
+    @Test
+    public void testGetContactFormSuccess() {
+        insertTestData("initial-testdata.sql");
+
+        User user = new AuctionHouse();
+        user.setId(3L);
+
+        AuctionPost auctionPost = auctionRepository.findById(100010L).orElse(null);
+
+        assertNotNull(auctionPost);
+        assertNull(auctionPost.getContactForm());
+
+        auctionService.postContactForm(100010L, user, createContactForm());
+
+        User user1 = new AuctionHouse();
+        user1.setId(2L);
+
+        assertEquals(Long.valueOf(2), auctionService.getContactForm(100010L, user1).getId());
+    }
+
+    private ContactForm createContactForm() {
+        ContactForm contactForm = new ContactForm();
+        contactForm.setFirstName("Test First");
+        contactForm.setLastName("Test Last");
+
+        Address address = new Address();
+        address.setStreet("Resselgasse");
+        address.setHouseNr(1);
+        address.setCity("Vienna");
+        address.setCountry("Austria");
+
+        contactForm.setAddress(address);
+        contactForm.setPhoneNr("062749403274");
+        contactForm.setEmail("test2@gmail.com");
+        contactForm.setRemark("No Remark");
+
+        return contactForm;
+    }
+
     private AuctionPost createAuction(String email) {
         AuctionPost auctionPost = new AuctionPost();
         auctionPost.setEndTime(LocalDateTime.now());

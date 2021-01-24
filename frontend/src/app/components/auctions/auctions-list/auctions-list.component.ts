@@ -173,7 +173,7 @@ export class AuctionsListComponent implements OnInit {
     /**
      * Refresh auctions after placing a bid
      */
-    this.refreshAuctions();
+    window.location.reload();
   }
 
   isOwnAuction(auction: AuctionPost) {

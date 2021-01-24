@@ -121,20 +121,26 @@ public interface IAuctionService {
     List<String> getCountriesWhereAuctionsExist();
 
     /**
-     *
-     * @param auctionId
-     * @param user
-     * @param contactForm
+     * Method which saves contact form in an auction post
+     * @param auctionId of a won auction
+     * @param user who won auction
+     * @param contactForm which is filled by user
      * @return
      */
     AuctionPostSendDTO postContactForm(Long auctionId, User user, ContactForm contactForm);
 
+    /**
+     * Method which retrieves contact form of an auction
+     * @param auctionPostId of a won auction
+     * @param user who is owner of an auction
+     * @return DTO of a contact form
+     */
     ContactFormDTO getContactForm(Long auctionPostId, User user);
 
     /**
-     *
-     * @param contactFormDTO
-     * @return
+     * Method which converts contact form DTO to the entity
+     * @param contactFormDTO to be converted
+     * @return contact form entity
      */
     ContactForm convertContactFormToDTO(ContactFormDTO contactFormDTO);
 

@@ -56,6 +56,14 @@ public class CatchabidBasePage extends PageObject {
         return getDriver().findElement(By.xpath("//a[contains(text(),'Register')]"));
     }
 
+    public WebElement getMyProfile() {
+        return getDriver().findElement(By.id("my-profile"));
+    }
+
+    public WebElement getLogout() {
+        return getDriver().findElement(By.id("logout"));
+    }
+
     public AuctionsListArea getAuctionsListArea() {
         return initPage(AuctionsListArea.class);
     }
@@ -70,6 +78,14 @@ public class CatchabidBasePage extends PageObject {
 
     public void clickRegisterButton(){
         getRegisterButton().click();
+    }
+
+    public void clickMyProfileButton() {
+        getMyProfile().click();
+    }
+
+    public void clickLogoutButton() {
+        getLogout().click();
     }
 
     public WebElement getDropdownToggleButton() {
