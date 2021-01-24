@@ -61,12 +61,19 @@ export class NavbarComponent implements OnInit {
   openWebSocket() {
     if (this.email) {
       this.client.connect({
-        email: this.email
       }, () => {
-        this.client.subscribe('/user/queue/notification',
+        this.client.subscribe('/topic/notification/' + this.email,
         (notRes: any) => {
           console.log(JSON.parse(notRes.body));
-          this.notifications.push(JSON.parse(notRes.body));
+          const notJSON = JSON.parse(notRes.body)
+          const newNotification: Notification = {
+            id: notRes.body.id,
+            info: notJSON.info,
+            seen: notJSON.seen,
+            date: notJSON.date
+          }
+          console.log(newNotification);
+          this.notifications.push(newNotification);
           console.log(this.notifications.length);
         });
       });
