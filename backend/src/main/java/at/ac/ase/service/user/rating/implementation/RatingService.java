@@ -9,6 +9,7 @@ import at.ac.ase.repository.user.UserRepository;
 import at.ac.ase.service.user.rating.IRatingService;
 import at.ac.ase.util.exceptions.InvalidRatingDataException;
 import at.ac.ase.util.exceptions.UserAlreadyRatedException;
+import at.ac.ase.util.exceptions.UserAndCreatorAreTheSameException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +57,8 @@ public class RatingService implements IRatingService {
         Optional<Rating> rating = ratingRepository.findById(ratingPK);
         if (rating.isPresent()) {
             throw new UserAlreadyRatedException();
+        } else if (auctionPostSendDTO.getCreatorEmail().equals(user.getEmail())){
+            throw new UserAndCreatorAreTheSameException();
         }
     }
 
@@ -67,14 +70,18 @@ public class RatingService implements IRatingService {
             rating.setId(ratingPK);
             RegularUser regularUser = userRepository.findByEmail(ratingData.getAuctionPost().getCreatorEmail());
             if (regularUser != null){
-                Double userRating = calculateRating(regularUser.getEmail());
-                if(regularUser.getRatings().size() >= 15 && userRating >= 4.0){
-                    if(!regularUser.getVerified()) {
-                        regularUser.setVerified(true);
-                        userRepository.save(regularUser);
-                    }
-                }
-                rating.setUser(regularUser);
+               if (!regularUser.getEmail().equals(user.getEmail())){
+                   Double userRating = calculateRating(regularUser.getEmail());
+                   if(regularUser.getRatings().size() >= 15 && userRating >= 4.0){
+                       if(!regularUser.getVerified()) {
+                           regularUser.setVerified(true);
+                           userRepository.save(regularUser);
+                       }
+                   }
+                   rating.setUser(regularUser);
+               } else {
+                   throw new UserAndCreatorAreTheSameException();
+               }
             } else {
                 AuctionHouse auctionHouse = auctionHouseRepository.findByEmail(ratingData.getAuctionPost().getCreatorEmail());
                 rating.setUser(auctionHouse);

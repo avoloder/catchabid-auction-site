@@ -1,6 +1,8 @@
 
 
 INSERT INTO public.regular_user (id, active, email, first_name,last_name, password_hash, phone_nr, country, city, street, house_nr) VALUES (2, true, 'test@test.com', 'Testname','TestLastName', '9999', '123', 'Austria', 'Vienna', 'Resselgasse', 1);
+INSERT INTO public.regular_user (id, active, email, first_name,last_name, password_hash, phone_nr, country, city, street, house_nr) VALUES (250, true, 'testUser@test.com', 'Testname','TestLastName', '9999', '123', 'Austria', 'Vienna', 'Resselgasse', 1);
+
 
 INSERT INTO public.auction_house (id, active, email, name, password_hash, phone_nr, tid, country, city, street, house_nr) VALUES (1, true, 'test@test.com', 'Testname', '9999', '123', '123', 'Austria', 'Vienna', 'Resselgasse', 1);
 INSERT INTO public.auction_house (id, active, email, name, password_hash, phone_nr, tid, country, city, street, house_nr) VALUES (3, true, 'test1@test.com', 'Max', '3333', '312', '312', 'Austria', 'Vienna', 'Resselgasse', 1);
