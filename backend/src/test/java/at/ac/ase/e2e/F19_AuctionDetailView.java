@@ -29,14 +29,14 @@ public class F19_AuctionDetailView extends BaseE2E {
 
     @Test
     void testDbAccess() {
-        insertTestData("initial-testdata.sql");
+        insertTestData("F19_tc1.sql");
         assertEquals(16L, auctionRepository.findAll().size());
         cleanDatabase();
     }
 
     @Test
     void testShowAuctionDetailView() throws InterruptedException {
-        insertTestData("initial-testdata.sql");
+        insertTestData("F19_tc1.sql");
 
         navigateToCatchabidPage();
         loginUser();
