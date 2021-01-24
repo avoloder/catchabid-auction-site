@@ -65,8 +65,6 @@ export class NavbarComponent implements OnInit {
       }, () => {
         this.client.subscribe('/user/queue/notification',
         (notRes: any) => {
-          console.log(notRes);
-          console.log(notRes.body);
           console.log(JSON.parse(notRes.body));
           this.notifications.push(JSON.parse(notRes.body));
           console.log(this.notifications.length);

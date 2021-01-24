@@ -36,13 +36,14 @@ public class NotificationController {
 
         RegularUserNotification notification = new RegularUserNotification();
         notification.setReceiver((RegularUser) user);
+        notification.setId(1L);
         notification.setInfo("Your bid has won the auction 'Camera Nixon 395!'");
         notification.setSeen(false);
         webSocketController.sendNotification(user, notification);
         // notificationService.saveNotification(notification);
 
-        return ResponseEntity.ok(
-            notificationDTOTranslator.toDtoList(notificationService.getNotificationsForUser(user)));
+        return ResponseEntity.ok().build();
+   //         notificationDTOTranslator.toDtoList(notificationService.getNotificationsForUser(user)));
     }
 
     @PutMapping("/{id}")

@@ -1,5 +1,6 @@
 package at.ac.ase.service.auction.implementation;
 
+import at.ac.ase.controllers.NotificationWebSocketController;
 import at.ac.ase.dto.AuctionCreationDTO;
 import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.AuctionQueryDTO;
@@ -72,6 +73,9 @@ public class AuctionService implements IAuctionService {
 
     @Autowired
     INotificationService notificationService;
+
+    @Autowired
+    NotificationWebSocketController webSocketController;
 
 
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -338,6 +342,7 @@ public class AuctionService implements IAuctionService {
             job.getJobDataMap().put("emailSender", emailSender);
             job.getJobDataMap().put("notificationService", notificationService);
             job.getJobDataMap().put("auctionService", this);
+            job.getJobDataMap().put("webSocketController", webSocketController);
 
             Trigger trigger = TriggerBuilder.newTrigger()
                     .withIdentity(triggerName, "group1")

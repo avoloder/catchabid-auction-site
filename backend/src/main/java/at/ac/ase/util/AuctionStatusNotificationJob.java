@@ -1,15 +1,21 @@
 package at.ac.ase.util;
 
+import at.ac.ase.config.WebSocketConfig;
+import at.ac.ase.controllers.NotificationWebSocketController;
 import at.ac.ase.entities.*;
 import at.ac.ase.service.auction.implementation.AuctionService;
 import at.ac.ase.service.notification.implementation.NotificationService;
 import at.ac.ase.util.exceptions.EmailNotSentException;
 import org.quartz.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
 public class AuctionStatusNotificationJob implements Job {
+
+    @Autowired
+    private NotificationWebSocketController webSocketController;
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
@@ -17,6 +23,7 @@ public class AuctionStatusNotificationJob implements Job {
         JavaMailSender emailSender = (JavaMailSender)jobExecutionContext.getJobDetail().getJobDataMap().get("emailSender");
         NotificationService notificationService = (NotificationService) jobExecutionContext.getJobDetail().getJobDataMap().get("notificationService");
         AuctionService auctionService = (AuctionService) jobExecutionContext.getJobDetail().getJobDataMap().get("auctionService");
+        NotificationWebSocketController webSocketController = (NotificationWebSocketController)jobExecutionContext.getJobDetail().getJobDataMap().get("webSocketController");
 
         String notificationMessage = "Auction you subscribed for \"" + auctionPost.getName() + "\" just started!";
 
@@ -38,6 +45,7 @@ public class AuctionStatusNotificationJob implements Job {
             notification.setReceiver((RegularUser) user);
             notification.setInfo(notificationMessage);
             notificationService.saveNotification(notification);
+            webSocketController.sendNotification(user, notification);
 
             // update auction post status to ACTIVE
             auctionPost.setStatus(Status.ACTIVE);

@@ -24,6 +24,7 @@ public class NotificationWebSocketController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         template.convertAndSendToUser(user.getEmail(),"/queue/notification", notification);
     }
 
