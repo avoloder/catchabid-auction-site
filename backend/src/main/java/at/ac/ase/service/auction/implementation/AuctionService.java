@@ -34,6 +34,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.validation.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -81,6 +82,14 @@ public class AuctionService implements IAuctionService {
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private final Validator validator = factory.getValidator();
 
+    @PostConstruct
+    private void scheduleJobForAuctions() {
+        logger.info("Scheduling jobs for stored auctions");
+        List<AuctionPost> auctionPostList = auctionRepository.findAllByStartTimeGreaterThan(LocalDateTime.now());
+        for(AuctionPost auctionPost: auctionPostList){
+            scheduleNotificationJob(auctionPost);
+        }
+    }
 
     @Override
     public Optional<AuctionPost> getAuctionPost(Long id) {
@@ -89,7 +98,11 @@ public class AuctionService implements IAuctionService {
 
     @Override
     public AuctionPost saveAuction(AuctionPost auctionPost) {
-        return auctionRepository.save(auctionPost);
+        AuctionPost auctionPostCreated = auctionRepository.save(auctionPost);
+        if(auctionPost.getId() == null){
+            scheduleNotificationJob(auctionPostCreated);
+        }
+        return auctionPostCreated;
     }
 
     @Override
@@ -186,31 +199,6 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public List<AuctionPostSendDTO> getUpcomingAuctions(Integer auctionsPerPage, Integer pageNr) {
-        logger.info("Fetching upcoming auctions without preferences, for pageNumber " + pageNr + ", and page size " + auctionsPerPage);
-        List<AuctionPost> upcomingAuctions = auctionRepository.findAllByStartTimeGreaterThan(LocalDateTime.now(),
-                getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").ascending()));
-        logger.debug("Fetched " + upcomingAuctions.size() + " auctions from database.");
-        return convertAuctionsToDTO(upcomingAuctions);
-    }
-
-    @Override
-    public List<AuctionPostSendDTO> getUpcomingAuctionsForUser(Integer auctionsPerPage, Integer pageNr, String userEmail, boolean usePreferences) {
-        List<Category> preferences = getPreferences(userEmail, usePreferences);
-        if (preferences == null || preferences.isEmpty()) {
-            logger.info("No preferences found, continue with retrieving upcoming auctions without preferences");
-            return getUpcomingAuctions(pageNr, auctionsPerPage);
-        } else {
-            logger.info("Retrieving upcoming auctions with preferences: " + preferences.toString() + " for pageNumber " + pageNr + ", and page size " + auctionsPerPage);
-            List<AuctionPost> upcomingAuctions = auctionRepository.findAllByStartTimeGreaterThanAndCategoryIn(LocalDateTime.now(), preferences,
-                    getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").ascending()));
-            logger.debug("Fetched " + upcomingAuctions.size() + " auctions from database.");
-            return convertAuctionsToDTO(upcomingAuctions);
-
-        }
-    }
-
-    @Override
     public List<AuctionPost> getAllAuctions() {
         return auctionRepository.findAll();
     }
@@ -228,11 +216,6 @@ public class AuctionService implements IAuctionService {
             entityQuery.setCategories(getPreferences(entityQuery.getUserEmail(), entityQuery.isUseUserPreferences()));
         }
         List<AuctionPost> foundAuctions = auctionRepository.query(entityQuery);
-        for (AuctionPost auctionPost: foundAuctions){
-            if(auctionPost.getStartTime().isAfter(LocalDateTime.now())) {
-                scheduleNotificationJob(auctionPost);
-            }
-        }
         logger.info("Size of auctions: " + foundAuctions.size());
         return auctionDtoTranslator.toDtoList(foundAuctions);
     }
@@ -306,7 +289,9 @@ public class AuctionService implements IAuctionService {
         Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
         subscriptions.add((RegularUser) user);
         auctionPost.setSubscriptions(subscriptions);
-        return auctionRepository.save(auctionPost);
+        AuctionPost updatedAuctionPost = auctionRepository.save(auctionPost);
+        scheduleNotificationJob(updatedAuctionPost);
+        return updatedAuctionPost;
     }
 
     @Override
@@ -314,7 +299,9 @@ public class AuctionService implements IAuctionService {
         Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
         subscriptions.removeIf(subscribedUser -> subscribedUser.getId().equals(user.getId()));
         auctionPost.setSubscriptions(subscriptions);
-        return auctionRepository.save(auctionPost);
+        AuctionPost updatedAuctionPost = auctionRepository.save(auctionPost);
+        scheduleNotificationJob(updatedAuctionPost);
+        return updatedAuctionPost;
     }
 
     public List<AuctionPostSendDTO> getMyAuctions(User user){
@@ -334,10 +321,14 @@ public class AuctionService implements IAuctionService {
             SchedulerFactory schedFact = new StdSchedulerFactory();
             Scheduler sched = schedFact.getScheduler();
             String jobName = auctionPost.getId().toString();
+
             String triggerName = "trigger-" + auctionPost.getId();
             JobDetail job = JobBuilder.newJob(AuctionStatusNotificationJob.class)
                     .withIdentity(jobName, "group1")
                     .build();
+
+            sched.deleteJob(job.getKey());
+
             job.getJobDataMap().put("auctionPost", auctionPost);
             job.getJobDataMap().put("emailSender", emailSender);
             job.getJobDataMap().put("notificationService", notificationService);
@@ -352,6 +343,7 @@ public class AuctionService implements IAuctionService {
                     .forJob(jobName, "group1")
                     .build();
 
+            System.out.println("usla sam tu");
             sched.scheduleJob(job, trigger);
             sched.start();
 
