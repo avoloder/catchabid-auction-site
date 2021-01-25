@@ -10,13 +10,13 @@ import javax.persistence.Table;
 public class AuctionHouseNotification extends Notification {
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private RegularUser receiver;
+    private AuctionHouse receiver;
 
-    public RegularUser getReceiver() {
+    public AuctionHouse getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(RegularUser receiver) {
+    public void setReceiver(AuctionHouse receiver) {
         this.receiver = receiver;
     }
 }

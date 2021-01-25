@@ -14,9 +14,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 
 public class AuctionStatusNotificationJob implements Job {
 
-    @Autowired
-    private NotificationWebSocketController webSocketController;
-
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         AuctionPost auctionPost = (AuctionPost)jobExecutionContext.getJobDetail().getJobDataMap().get("auctionPost");
@@ -51,6 +48,8 @@ public class AuctionStatusNotificationJob implements Job {
             // update auction post status to ACTIVE
             auctionPost.setStatus(Status.ACTIVE);
             auctionService.saveAuction(auctionPost);
+
+            auctionService.scheduleNotificationJob(auctionPost);
         }
     }
 }

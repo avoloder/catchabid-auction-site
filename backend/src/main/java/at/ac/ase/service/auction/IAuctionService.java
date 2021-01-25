@@ -138,4 +138,10 @@ public interface IAuctionService {
     List<AuctionPostSendDTO> getMyAuctions(User user);
     Set<AuctionPostSendDTO> getMySubscriptions(RegularUser user);
 
+    /**
+     * Method which schedules notification job for recent and upcoming auctions
+     * @param auctionPost - auction post for which the job is creeated
+     */
+    public void scheduleNotificationJob(AuctionPost auctionPost);
+
 }

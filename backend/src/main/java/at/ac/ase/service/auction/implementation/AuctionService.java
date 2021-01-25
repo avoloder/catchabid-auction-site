@@ -15,6 +15,7 @@ import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.service.notification.INotificationService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
+import at.ac.ase.util.AuctionFinishedNotificationJob;
 import at.ac.ase.util.AuctionStatusNotificationJob;
 import at.ac.ase.util.exceptions.ObjectNotFoundException;
 import at.ac.ase.util.exceptions.WrongSubscriberException;
@@ -83,10 +84,11 @@ public class AuctionService implements IAuctionService {
     @PostConstruct
     private void scheduleJobForAuctions() {
         logger.info("Scheduling jobs for stored auctions");
-        List<AuctionPost> auctionPostList = auctionRepository.findAllByStartTimeGreaterThan(LocalDateTime.now());
+        List<AuctionPost> auctionPostList = auctionRepository.findAll();
         for(AuctionPost auctionPost: auctionPostList){
             scheduleNotificationJob(auctionPost);
         }
+
     }
 
     @Override
@@ -314,36 +316,63 @@ public class AuctionService implements IAuctionService {
         return auctionDtoTranslator.toDtoSet(retrieved);
     }
 
-    private void scheduleNotificationJob(AuctionPost auctionPost){
+    public void scheduleNotificationJob(AuctionPost auctionPost){
         try {
             SchedulerFactory schedFact = new StdSchedulerFactory();
             Scheduler sched = schedFact.getScheduler();
             String jobName = auctionPost.getId().toString();
-
             String triggerName = "trigger-" + auctionPost.getId();
-            JobDetail job = JobBuilder.newJob(AuctionStatusNotificationJob.class)
-                    .withIdentity(jobName, "group1")
-                    .build();
+            Trigger trigger = null;
+            JobDetail job = null;
 
-            sched.deleteJob(job.getKey());
+            if(auctionPost.getStartTime().isAfter(LocalDateTime.now())) {
+                job = JobBuilder.newJob(AuctionStatusNotificationJob.class)
+                        .withIdentity(jobName, "group1")
+                        .build();
 
-            job.getJobDataMap().put("auctionPost", auctionPost);
-            job.getJobDataMap().put("emailSender", emailSender);
-            job.getJobDataMap().put("notificationService", notificationService);
-            job.getJobDataMap().put("auctionService", this);
-            job.getJobDataMap().put("webSocketController", webSocketController);
+                sched.deleteJob(job.getKey());
 
-            Trigger trigger = TriggerBuilder.newTrigger()
-                    .withIdentity(triggerName, "group1")
-                    .startAt(java.util.Date
-                            .from(auctionPost.getStartTime().atZone(ZoneId.systemDefault())
-                                    .toInstant()))
-                    .forJob(jobName, "group1")
-                    .build();
+                job.getJobDataMap().put("auctionPost", auctionPost);
+                job.getJobDataMap().put("emailSender", emailSender);
+                job.getJobDataMap().put("notificationService", notificationService);
+                job.getJobDataMap().put("auctionService", this);
+                job.getJobDataMap().put("webSocketController", webSocketController);
 
-            System.out.println("usla sam tu");
-            sched.scheduleJob(job, trigger);
-            sched.start();
+                trigger = TriggerBuilder.newTrigger()
+                        .withIdentity(triggerName, "group1")
+                        .startAt(java.util.Date
+                                .from(auctionPost.getStartTime().atZone(ZoneId.systemDefault())
+                                        .toInstant()))
+                        .forJob(jobName, "group1")
+                        .build();
+            }else{
+                if(auctionPost.getEndTime().isAfter(LocalDateTime.now())) {
+                    job = JobBuilder.newJob(AuctionFinishedNotificationJob.class)
+                            .withIdentity(jobName, "group1")
+                            .build();
+
+                    sched.deleteJob(job.getKey());
+
+                    job.getJobDataMap().put("auctionPost", auctionPost);
+                    job.getJobDataMap().put("emailSender", emailSender);
+                    job.getJobDataMap().put("notificationService", notificationService);
+                    job.getJobDataMap().put("auctionService", this);
+                    job.getJobDataMap().put("webSocketController", webSocketController);
+
+                    trigger = TriggerBuilder.newTrigger()
+                            .withIdentity(triggerName, "group1")
+                            .startAt(java.util.Date
+                                    .from(auctionPost.getEndTime().atZone(ZoneId.systemDefault())
+                                            .toInstant()))
+                            .forJob(jobName, "group1")
+                            .build();
+                }
+            }
+
+            if(job != null && trigger != null) {
+                sched.scheduleJob(job, trigger);
+                sched.start();
+            }
 
         }catch (SchedulerException e){
             logger.error(e.getMessage());
