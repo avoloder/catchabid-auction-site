@@ -343,6 +343,7 @@ public class AuctionService implements IAuctionService {
         if(auctionPost.getStatus().equals(Status.CANCELLED)){
             throw new AuctionCancelledException();
         }
+        //ToDo: check if user trying to subsribe is a regaular user and not an auction house (also in frontend)
         Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
         subscriptions.add((RegularUser) user);
         auctionPost.setSubscriptions(subscriptions);
@@ -436,9 +437,6 @@ public class AuctionService implements IAuctionService {
         }
     }
 
-
-
-}
     public void scheduleNotificationJob(AuctionPost auctionPost){
         try {
             SchedulerFactory schedFact = new StdSchedulerFactory();
