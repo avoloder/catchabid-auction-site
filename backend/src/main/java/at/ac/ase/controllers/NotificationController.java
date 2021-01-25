@@ -5,7 +5,6 @@ import at.ac.ase.entities.RegularUser;
 import at.ac.ase.entities.RegularUserNotification;
 import at.ac.ase.entities.User;
 import at.ac.ase.service.notification.INotificationService;
-import javax.ws.rs.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,12 +29,25 @@ public class NotificationController {
     @Autowired
     private NotificationWebSocketController webSocketController;
 
+    /**
+     * Endpoint for getting {@link at.ac.ase.entities.Notification}s for given User
+     * @param user {@link User} whose notifications should be found
+     *
+     * @return
+     */
     @GetMapping
     public ResponseEntity<Object> getNotificationsForRegularUser(
         @CurrentSecurityContext(expression = "authentication.principal") User user) {
         return ResponseEntity.ok(notificationDTOTranslator.toDtoList(notificationService.getNotificationsForUser(user)));
     }
 
+    /**
+     * Endpoint for updating notification's seen attribute
+     *
+     * @param id Id of the {@link at.ac.ase.entities.Notification} to be update
+     *
+     * @return
+     */
     @PutMapping("/{id}")
     public ResponseEntity updateNotificationSeen(
         @PathVariable Long id) {
