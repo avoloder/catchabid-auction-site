@@ -34,8 +34,6 @@ public class Notification {
     @Column
     private Date date = new Date();
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private AuctionPost auctionPost;
 
     public Long getId() {
         return id;
@@ -51,14 +49,6 @@ public class Notification {
 
     public void setInfo(String info) {
         this.info = info;
-    }
-
-    public AuctionPost getAuctionPost() {
-        return auctionPost;
-    }
-
-    public void setAuctionPost(AuctionPost auctionPost) {
-        this.auctionPost = auctionPost;
     }
 
     public Boolean getSeen() {

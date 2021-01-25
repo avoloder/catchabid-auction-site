@@ -16,8 +16,6 @@ import at.ac.ase.service.notification.INotificationService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
 import at.ac.ase.util.AuctionStatusNotificationJob;
-import at.ac.ase.util.exceptions.EmailNotSentException;
-import at.ac.ase.util.exceptions.EmptyObjectException;
 import at.ac.ase.util.exceptions.ObjectNotFoundException;
 import at.ac.ase.util.exceptions.WrongSubscriberException;
 import org.modelmapper.ModelMapper;

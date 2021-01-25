@@ -23,27 +23,12 @@ public class NotificationWebSocketController {
     }
 
     public void sendNotification(User user, Notification notification){
-
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+
         }
-
-        System.out.println(userRegistry.getUsers().size());
-
-        printConnectedUsers();
-
-        System.out.println(user.getEmail());
-
         template.convertAndSend("/topic/notification/" + user.getEmail(), notification);
     }
-
-    public void printConnectedUsers() {
-        userRegistry.getUsers().stream()
-            .map(u -> u.getName())
-            .forEach(System.out::println);
-    }
-
 
 }

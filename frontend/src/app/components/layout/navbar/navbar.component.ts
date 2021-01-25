@@ -63,19 +63,18 @@ export class NavbarComponent implements OnInit {
       }, () => {
         this.client.subscribe('/topic/notification/' + this.email,
         (notRes: any) => {
-          console.log(JSON.parse(notRes.body));
+          console.log(notRes)
           const notJSON = JSON.parse(notRes.body)
           const newNotification: Notification = {
-            id: notRes.body.id,
+            id: notJSON.id,
             info: notJSON.info,
             seen: notJSON.seen,
             date: notJSON.date
           }
-          console.log(newNotification);
           this.notifications.push(newNotification);
-          console.log(this.notifications.length);
-          console.log(this.notifications[0]);
-        });
+          this.notifications.sort((a, b) => (a.id < b.id) ? 1 : -1);
+        },
+        error => console.log(error));
       });
     } else {
       console.log('Unable to subscribe to notifications');
@@ -142,7 +141,8 @@ export class NavbarComponent implements OnInit {
     this.notificationsService.getNotifications().subscribe(
       (res) => {
         if (res) {
-          res.forEach(n => this.notifications.push(n))
+          res.forEach(n => this.notifications.push(n));
+          this.notifications.sort((a, b) => (a.id < b.id) ? 1 : -1);
         }
       },
       (err) => console.log(err)
@@ -150,7 +150,6 @@ export class NavbarComponent implements OnInit {
   }
 
   checkIfSomeUnseen(): boolean {
-    console.log(this.notifications);
     if (this.notifications) {
       return this.notifications.some(n => !n.seen);
     } else {

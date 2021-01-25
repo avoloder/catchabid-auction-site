@@ -28,6 +28,14 @@ public class AuctionStatusNotificationJob implements Job {
         String notificationMessage = "Auction you subscribed for \"" + auctionPost.getName() + "\" just started!";
 
         for(User user: auctionPost.getSubscriptions()) {
+            // create and store notification for each subscribed user
+            RegularUserNotification notification = new RegularUserNotification();
+            notification.setReceiver((RegularUser) user);
+            notification.setInfo(notificationMessage);
+            notification.setSeen(false);
+            notificationService.saveNotification(notification);
+            webSocketController.sendNotification(user, notification);
+
             // send an email to all subscribed user
             try {
                 SimpleMailMessage message = new SimpleMailMessage();
@@ -39,13 +47,6 @@ public class AuctionStatusNotificationJob implements Job {
             } catch (MailException e) {
                 throw new EmailNotSentException();
             }
-
-            // create and store notification for each subscribed user
-            RegularUserNotification notification = new RegularUserNotification();
-            notification.setReceiver((RegularUser) user);
-            notification.setInfo(notificationMessage);
-            notificationService.saveNotification(notification);
-            webSocketController.sendNotification(user, notification);
 
             // update auction post status to ACTIVE
             auctionPost.setStatus(Status.ACTIVE);

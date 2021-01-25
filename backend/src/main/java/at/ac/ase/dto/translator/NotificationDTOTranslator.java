@@ -19,9 +19,7 @@ public class NotificationDTOTranslator {
         notificationDTO.setId(notification.getId());
         notificationDTO.setDate(notification.getDate());
         notificationDTO.setInfo(notification.getInfo());
-        notificationDTO.setAuctionPostSendDTO(
-            notification.getAuctionPost() != null ?
-            auctionDtoTranslator.toSendDto(notification.getAuctionPost(), false) : null);
+        notificationDTO.setSeen(notification.getSeen());
         return notificationDTO;
     }
 

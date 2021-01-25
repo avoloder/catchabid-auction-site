@@ -68,13 +68,14 @@
               NOTIFICATIONS
             </h6>
           </div>
-          <ul class=" list-group list-group-flush" data-toggle="checklist">
+          <ul class="notification-box list-group list-group-flush" data-toggle="checklist">
             <li *ngFor="let n of notifications; index as i"
                 [ngStyle]="!n.seen && {'background-color':'rgb(236, 241, 255)'}" title={{n.info}}
                 class="checklist-entry list-group-item flex-column align-items-start py-4 px-4"
+                style="width: 100%;"
             >
               <div class="row">
-                <div class="col-10 checklist-info">
+                <div class="col-12 checklist-info">
                   <h6 class="checklist-title mb-0">{{n.info}}</h6>
                   <small>
                     <a href="javascript:void(0)">
