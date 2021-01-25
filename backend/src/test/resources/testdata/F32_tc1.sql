@@ -5,7 +5,7 @@ INSERT INTO public.regular_user (id, active, email, first_name, last_name, passw
 INSERT INTO public.regular_user (id, active, email, first_name, last_name, password_hash, phone_nr) VALUES (5, true, 'testRegular5@test.com', 'Testname', 'Testname', '$2a$10$NGnDMIixLDjizyZ9WNGSGudzwiMU9/mC652K6HOoBkMfsgojO6CH2', '123');
 INSERT INTO public.regular_user (id, active, email, first_name, last_name, password_hash, phone_nr) VALUES (6, true, 'testRegular6@test.com', 'Testname', 'Testname', '$2a$10$NGnDMIixLDjizyZ9WNGSGudzwiMU9/mC652K6HOoBkMfsgojO6CH2', '123');
 
-INSERT INTO public.auction_house (id, active, email, name, password_hash, phone_nr, tid) VALUES (3, true, 'testHouse@test.com', 'Testname', '$2a$10$NGnDMIixLDjizyZ9WNGSGudzwiMU9/mC652K6HOoBkMfsgojO6CH2', '123', '1234567');testRegular5@test.com
+INSERT INTO public.auction_house (id, active, email, name, password_hash, phone_nr, tid) VALUES (3, true, 'testHouse@test.com', 'Testname', '$2a$10$NGnDMIixLDjizyZ9WNGSGudzwiMU9/mC652K6HOoBkMfsgojO6CH2', '123', '1234567');
 INSERT INTO public.auction_house (id, active, email, name, password_hash, phone_nr, tid) VALUES (2, true, 'test2@test.com', 'Max', '$2a$10$NGnDMIixLDjizyZ9WNGSGudzwiMU9/mC652K6HOoBkMfsgojO6CH2', '312', '7654321');
 INSERT INTO public.auction_house (id, active, email, name, password_hash, phone_nr, tid) VALUES (7, true, 'testAH@test.com', 'Max', '$2a$10$NGnDMIixLDjizyZ9WNGSGudzwiMU9/mC652K6HOoBkMfsgojO6CH2', '312', '7654321');
 

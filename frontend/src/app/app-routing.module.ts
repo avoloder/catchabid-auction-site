@@ -6,7 +6,7 @@ import { RegisterComponent } from './components/register/register.component';
 import {AuctionsListComponent} from "./components/auctions/auctions-list/auctions-list.component";
 import {ProfileComponent} from "./components/profile/profile.component";
 import {UpdatePasswordComponent} from "./components/profile/update-password/update-password.component";
-import {StatisticsComponent} from "./components/statistics/statistics.component";
+import {StatisticsComponent} from "./components/profile/statistics/statistics.component";
 
 const routes: Routes = [
   {
@@ -23,13 +23,10 @@ const routes: Routes = [
   {path: 'profile' ,
   component: ProfileComponent,
   children: [
-    {path:'password',component: UpdatePasswordComponent}
-  ]},
-  {path: 'statistics' ,
-    component: StatisticsComponent,
-    }
-
-];
+    {path:'password',component: UpdatePasswordComponent},
+    {path:'statistics',component: StatisticsComponent}
+  ]}
+  ];
 
 
 @NgModule({

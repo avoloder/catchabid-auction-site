@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {StatisticsService} from "../../services/statistics.service";
+import {StatisticsService} from "../../../services/statistics.service";
 
 @Component({
   selector: 'app-statistics',
@@ -139,7 +139,6 @@ export class StatisticsComponent implements OnInit {
 
     })
     this.cdRef.detectChanges();
-    this.elementView.nativeElement.refresh;
   }
 
 }
