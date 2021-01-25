@@ -7,7 +7,9 @@ import { AuctionFormComponent } from '../../auctions/auction-form/auction-form.c
 import { Router } from '@angular/router';
 import {AuctionsService} from '../../../services/auction.service';
 import {AuctionsSearchService} from "../../../services/auctions-search.service";
-import {ContactFormComponent} from "../../auctions/contact-form/contact-form.component";
+import { NotificationsService } from 'src/app/services/notifications.service';
+import * as Stomp from 'stompjs';
+import { Notification } from 'src/app/models/notification';
 
 @Component({
   selector: 'app-navbar',
@@ -29,14 +31,54 @@ export class NavbarComponent implements OnInit {
 
   searchInputText: string;
 
+  webSocket: WebSocket;
+  client: Stomp.Client;
+
+  notifications: Notification[] = [];
+
+  email: string;
+
+  notficationsOpened: boolean;
+
   constructor(
     private modalService: NgbModal,
     private auctionsService: AuctionsService,
     private router: Router,
-    private auctionsSearchService: AuctionsSearchService
+    private auctionsSearchService: AuctionsSearchService,
+    private notificationsService: NotificationsService,
   ) { }
 
   ngOnInit(): void {
+    this.email = localStorage.getItem('email');
+    this.notficationsOpened = false;
+    this.loadNotifications();
+    this.webSocket = new WebSocket('ws://localhost:8080/notification');
+    this.client = Stomp.over(this.webSocket);
+    this.openWebSocket();
+  }
+
+  openWebSocket() {
+    if (this.email) {
+      this.client.connect({
+      }, () => {
+        this.client.subscribe('/topic/notification/' + this.email,
+        (notRes: any) => {
+          console.log(notRes)
+          const notJSON = JSON.parse(notRes.body)
+          const newNotification: Notification = {
+            id: notJSON.id,
+            info: notJSON.info,
+            seen: notJSON.seen,
+            date: notJSON.date
+          }
+          this.notifications.push(newNotification);
+          this.notifications.sort((a, b) => (a.id < b.id) ? 1 : -1);
+        },
+        error => console.log(error));
+      });
+    } else {
+      console.log('Unable to subscribe to notifications');
+    }
   }
 
   openLoginModal(): void {
@@ -98,4 +140,45 @@ export class NavbarComponent implements OnInit {
     this.searchInputText = "";
     this.auctionsSearchService.updateSearchKeys([]);
   }
+
+  private loadNotifications() {
+    this.notificationsService.getNotifications().subscribe(
+      (res) => {
+        if (res) {
+          res.forEach(n => this.notifications.push(n));
+          this.notifications.sort((a, b) => (a.id < b.id) ? 1 : -1);
+        }
+      },
+      (err) => console.log(err)
+    )
+  }
+
+  checkIfSomeUnseen(): boolean {
+    if (this.notifications) {
+      return this.notifications.some(n => !n.seen);
+    } else {
+      return false;
+    }
+  }
+
+  onNotificationsToggle() {
+    this.notficationsOpened = !this.notficationsOpened;
+    if (!this.notficationsOpened) {
+      console.log(this.notifications);
+      this.notifications.forEach((n, index) => {
+        if (!n.seen) {
+          n.seen = true;
+
+          this.notificationsService.updateNotificationsSeen(n).subscribe(
+            () => {
+              console.log('Notification with info ', n.info, ' successfully updated');
+            },
+            () => {
+              console.log('Error by updating notifications');
+            });
+        }
+      });
+    }
+  }
+
 }
