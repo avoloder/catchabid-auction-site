@@ -8,15 +8,17 @@ import at.ac.ase.dto.translator.AuctionDtoTranslator;
 import at.ac.ase.entities.*;
 import at.ac.ase.repository.auction.AuctionPostQuery;
 import at.ac.ase.repository.auction.AuctionRepository;
-import at.ac.ase.repository.user.UserRepository;
 import at.ac.ase.service.auction.IAuctionService;
+import at.ac.ase.service.twitter.ITwitterService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
-import com.lowagie.text.DocumentException;
-import org.apache.commons.io.FileUtils;
+import at.ac.ase.util.AuctionTweetJob;
 import at.ac.ase.util.exceptions.*;
+import com.lowagie.text.DocumentException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,24 +27,27 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.persistence.LockModeType;
 import javax.validation.*;
-import java.io.*;
-import java.text.SimpleDateFormat;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -72,10 +77,14 @@ public class AuctionService implements IAuctionService {
     @Autowired
     IRegularUserService userService;
 
+    @Autowired
+    ITwitterService twitterService;
 
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private final Validator validator = factory.getValidator();
 
+    private final int POPULAR_AUCTION_SUBSCRIPTIONS_MINIMUM = 1;
+    private final int AWESOME_AUCTION_SUBSCRIPTIONS_MINIMUM = 2;
 
     @Override
     public Optional<AuctionPost> getAuctionPost(Long id) {
@@ -331,6 +340,7 @@ public class AuctionService implements IAuctionService {
         return auctionRepository.findAllByHighestBidUserIdAndEndTimeLessThan(
             user.getId(), LocalDateTime.now());
     }
+
     @Override
     public AuctionPost subscribeToAuction(AuctionPost auctionPost, User user) {
         if(auctionPost.getCreator().getId().equals(user.getId())) {
@@ -342,6 +352,9 @@ public class AuctionService implements IAuctionService {
         Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
         subscriptions.add((RegularUser) user);
         auctionPost.setSubscriptions(subscriptions);
+
+        adaptAuctionPopularity(auctionPost);
+
         return auctionRepository.save(auctionPost);
     }
 
@@ -428,6 +441,56 @@ public class AuctionService implements IAuctionService {
         }
     }
 
+    private void adaptAuctionPopularity(AuctionPost auctionPost) {
+
+        if (auctionPost.getSubscriptions().size() >= POPULAR_AUCTION_SUBSCRIPTIONS_MINIMUM
+                && AuctionPopularity.DEFAULT.equals(auctionPost.getAuctionPopularity()))
+        {
+            auctionPost.setAuctionPopularity(AuctionPopularity.POPULAR);
+            scheduleTweet(auctionPost, auctionPost.getStartTime(), TwitterPostType.AUCTION_START);
+        }
+
+        if (auctionPost.getSubscriptions().size() >= AWESOME_AUCTION_SUBSCRIPTIONS_MINIMUM
+                && AuctionPopularity.POPULAR.equals(auctionPost.getAuctionPopularity()) )
+        {
+            auctionPost.setAuctionPopularity(AuctionPopularity.AWESOME);
+            scheduleTweet(auctionPost, auctionPost.getStartTime().minusHours(24), TwitterPostType.AUCTION_UPCOMING);
+            scheduleTweet(auctionPost, auctionPost.getEndTime().minusHours(1),    TwitterPostType.AUCTION_CLOSE_TO_END);
+            scheduleTweet(auctionPost, auctionPost.getEndTime(),                  TwitterPostType.AUCTION_END);
+        }
+    }
+
+    private void scheduleTweet(AuctionPost auctionPost, LocalDateTime time, TwitterPostType twitterPostType) {
+        if(time.isAfter(LocalDateTime.now())) {
+            return;
+        }
+        try {
+            SchedulerFactory schedFact = new StdSchedulerFactory();
+            Scheduler sched = schedFact.getScheduler();
+            String jobName = auctionPost.getId().toString() + twitterPostType.name();
+            String triggerName = "trigger-" + auctionPost.getId() + twitterPostType.name();
+            JobDetail job = JobBuilder.newJob(AuctionTweetJob.class)
+                    .withIdentity(jobName, "group2")
+                    .build();
+            job.getJobDataMap().put("auctionPost", auctionPost);
+            job.getJobDataMap().put("twitterService", twitterService);
+            job.getJobDataMap().put("twitterPostType", twitterPostType);
+
+            Trigger trigger = TriggerBuilder.newTrigger()
+                    .withIdentity(triggerName, "group2")
+                    .startAt(java.util.Date
+                            .from(auctionPost.getStartTime().atZone(ZoneId.systemDefault())
+                                    .toInstant()))
+                    .forJob(jobName, "group2")
+                    .build();
+
+            sched.scheduleJob(job, trigger);
+            sched.start();
+
+        }catch (SchedulerException e){
+            logger.error(e.getMessage());
+        }
+    }
 
 
 }
