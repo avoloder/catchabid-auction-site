@@ -16,7 +16,7 @@ import at.ac.ase.service.notification.INotificationService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
 import at.ac.ase.util.AuctionFinishedNotificationJob;
-import at.ac.ase.util.AuctionStatusNotificationJob;
+import at.ac.ase.util.AuctionStartedNotificationJob;
 import at.ac.ase.util.exceptions.ObjectNotFoundException;
 import at.ac.ase.util.exceptions.WrongSubscriberException;
 import org.modelmapper.ModelMapper;
@@ -326,7 +326,7 @@ public class AuctionService implements IAuctionService {
             JobDetail job = null;
 
             if(auctionPost.getStartTime().isAfter(LocalDateTime.now())) {
-                job = JobBuilder.newJob(AuctionStatusNotificationJob.class)
+                job = JobBuilder.newJob(AuctionStartedNotificationJob.class)
                         .withIdentity(jobName, "group1")
                         .build();
 
