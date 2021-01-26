@@ -120,7 +120,6 @@ public class RegularUser extends User {
                 .append(firstName, that.firstName)
                 .append(lastName, that.lastName)
                 .append(address, that.address)
-                .append(bids, that.bids)
                 .append(getPhoneNr(), that.getPhoneNr())
                 .append(getActive(), that.getActive())
                 .isEquals();

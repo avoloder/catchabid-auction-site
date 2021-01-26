@@ -33,7 +33,7 @@ public class StatisticsServiceTest extends BaseIntegrationTest {
 
     @After
     public void cleanup() {
-//        cleanDatabase();
+        cleanDatabase();
     }
 
     @Test

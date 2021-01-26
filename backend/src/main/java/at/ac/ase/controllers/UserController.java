@@ -91,16 +91,16 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(rating);
     }
     @RequestMapping(value="/updateUser", method = RequestMethod.POST)
-    public ResponseEntity<RegularUser> updateUser(@RequestParam String email, @RequestBody RegularUserDTO user){
-        logger.info("Updating user with the email " + user.getEmail());
+    public ResponseEntity<RegularUser> updateUser( @CurrentSecurityContext(expression = "authentication.principal") User oldUser, @RequestBody RegularUserDTO user){
+        logger.info("Updating user with the email " + oldUser.getEmail());
         logger.info("Address Data : " +user.getAddress());
-        return ResponseEntity.status(HttpStatus.OK).body(regularUserService.updateUser(email, user));
+        return ResponseEntity.status(HttpStatus.OK).body(regularUserService.updateUser(oldUser.getEmail(), user));
     }
 
     @RequestMapping(value="/updateHouse", method = RequestMethod.POST)
-    public ResponseEntity updateHouse(@RequestParam String email, @RequestBody AuctionHouseDTO auctionHouse){
+    public ResponseEntity updateHouse(@CurrentSecurityContext(expression = "authentication.principal") User oldUser, @RequestBody AuctionHouseDTO auctionHouse){
         logger.info("Updating auction house with the email " + auctionHouse.getEmail());
-        auctionHouseService.updateHouse(email, auctionHouse);
+        auctionHouseService.updateHouse(oldUser.getEmail(), auctionHouse);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

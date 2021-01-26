@@ -69,7 +69,7 @@ public class RegularUserService implements IRegularUserService {
                     throw new UserNotFoundException();
 
                 }
-                if (persisted.equals(user)) {
+                if (user.equals(persisted)) {
                     return persisted;
                 }
                 if (!email.equals(updatedUser.getEmail())){

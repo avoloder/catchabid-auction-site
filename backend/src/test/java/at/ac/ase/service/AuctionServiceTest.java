@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -171,8 +172,10 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         auctionPost = auctionService.getAllAuctions().get(0);
 
         assertThat(auctionPost.getSubscriptions().size(), is(1));
+        Set<AuctionPostSendDTO> subscriptions = auctionService.getMySubscriptions((RegularUser) user);
+        assertThat(subscriptions.size(), is(1));
 
-        Iterator iterator = auctionPost.getSubscriptions().iterator();
+        Iterator iterator = subscriptions.iterator();
         RegularUser subscribedUser = (RegularUser)iterator.next();
         assertThat(subscribedUser.getId(), is(2L));
         assertTrue(subscribedUser.getActive());
