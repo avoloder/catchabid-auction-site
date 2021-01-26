@@ -97,7 +97,6 @@ export class ProfileComponent implements OnInit {
 
 }
 
-import {Type} from '@angular/core';
 import {NgbActiveModal, NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import { Address } from 'src/app/models/address';
 import { Router } from '@angular/router';
@@ -117,7 +116,7 @@ import { Router } from '@angular/router';
     </p>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss(false)">Cancel</button>
+    <button type="btn btn-primary" class="btn btn-outline-secondary" (click)="modal.dismiss(false)">Cancel</button>
     <button type="submit" ngbAutofocus class="btn btn-danger" (click)="modal.close(true)">Ok</button>
   </div>
   `
