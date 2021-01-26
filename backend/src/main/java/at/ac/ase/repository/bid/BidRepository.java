@@ -16,4 +16,5 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
      * @return the list of found {@link Bid}s
      */
     List<Bid> findAllByUser_Id(Long userId);
+    List<Bid> findAllByAuction_id(Long auctionId);
 }

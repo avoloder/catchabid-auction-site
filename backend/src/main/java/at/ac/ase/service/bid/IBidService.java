@@ -2,6 +2,7 @@ package at.ac.ase.service.bid;
 
 import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.BidDTO;
+import at.ac.ase.entities.AuctionPost;
 import at.ac.ase.entities.Bid;
 import at.ac.ase.entities.User;
 
@@ -33,6 +34,8 @@ public interface IBidService {
     Bid placeBid(Bid bid);
 
     List<AuctionPostSendDTO> getMyBids(User user);
+
+    List<AuctionPostSendDTO> getAuctionBids(AuctionPost post);
 
 
 }
