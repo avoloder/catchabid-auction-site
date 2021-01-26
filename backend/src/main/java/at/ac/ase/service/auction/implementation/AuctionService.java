@@ -1,5 +1,6 @@
 package at.ac.ase.service.auction.implementation;
 
+import at.ac.ase.controllers.NotificationWebSocketController;
 import at.ac.ase.dto.AuctionCreationDTO;
 import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.AuctionQueryDTO;
@@ -10,13 +11,20 @@ import at.ac.ase.repository.auction.AuctionPostQuery;
 import at.ac.ase.repository.auction.AuctionRepository;
 import at.ac.ase.repository.user.UserRepository;
 import at.ac.ase.service.auction.IAuctionService;
+import at.ac.ase.service.notification.INotificationService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
 import com.lowagie.text.DocumentException;
 import org.apache.commons.io.FileUtils;
 import at.ac.ase.util.exceptions.*;
+import at.ac.ase.util.AuctionFinishedNotificationJob;
+import at.ac.ase.util.AuctionStartedNotificationJob;
+import at.ac.ase.util.exceptions.ObjectNotFoundException;
+import at.ac.ase.util.exceptions.WrongSubscriberException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +45,14 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.validation.*;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -72,10 +82,25 @@ public class AuctionService implements IAuctionService {
     @Autowired
     IRegularUserService userService;
 
+    @Autowired
+    INotificationService notificationService;
+
+    @Autowired
+    NotificationWebSocketController webSocketController;
+
 
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private final Validator validator = factory.getValidator();
 
+    @PostConstruct
+    private void scheduleJobForAuctions() {
+        logger.info("Scheduling jobs for stored auctions");
+        List<AuctionPost> auctionPostList = auctionRepository.findAll();
+        for(AuctionPost auctionPost: auctionPostList){
+            scheduleNotificationJob(auctionPost);
+        }
+
+    }
 
     @Override
     public Optional<AuctionPost> getAuctionPost(Long id) {
@@ -84,7 +109,11 @@ public class AuctionService implements IAuctionService {
 
     @Override
     public AuctionPost saveAuction(AuctionPost auctionPost) {
-        return auctionRepository.save(auctionPost);
+        AuctionPost auctionPostCreated = auctionRepository.save(auctionPost);
+        if(auctionPost.getId() == null){
+            scheduleNotificationJob(auctionPostCreated);
+        }
+        return auctionPostCreated;
     }
 
     @Override
@@ -195,31 +224,6 @@ public class AuctionService implements IAuctionService {
                     LocalDateTime.now(), LocalDateTime.now(), preferences, getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").descending()));
             logger.debug("Fetched " + recentAuctions.size() + " auctions from database.");
             return auctionDtoTranslator.toDtoList(recentAuctions);
-        }
-    }
-
-    @Override
-    public List<AuctionPostSendDTO> getUpcomingAuctions(Integer auctionsPerPage, Integer pageNr) {
-        logger.info("Fetching upcoming auctions without preferences, for pageNumber " + pageNr + ", and page size " + auctionsPerPage);
-        List<AuctionPost> upcomingAuctions = auctionRepository.findAllByStartTimeGreaterThan(LocalDateTime.now(),
-                getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").ascending()));
-        logger.debug("Fetched " + upcomingAuctions.size() + " auctions from database.");
-        return convertAuctionsToDTO(upcomingAuctions);
-    }
-
-    @Override
-    public List<AuctionPostSendDTO> getUpcomingAuctionsForUser(Integer auctionsPerPage, Integer pageNr, String userEmail, boolean usePreferences) {
-        List<Category> preferences = getPreferences(userEmail, usePreferences);
-        if (preferences == null || preferences.isEmpty()) {
-            logger.info("No preferences found, continue with retrieving upcoming auctions without preferences");
-            return getUpcomingAuctions(pageNr, auctionsPerPage);
-        } else {
-            logger.info("Retrieving upcoming auctions with preferences: " + preferences.toString() + " for pageNumber " + pageNr + ", and page size " + auctionsPerPage);
-            List<AuctionPost> upcomingAuctions = auctionRepository.findAllByStartTimeGreaterThanAndCategoryIn(LocalDateTime.now(), preferences,
-                    getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").ascending()));
-            logger.debug("Fetched " + upcomingAuctions.size() + " auctions from database.");
-            return convertAuctionsToDTO(upcomingAuctions);
-
         }
     }
 
@@ -339,10 +343,13 @@ public class AuctionService implements IAuctionService {
         if(auctionPost.getStatus().equals(Status.CANCELLED)){
             throw new AuctionCancelledException();
         }
+        //ToDo: check if user trying to subsribe is a regaular user and not an auction house (also in frontend)
         Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
         subscriptions.add((RegularUser) user);
         auctionPost.setSubscriptions(subscriptions);
-        return auctionRepository.save(auctionPost);
+        AuctionPost updatedAuctionPost = auctionRepository.save(auctionPost);
+        scheduleNotificationJob(updatedAuctionPost);
+        return updatedAuctionPost;
     }
 
     @Override
@@ -350,7 +357,9 @@ public class AuctionService implements IAuctionService {
         Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
         subscriptions.removeIf(subscribedUser -> subscribedUser.getId().equals(user.getId()));
         auctionPost.setSubscriptions(subscriptions);
-        return auctionRepository.save(auctionPost);
+        AuctionPost updatedAuctionPost = auctionRepository.save(auctionPost);
+        scheduleNotificationJob(updatedAuctionPost);
+        return updatedAuctionPost;
     }
 
     public List<AuctionPostSendDTO> getMyAuctions(User user){
@@ -428,6 +437,66 @@ public class AuctionService implements IAuctionService {
         }
     }
 
+    public void scheduleNotificationJob(AuctionPost auctionPost){
+        try {
+            SchedulerFactory schedFact = new StdSchedulerFactory();
+            Scheduler sched = schedFact.getScheduler();
+            String jobName = auctionPost.getId().toString();
+            String triggerName = "trigger-" + auctionPost.getId();
+            Trigger trigger = null;
+            JobDetail job = null;
 
+            if(auctionPost.getStartTime().isAfter(LocalDateTime.now())) {
+                job = JobBuilder.newJob(AuctionStartedNotificationJob.class)
+                        .withIdentity(jobName, "group1")
+                        .build();
 
+                sched.deleteJob(job.getKey());
+
+                job.getJobDataMap().put("auctionPost", auctionPost);
+                job.getJobDataMap().put("emailSender", emailSender);
+                job.getJobDataMap().put("notificationService", notificationService);
+                job.getJobDataMap().put("auctionService", this);
+                job.getJobDataMap().put("webSocketController", webSocketController);
+
+                trigger = TriggerBuilder.newTrigger()
+                        .withIdentity(triggerName, "group1")
+                        .startAt(java.util.Date
+                                .from(auctionPost.getStartTime().atZone(ZoneId.systemDefault())
+                                        .toInstant()))
+                        .forJob(jobName, "group1")
+                        .build();
+            }else{
+                if(auctionPost.getEndTime().isAfter(LocalDateTime.now())) {
+                    job = JobBuilder.newJob(AuctionFinishedNotificationJob.class)
+                            .withIdentity(jobName, "group1")
+                            .build();
+
+                    sched.deleteJob(job.getKey());
+
+                    job.getJobDataMap().put("auctionPost", auctionPost);
+                    job.getJobDataMap().put("emailSender", emailSender);
+                    job.getJobDataMap().put("notificationService", notificationService);
+                    job.getJobDataMap().put("auctionService", this);
+                    job.getJobDataMap().put("webSocketController", webSocketController);
+
+                    trigger = TriggerBuilder.newTrigger()
+                            .withIdentity(triggerName, "group1")
+                            .startAt(java.util.Date
+                                    .from(auctionPost.getEndTime().atZone(ZoneId.systemDefault())
+                                            .toInstant()))
+                            .forJob(jobName, "group1")
+                            .build();
+                }
+            }
+
+            if(job != null && trigger != null) {
+                sched.scheduleJob(job, trigger);
+                sched.start();
+            }
+
+        }catch (SchedulerException e){
+            logger.error(e.getMessage());
+        }
+    }
 }

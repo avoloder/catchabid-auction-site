@@ -34,24 +34,6 @@ public interface IAuctionService {
     List<AuctionPostSendDTO> getRecentAuctionsForUser(Integer pageNr, Integer auctionsPerPage,String userEmail,boolean usePreferences);
 
     /**
-     * Get upcomming auctions ordered by start-time ascending
-     * @param auctionsPerPage page size (default=50 if invalid parameter)
-     * @param pageNr page number starting at 0. (default=0 if invalid parameter)
-     * @return
-     */
-    List<AuctionPostSendDTO> getUpcomingAuctions(Integer auctionsPerPage, Integer pageNr);
-
-    /**
-     * Get upcomming auctions ordered by start-time ascending, based on user preferences
-     * @param auctionsPerPage page size (default=50 if invalid parameter)
-     * @param pageNr page number starting at 0. (default=0 if invalid parameter)
-     * @param userEmail email of user whose preferences we should follow
-     * @param usePreferences show auctions with user preferences or not
-     * @return
-     */
-    List<AuctionPostSendDTO> getUpcomingAuctionsForUser(Integer auctionsPerPage, Integer pageNr,String userEmail,boolean usePreferences);
-
-    /**
      *
      * @param auctionsPerPage
      * @param pageNr
@@ -186,5 +168,11 @@ public interface IAuctionService {
      * @return - modified auction post to which the user unsubscribed from
      */
     AuctionPost sendConfirmation(AuctionPost auctionPost, User user) throws IOException, DocumentException;
+
+    /**
+     * Method which schedules notification job for recent and upcoming auctions
+     * @param auctionPost - auction post for which the job is creeated
+     */
+    public void scheduleNotificationJob(AuctionPost auctionPost);
 
 }

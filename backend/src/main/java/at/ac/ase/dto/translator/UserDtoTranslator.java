@@ -39,6 +39,7 @@ public class UserDtoTranslator {
         regularUserDTO.setOwnedAuctions(auctionDtoTranslator.toDtoSet(regularUser.getOwnedAuctions()));
         regularUserDTO.setRatings(ratingDtoTranslator.toDtoSet(regularUser.getRatings()));
         regularUserDTO.setPreferences(regularUser.getPreferences());
+        regularUserDTO.setVerified(regularUser.getVerified());
         return regularUserDTO;
     }
 
@@ -54,6 +55,7 @@ public class UserDtoTranslator {
         regularUser.setPhoneNr(regularUserDTO.getPhoneNr());
         //regularUser.setRatings(regularUserDTO.getRatings());
         regularUser.setPreferences(regularUserDTO.getPreferences());
+        regularUser.setVerified(regularUserDTO.getVerified());
         return regularUser;
     }
 

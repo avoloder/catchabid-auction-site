@@ -35,6 +35,9 @@ public abstract class User {
     @Column
     private String passwordHash;
 
+    @Column
+    private Boolean isVerified;
+
     @OneToMany(
         fetch = FetchType.EAGER,
         mappedBy = "user",
@@ -119,6 +122,14 @@ public abstract class User {
 
     public void setOwnedAuctions(Set<AuctionPost> ownedAuctions) {
         this.ownedAuctions = ownedAuctions;
+    }
+
+    public Boolean getVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(Boolean verified) {
+        isVerified = verified;
     }
 
     @Override

@@ -127,52 +127,17 @@ public class AuctionServiceTest extends BaseIntegrationTest {
 
     @Test
     @Transactional
-    public void testRecentAuctionsForUser(){
+    public void testRecentAuctionsForUser() {
         insertTestData("auctions-filter-preferences.sql");
-        List<AuctionPostSendDTO> posts = auctionService.getRecentAuctionsForUser(0,10,"testRegular@test.com",true);
-        assertEquals(1,posts.size());
-        assertEquals("Desktop PC - Intel i7, AMD RX 580 8GB",posts.get(0).getDescription());
+        List<AuctionPostSendDTO> posts = auctionService.getRecentAuctionsForUser(0, 10, "testRegular@test.com", true);
+        assertEquals(1, posts.size());
+        assertEquals("Desktop PC - Intel i7, AMD RX 580 8GB", posts.get(0).getDescription());
 
-        posts = auctionService.getRecentAuctionsForUser(0,10,"testRegular@test.com",false);
-        assertEquals(2,posts.size());
-        assertEquals("Bob Marley Tickets",posts.get(0).getDescription());
-        assertEquals("Ticket to Paradise CD",posts.get(1).getDescription());
+        posts = auctionService.getRecentAuctionsForUser(0, 10, "testRegular@test.com", false);
+        assertEquals(2, posts.size());
+        assertEquals("Bob Marley Tickets", posts.get(0).getDescription());
+        assertEquals("Ticket to Paradise CD", posts.get(1).getDescription());
 
-    }
-
-    @Test
-    @Transactional
-    public void testUpcomingAuctionsForUser(){
-        insertTestData("auctions-filter-preferences.sql");
-        List<AuctionPostSendDTO> posts = auctionService.getUpcomingAuctionsForUser(10,0,"testRegular@test.com",true);
-        assertEquals(1,posts.size());
-        assertEquals("Desktop PC - Intel i7, AMD RX 580 8GB",posts.get(0).getDescription());
-
-        posts = auctionService.getUpcomingAuctionsForUser(10,0,"testRegular@test.com",false);
-        assertEquals(2,posts.size());
-        assertEquals("Bob Marley Tickets",posts.get(0).getDescription());
-        assertEquals("Ticket to Paradise CD",posts.get(1).getDescription());
-
-    }
-
-    @Test
-    @Transactional
-    public void testGetUpcomingAuctions() {
-        insertTestData("auctions.sql");
-
-        List<AuctionPostSendDTO> upcoming = auctionService.getUpcomingAuctions(0, 0);
-        assertEquals(0, upcoming.size());
-
-        AuctionPost auctionPost =auctionService.getAllAuctions().get(0);
-        auctionPost.setStartTime(LocalDateTime.now().plusHours(2));
-        auctionPost.setEndTime(LocalDateTime.now().plusHours(12));
-        auctionPost.setStatus(Status.UPCOMING);
-
-        auctionService.saveAuction(auctionPost);
-
-        upcoming = auctionService.getUpcomingAuctions(0, 0);
-        assertEquals(1, upcoming.size());
-        assertEquals(auctionPost.getId(), upcoming.get(0).getId());
     }
 
     @Test

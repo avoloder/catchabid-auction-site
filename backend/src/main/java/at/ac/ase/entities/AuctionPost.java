@@ -61,7 +61,7 @@ public class AuctionPost {
     @JsonManagedReference(value = "post_highest_bid")
     private Bid highestBid;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(
         name = "auction_subscriptions",
         joinColumns = { @JoinColumn(name = "auction_post_id") },
