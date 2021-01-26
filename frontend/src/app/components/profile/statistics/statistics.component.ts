@@ -56,7 +56,9 @@ export class StatisticsComponent implements OnInit {
         "#fffc51", "#fa7d00", "#ff0000", "#f8006c"]
     }];
   public options: any = {
-    legend: {position: 'right'}
+    legend: {position: 'right',
+      labels: {boxWidth:10, fontSize:10}},
+    responsive: true,
   }
 
   constructor(private statisticsService: StatisticsService, private cdRef: ChangeDetectorRef) {

@@ -2,10 +2,10 @@
   <h3 class="font-weight-bold py-3 mb-4">My statistics </h3>
   <div class="card-body">
     <div>
-      <div class="d-flex align-content-center flex-wrap">
+      <div class="d-flex align-content-center flex-wrap" style="margin-left: 5%">
         <div *ngIf="!showBidsChart">
-          <div class="card statistic-card">
-            <div class="card-body" >
+          <div class="card statistic-card" >
+            <div class="card-body">
               <p class="card-title">Bids per Category</p>
               <canvas baseChart
                       [data]="doughnutChartBidsData"
@@ -17,13 +17,12 @@
           </div>
         </div>
         <div *ngIf="!showWinsChart">
-          <div class="card statistic-card " >
-            <div class="card-body" >
+          <div class="card statistic-card">
+            <div class="card-body">
               <p>Wins per Category</p>
               <canvas baseChart
                       [data]="doughnutChartWinsData"
                       [options]="options"
-                      [legend]="{position: 'bottom'}"
                       [colors]="chartColors"
                       [labels]="doughnutChartWinsLabels"
                       [chartType]="doughnutChartType"></canvas>
@@ -43,6 +42,7 @@
                         [labels]="doughnutChartRatioLabels"
                         [chartType]="doughnutChartType"
                         [colors]="chartColorsTwo"
+                        [options]="options"
                         [legend]="false"
                         [options]="{cutoutPercentage: 80}"></canvas>
               </div>
