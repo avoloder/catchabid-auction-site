@@ -17,10 +17,9 @@ public interface AuctionRepository extends JpaRepository<AuctionPost, Long>, Auc
     /**
      * get upcoming auctions from database
      * @param from earliest starting date of results
-     * @param pageable page of results
      * @return
      */
-    List<AuctionPost> findAllByStartTimeGreaterThan(LocalDateTime from, Pageable pageable);
+    List<AuctionPost> findAllByStartTimeGreaterThan(LocalDateTime from);
 
     /**
      * get active auctions from database

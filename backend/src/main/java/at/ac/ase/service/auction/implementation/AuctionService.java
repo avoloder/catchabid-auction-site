@@ -1,5 +1,6 @@
 package at.ac.ase.service.auction.implementation;
 
+import at.ac.ase.controllers.NotificationWebSocketController;
 import at.ac.ase.dto.AuctionCreationDTO;
 import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.AuctionQueryDTO;
@@ -9,26 +10,50 @@ import at.ac.ase.entities.*;
 import at.ac.ase.repository.auction.AuctionPostQuery;
 import at.ac.ase.repository.auction.AuctionRepository;
 import at.ac.ase.repository.user.UserRepository;
-import at.ac.ase.repository.auction.ContactFormRepository;
 import at.ac.ase.service.auction.IAuctionService;
+import at.ac.ase.service.notification.INotificationService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
+import com.lowagie.text.DocumentException;
+import org.apache.commons.io.FileUtils;
 import at.ac.ase.util.exceptions.*;
+import at.ac.ase.util.AuctionFinishedNotificationJob;
+import at.ac.ase.util.AuctionStartedNotificationJob;
+import at.ac.ase.util.exceptions.ObjectNotFoundException;
+import at.ac.ase.util.exceptions.WrongSubscriberException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.validation.*;
+import java.io.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,16 +71,10 @@ public class AuctionService implements IAuctionService {
     private IAuctionHouseService auctionHouseService;
 
     @Autowired
-    private ContactFormRepository contactFormRepository;
-
-    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
     private AuctionDtoTranslator auctionDtoTranslator;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     JavaMailSender emailSender;
@@ -63,10 +82,25 @@ public class AuctionService implements IAuctionService {
     @Autowired
     IRegularUserService userService;
 
+    @Autowired
+    INotificationService notificationService;
+
+    @Autowired
+    NotificationWebSocketController webSocketController;
+
 
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private final Validator validator = factory.getValidator();
 
+    @PostConstruct
+    private void scheduleJobForAuctions() {
+        logger.info("Scheduling jobs for stored auctions");
+        List<AuctionPost> auctionPostList = auctionRepository.findAll();
+        for(AuctionPost auctionPost: auctionPostList){
+            scheduleNotificationJob(auctionPost);
+        }
+
+    }
 
     @Override
     public Optional<AuctionPost> getAuctionPost(Long id) {
@@ -75,7 +109,11 @@ public class AuctionService implements IAuctionService {
 
     @Override
     public AuctionPost saveAuction(AuctionPost auctionPost) {
-        return auctionRepository.save(auctionPost);
+        AuctionPost auctionPostCreated = auctionRepository.save(auctionPost);
+        if(auctionPost.getId() == null){
+            scheduleNotificationJob(auctionPostCreated);
+        }
+        return auctionPostCreated;
     }
 
     @Override
@@ -190,31 +228,6 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public List<AuctionPostSendDTO> getUpcomingAuctions(Integer auctionsPerPage, Integer pageNr) {
-        logger.info("Fetching upcoming auctions without preferences, for pageNumber " + pageNr + ", and page size " + auctionsPerPage);
-        List<AuctionPost> upcomingAuctions = auctionRepository.findAllByStartTimeGreaterThan(LocalDateTime.now(),
-                getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").ascending()));
-        logger.debug("Fetched " + upcomingAuctions.size() + " auctions from database.");
-        return convertAuctionsToDTO(upcomingAuctions);
-    }
-
-    @Override
-    public List<AuctionPostSendDTO> getUpcomingAuctionsForUser(Integer auctionsPerPage, Integer pageNr, String userEmail, boolean usePreferences) {
-        List<Category> preferences = getPreferences(userEmail, usePreferences);
-        if (preferences == null || preferences.isEmpty()) {
-            logger.info("No preferences found, continue with retrieving upcoming auctions without preferences");
-            return getUpcomingAuctions(pageNr, auctionsPerPage);
-        } else {
-            logger.info("Retrieving upcoming auctions with preferences: " + preferences.toString() + " for pageNumber " + pageNr + ", and page size " + auctionsPerPage);
-            List<AuctionPost> upcomingAuctions = auctionRepository.findAllByStartTimeGreaterThanAndCategoryIn(LocalDateTime.now(), preferences,
-                    getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").ascending()));
-            logger.debug("Fetched " + upcomingAuctions.size() + " auctions from database.");
-            return convertAuctionsToDTO(upcomingAuctions);
-
-        }
-    }
-
-    @Override
     public List<AuctionPost> getAllAuctions() {
         return auctionRepository.findAll();
     }
@@ -264,10 +277,18 @@ public class AuctionService implements IAuctionService {
         return new ArrayList<>();
     }
 
-    public ContactForm postContactForm(ContactForm contactForm) {
+    public AuctionPostSendDTO postContactForm(Long auctionId, User user, ContactForm contactForm) {
+        AuctionPost auction = auctionRepository.findById(auctionId)
+                .orElseThrow(ObjectNotFoundException::new);
+
+        if (!auction.getHighestBid().getUser().getId().equals(user.getId())) {
+            throw new AuthorizationException();
+        }
         Set<ConstraintViolation<ContactForm>> violations = validator.validate(contactForm);
+
         if (violations.isEmpty()) {
-            return contactFormRepository.save(contactForm);
+            auction.setContactForm(contactForm);
+            return auctionDtoTranslator.toSendDto(saveAuction(auction), true);
         } else {
             for (ConstraintViolation<ContactForm> violation : violations) {
                 throw new ValidationException(violation.getMessage());
@@ -276,13 +297,30 @@ public class AuctionService implements IAuctionService {
         }
     }
 
-    public ContactForm convertContactFormToDTO(ContactFormDTO contactFormDTO, User user) {
+    public ContactFormDTO getContactForm(Long auctionPostId, User user) {
+        AuctionPost auction = auctionRepository.findById(auctionPostId)
+                .orElseThrow(ObjectNotFoundException::new);
+
+        if (!auction.getCreator().getId().equals(user.getId())) {
+            throw new AuthorizationException();
+        }
+
+        return convertDTOToContactForm(auction.getContactForm(), auctionPostId);
+    }
+
+    private ContactFormDTO convertDTOToContactForm(ContactForm contactForm, Long auctionPostId) {
+        ContactFormDTO contactFormDTO = modelMapper.map(contactForm, ContactFormDTO.class);
+        contactFormDTO.setCountry(contactForm.getAddress().getCountry());
+        contactFormDTO.setCity(contactForm.getAddress().getCity());
+        contactFormDTO.setStreet(contactForm.getAddress().getStreet());
+        contactFormDTO.setHouseNr(contactForm.getAddress().getHouseNr());
+        contactFormDTO.setAuctionPostId(auctionPostId);
+        return contactFormDTO;
+    }
+
+    public ContactForm convertContactFormToDTO(ContactFormDTO contactFormDTO) {
         ContactForm contactForm = modelMapper.map(contactFormDTO, ContactForm.class);
-
         contactForm.setAddress(new Address(contactFormDTO.getCountry(), contactFormDTO.getCity(), contactFormDTO.getStreet(), contactFormDTO.getHouseNr()));
-        contactForm.setUser(user);
-        auctionRepository.findById(contactFormDTO.getAuctionPostId()).ifPresent(contactForm::setAuctionPost);
-
         return contactForm;
     }
 
@@ -305,10 +343,13 @@ public class AuctionService implements IAuctionService {
         if(auctionPost.getStatus().equals(Status.CANCELLED)){
             throw new AuctionCancelledException();
         }
+        //ToDo: check if user trying to subsribe is a regaular user and not an auction house (also in frontend)
         Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
         subscriptions.add((RegularUser) user);
         auctionPost.setSubscriptions(subscriptions);
-        return auctionRepository.save(auctionPost);
+        AuctionPost updatedAuctionPost = auctionRepository.save(auctionPost);
+        scheduleNotificationJob(updatedAuctionPost);
+        return updatedAuctionPost;
     }
 
     @Override
@@ -316,7 +357,9 @@ public class AuctionService implements IAuctionService {
         Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
         subscriptions.removeIf(subscribedUser -> subscribedUser.getId().equals(user.getId()));
         auctionPost.setSubscriptions(subscriptions);
-        return auctionRepository.save(auctionPost);
+        AuctionPost updatedAuctionPost = auctionRepository.save(auctionPost);
+        scheduleNotificationJob(updatedAuctionPost);
+        return updatedAuctionPost;
     }
 
     public List<AuctionPostSendDTO> getMyAuctions(User user){
@@ -331,4 +374,129 @@ public class AuctionService implements IAuctionService {
         return auctionDtoTranslator.toDtoSet(retrieved);
     }
 
+    @Override
+    public AuctionPost sendConfirmation(AuctionPost auctionPost, User user) throws IOException, DocumentException {
+       generatePdfFromHtml(parseThymeleafTemplate(auctionPost));
+       sendConfirmationEmail(auctionPost.getContactForm());
+       return null;
+    }
+
+    private String parseThymeleafTemplate(AuctionPost auctionPost) throws IOException {
+        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode(TemplateMode.HTML);
+
+        TemplateEngine templateEngine = new TemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver);
+
+        DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String dateString = formatDate.format(auctionPost.getEndTime());
+
+        Context context = new Context();
+        context.setVariable("auction", auctionPost);
+        context.setVariable("created", dateString);
+        if (auctionPost.getCreator() instanceof RegularUser) {
+            context.setVariable("user", "regularUser");
+        } else {
+            context.setVariable("user", "auctionHouse");
+        }
+
+        return templateEngine.process("confirmation", context);
+    }
+
+    private void generatePdfFromHtml(String html) throws IOException, DocumentException {
+        String outputFolder = System.getProperty("user.home") + File.separator + "thymeleaf2.pdf";
+        OutputStream outputStream = new FileOutputStream(outputFolder);
+
+        ITextRenderer renderer = new ITextRenderer();
+        renderer.setDocumentFromString(html);
+        renderer.layout();
+        renderer.createPDF(outputStream);
+
+        outputStream.close();
+    }
+
+    private void sendConfirmationEmail(ContactForm contactForm){
+        try {
+            MimeMessage message = emailSender.createMimeMessage();
+
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom("noreply.catchabid@gmail.com");
+            helper.setTo(contactForm.getEmail());
+            helper.setSubject("Confirmation about won auction");
+            helper.setText("Dear " + contactForm.getFirstName() + " " + contactForm.getLastName() +
+                    ", <br/> congratulations on winning an auction. " +
+                    "You can find the official confirmation about the won auction in the attachment. <br/>", true);
+
+            FileSystemResource file = new FileSystemResource(new File(System.getProperty("user.home") + File.separator + "thymeleaf2.pdf"));
+            helper.addAttachment("confirmation.pdf", file);
+
+            emailSender.send(message);
+        } catch (MessagingException e) {
+            throw new EmailNotSentException();
+        }
+    }
+
+    public void scheduleNotificationJob(AuctionPost auctionPost){
+        try {
+            SchedulerFactory schedFact = new StdSchedulerFactory();
+            Scheduler sched = schedFact.getScheduler();
+            String jobName = auctionPost.getId().toString();
+            String triggerName = "trigger-" + auctionPost.getId();
+            Trigger trigger = null;
+            JobDetail job = null;
+
+            if(auctionPost.getStartTime().isAfter(LocalDateTime.now())) {
+                job = JobBuilder.newJob(AuctionStartedNotificationJob.class)
+                        .withIdentity(jobName, "group1")
+                        .build();
+
+                sched.deleteJob(job.getKey());
+
+                job.getJobDataMap().put("auctionPost", auctionPost);
+                job.getJobDataMap().put("emailSender", emailSender);
+                job.getJobDataMap().put("notificationService", notificationService);
+                job.getJobDataMap().put("auctionService", this);
+                job.getJobDataMap().put("webSocketController", webSocketController);
+
+                trigger = TriggerBuilder.newTrigger()
+                        .withIdentity(triggerName, "group1")
+                        .startAt(java.util.Date
+                                .from(auctionPost.getStartTime().atZone(ZoneId.systemDefault())
+                                        .toInstant()))
+                        .forJob(jobName, "group1")
+                        .build();
+            }else{
+                if(auctionPost.getEndTime().isAfter(LocalDateTime.now())) {
+                    job = JobBuilder.newJob(AuctionFinishedNotificationJob.class)
+                            .withIdentity(jobName, "group1")
+                            .build();
+
+                    sched.deleteJob(job.getKey());
+
+                    job.getJobDataMap().put("auctionPost", auctionPost);
+                    job.getJobDataMap().put("emailSender", emailSender);
+                    job.getJobDataMap().put("notificationService", notificationService);
+                    job.getJobDataMap().put("auctionService", this);
+                    job.getJobDataMap().put("webSocketController", webSocketController);
+
+                    trigger = TriggerBuilder.newTrigger()
+                            .withIdentity(triggerName, "group1")
+                            .startAt(java.util.Date
+                                    .from(auctionPost.getEndTime().atZone(ZoneId.systemDefault())
+                                            .toInstant()))
+                            .forJob(jobName, "group1")
+                            .build();
+                }
+            }
+
+            if(job != null && trigger != null) {
+                sched.scheduleJob(job, trigger);
+                sched.start();
+            }
+
+        }catch (SchedulerException e){
+            logger.error(e.getMessage());
+        }
+    }
 }

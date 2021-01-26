@@ -120,4 +120,12 @@ export class AuctionDetailsComponent implements OnInit {
   isUpcoming(): boolean {
     return this.auction.status == 'UPCOMING';
   }
+
+  isRatingSet(){
+    if(!isNaN(this.rating)){
+      return true;
+    }else{
+      return false;
+    }
+  }
 }

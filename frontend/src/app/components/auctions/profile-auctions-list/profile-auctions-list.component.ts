@@ -8,6 +8,8 @@ import { PaymentsService } from 'src/app/services/payments.service';
 import { Subscription } from 'rxjs';
 import { AuctionDetailsComponent } from '../../auction-details/auction-details.component';
 import {BidsService} from "../../../services/bids.service";
+import {ContactFormComponent} from "../contact-form/contact-form.component";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-profile-auctions-list',
@@ -31,11 +33,15 @@ export class ProfileAuctionsListComponent implements OnInit {
 
   auctionDetailsModalClosedSub: Subscription;
 
+  contactFormModalClosedSub: Subscription;
+
+
   constructor(
     private auctionService: AuctionsService,
     private bidsService: BidsService,
     private modalService: NgbModal,
-    private paymentService: PaymentsService
+    private paymentService: PaymentsService,
+    private toast: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -95,6 +101,26 @@ export class ProfileAuctionsListComponent implements OnInit {
     )
   }
 
+
+  openContactFormModal(auction: AuctionPost, check?: boolean): void {
+    this.modalRef = this.modalService.open(ContactFormComponent);
+    this.modalRef.componentInstance.auction = auction;
+    if (check) {
+      this.modalRef.componentInstance.check = true;
+    }
+
+
+    this.contactFormModalClosedSub = this.auctionService.contactFormModalClosed.subscribe(
+      () => this.onContactFormClosed()
+    );
+  }
+
+  onContactFormClosed(): void {
+    this.modalRef.close();
+    this.contactFormModalClosedSub.unsubscribe();
+    this.getWonAuctions();
+  }
+
   openPaymentModal(auction: AuctionPost): void {
     this.modalRef = this.modalService.open(PaymentsComponent);
     this.modalRef.componentInstance.auction = auction;
@@ -125,4 +151,11 @@ export class ProfileAuctionsListComponent implements OnInit {
   }
 
 
+  sendConfirmation(auction: AuctionPost): void {
+    this.auctionService.sendConfirmation(auction).subscribe(contactForm => {
+      this.toast.success('Contact form successfully submitted');
+    }, error => {
+      this.toast.error(error.error.message);
+    });
+  }
 }

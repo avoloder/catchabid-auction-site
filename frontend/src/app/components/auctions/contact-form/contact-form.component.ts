@@ -14,6 +14,7 @@
 export class ContactFormComponent implements OnInit {
 
   @Input() public auction;
+  @Input() public check;
   user: JsonObject;
   model: any = {};
   buttonDisable = false;
@@ -28,26 +29,49 @@ export class ContactFormComponent implements OnInit {
     const userData = JSON.parse(atob(localStorage.getItem('token').split('.')[1]));
     console.log(userData.sub);
 
-    this.userService.findByEmail(userData.sub).subscribe(
-      user => {
-        this.user = JSON.parse(JSON.stringify(user));
-        this.model = {
-          firstName: this.user.firstName,
-          lastName: this.user.lastName,
-          email: this.user.email,
-          // @ts-ignore
-          country: this.user.address.country,
-          // @ts-ignore
-          city: this.user.address.city,
-          // @ts-ignore
-          street: this.user.address.street,
-          // @ts-ignore
-          houseNr: this.user.address.houseNr,
-          phoneNumbe: this.user.phoneNr
-        };
-      },
-      error => console.log(error)
+    if (this.check) {
+      this.auctionService.getContactForm(this.auction).subscribe(
+        contactForm => {
+          this.model = {
+            firstName: contactForm.firstName,
+            lastName: contactForm.lastName,
+            email: contactForm.email,
+            // @ts-ignore
+            country: contactForm.country,
+            // @ts-ignore
+            city: contactForm.city,
+            // @ts-ignore
+            street: contactForm.street,
+            // @ts-ignore
+            houseNr: contactForm.houseNr,
+            phoneNumbe: contactForm.phoneNr,
+            remark: contactForm.remark
+          };
+        },
+        error => this.toast.error(error.error.message)
+      );
+    } else {
+      this.userService.findByEmail(userData.sub).subscribe(
+        user => {
+          this.user = JSON.parse(JSON.stringify(user));
+          this.model = {
+            firstName: this.user.firstName,
+            lastName: this.user.lastName,
+            email: this.user.email,
+            // @ts-ignore
+            country: this.user.address.country,
+            // @ts-ignore
+            city: this.user.address.city,
+            // @ts-ignore
+            street: this.user.address.street,
+            // @ts-ignore
+            houseNr: this.user.address.houseNr,
+            phoneNumbe: this.user.phoneNr
+          };
+        },
+        error => this.toast.error(error.error.message)
     );
+    }
   }
 
   submitContactForm(): void {

@@ -30,6 +30,8 @@ public class AuctionHouseDTO {
     @NotNull
     private String passwordHash;
 
+    private Boolean isVerifed;
+
     private AddressDTO address;
 
     private Set<AuctionPost> ownedAuctions = new HashSet<>();
@@ -114,5 +116,13 @@ public class AuctionHouseDTO {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    public Boolean getVerifed() {
+        return isVerifed;
+    }
+
+    public void setVerifed(Boolean verifed) {
+        isVerifed = verifed;
     }
 }

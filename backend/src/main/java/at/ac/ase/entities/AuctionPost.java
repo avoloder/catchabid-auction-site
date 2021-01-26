@@ -61,7 +61,7 @@ public class AuctionPost {
     @JsonManagedReference(value = "post_highest_bid")
     private Bid highestBid;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(
         name = "auction_subscriptions",
         joinColumns = { @JoinColumn(name = "auction_post_id") },
@@ -71,6 +71,10 @@ public class AuctionPost {
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "payment")
     private Payment payment;
+
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="contact_form")
+    private ContactForm contactForm;
 
     public Long getId() {
         return id;
@@ -191,5 +195,13 @@ public class AuctionPost {
     public boolean isActive() {
         return (this.status == Status.UPCOMING || this.status == Status.ACTIVE)
                 && startTime.isBefore(LocalDateTime.now()) && endTime.isAfter(LocalDateTime.now());
+    }
+
+    public ContactForm getContactForm() {
+        return contactForm;
+    }
+
+    public void setContactForm(ContactForm contactForm) {
+        this.contactForm = contactForm;
     }
 }

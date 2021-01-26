@@ -32,12 +32,15 @@
                 <p class="h6">Information about creator:</p>
                 <div class="row">
                   <div class="col-7">
-                    <span>{{auction.creatorName}}</span>
+                    <span>{{auction.creatorName}}
+                      <i *ngIf="auction.creatorVerified" class="fa fa-check-circle" style="color:dodgerblue"></i>
+                    </span>
                   </div>
                   <div class="col-5" style="text-align: right;">
                     <i class="fa fa-star" style="color: #ffe234; margin-right:5px"></i>
                     <span>Rating:
-                      <span>{{rating}}</span>
+                      <span *ngIf="isRatingSet()">{{rating}}</span>
+                      <span *ngIf="!isRatingSet()">—</span>
                     </span>
                   </div>
                 </div>
@@ -71,13 +74,13 @@
               <div class="col-12"  style="margin-bottom: 10px;">
                 <a *ngIf="!isAuctionEnded() && path != 'auctions' && !isOwnAuction()" (click)="openBidModal(auction)" class="btn btn-primary card-button">Place a bid</a>
                 <a *ngIf="isUpcoming() && isOwnAuction()" (click)="cancelAuction(auction)" class="btn btn-primary card-button">Cancel Auction</a>
-                <div class="row">
+                <div class="row" ngbTooltip="You have 30 days from the auction's end to rate the user">
                   <div class="col-11">
                     <a *ngIf="path=='wins' && !alreadyRated && calculateDateDiff()" (click)="openRatingModal(auction)" class="btn btn-primary card-button">Rate this user</a>
-                    <a *ngIf="path=='wins' && (alreadyRated || !calculateDateDiff())" class="btn btn-secondary card-button" style="background-color: grey;" disabled>User successfully rated</a>
+                    <a *ngIf="path=='wins' && (alreadyRated || !calculateDateDiff())" class="btn btn-secondary card-button" style="background-color: grey;" disabled>Rate this user</a>
                   </div>
                   <div class="col-1" style="margin-top:22px; padding:0px; font-size:20px">
-                    <i *ngIf="path=='wins'" class="fa fa-question-circle" title="You have 30 days from the auction's end to rate the user" aria-hidden="true"></i>
+                    <i *ngIf="path=='wins'" class="fa fa-question-circle" aria-hidden="true"></i>
                   </div>
                 </div>
               </div>
