@@ -32,6 +32,7 @@ import {ContactFormComponent} from "./components/auctions/contact-form/contact-f
 import { RatingComponent } from './components/rating/rating/rating.component';
 import {ProfileModule} from "./components/profile/profile.module";
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,7 +45,7 @@ import {ProfileModule} from "./components/profile/profile.module";
     ContactFormComponent,
     AuctionDetailsComponent,
     CategoriesPickerComponent,
-    RatingComponent
+    RatingComponent,
   ],
   imports: [
     BrowserModule,

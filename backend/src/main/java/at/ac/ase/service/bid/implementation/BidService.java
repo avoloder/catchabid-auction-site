@@ -73,6 +73,12 @@ public class BidService implements IBidService {
         logger.info("myBids"+myBids);
         return myBids.stream().map(x->auctionDtoTranslator.toSendDto(getMappedAuction(x),false)).collect(Collectors.toList());
     }
+    @Override
+    public List<AuctionPostSendDTO> getAuctionBids(AuctionPost post){
+        List<Bid> myBids = bidRepository.findAllByAuction_id(post.getId());
+        logger.info("myBids"+myBids);
+        return myBids.stream().map(x->auctionDtoTranslator.toSendDto(getMappedAuction(x),false)).collect(Collectors.toList());
+    }
 
     private AuctionPost getMappedAuction(Bid bid){
         AuctionPost post = bid.getAuction();

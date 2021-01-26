@@ -6,15 +6,19 @@ import {UpdatePasswordComponent} from './update-password/update-password.compone
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { FormsModule } from '@angular/forms';
 import {AuctionsModule} from "../auctions/auctions.module";
+import {StatisticsComponent} from "./statistics/statistics.component";
+import { ChartsModule } from 'ng2-charts';
+
 
 @NgModule({
-  declarations: [UpdatePasswordComponent, ProfileComponent, NgbdModalConfirm],
+  declarations: [UpdatePasswordComponent, ProfileComponent, NgbdModalConfirm, StatisticsComponent],
   imports: [
     BrowserModule,
     CommonModule,
     NgMultiSelectDropDownModule.forRoot(),
     FormsModule,
-    AuctionsModule
+    AuctionsModule,
+    ChartsModule
   ]
 })
 export class ProfileModule {
