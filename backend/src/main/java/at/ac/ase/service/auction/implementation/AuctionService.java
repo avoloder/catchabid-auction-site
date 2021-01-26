@@ -1,5 +1,6 @@
 package at.ac.ase.service.auction.implementation;
 
+import at.ac.ase.controllers.NotificationWebSocketController;
 import at.ac.ase.dto.AuctionCreationDTO;
 import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.AuctionQueryDTO;
@@ -208,54 +209,6 @@ public class AuctionService implements IAuctionService {
         return auctionRepository.getAllCountriesWhereAuctionsExist();
     }
 
-    @Override
-    public List<AuctionPostSendDTO> getRecentAuctions(Integer pageNr, Integer auctionsPerPage) {
-        logger.info("Fetching recent auctions without preferences, for pageNumber " + pageNr + ", and page size " + auctionsPerPage);
-        List<AuctionPost> recentAuctions = auctionRepository.findAllByStartTimeLessThanAndEndTimeGreaterThan(
-                LocalDateTime.now(), LocalDateTime.now(), getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").descending()));
-        logger.debug("Fetched " + recentAuctions.size() + " auctions from database.");
-        return auctionDtoTranslator.toDtoList(recentAuctions);
-    }
-
-    @Override
-    public List<AuctionPostSendDTO> getRecentAuctionsForUser(Integer pageNr, Integer auctionsPerPage, String userEmail, boolean usePreferences) {
-        List<Category> preferences = getPreferences(userEmail, usePreferences);
-        if (preferences == null || preferences.isEmpty()) {
-            logger.info("No preferences found, continue with fetching recent auctions without preferences");
-            return getRecentAuctions(pageNr, auctionsPerPage);
-        } else {
-            logger.info("Fetching recent auctions with preferences: " + preferences.toString() + "pageNumber " + pageNr + ", and page size " + auctionsPerPage);
-            List<AuctionPost> recentAuctions = auctionRepository.findAllByStartTimeLessThanAndEndTimeGreaterThanAndCategoryIn(
-                    LocalDateTime.now(), LocalDateTime.now(), preferences, getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").descending()));
-            logger.debug("Fetched " + recentAuctions.size() + " auctions from database.");
-            return auctionDtoTranslator.toDtoList(recentAuctions);
-        }
-    }
-
-    @Override
-    public List<AuctionPostSendDTO> getUpcomingAuctions(Integer auctionsPerPage, Integer pageNr) {
-        logger.info("Fetching upcoming auctions without preferences, for pageNumber " + pageNr + ", and page size " + auctionsPerPage);
-        List<AuctionPost> upcomingAuctions = auctionRepository.findAllByStartTimeGreaterThan(LocalDateTime.now(),
-                getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").ascending()));
-        logger.debug("Fetched " + upcomingAuctions.size() + " auctions from database.");
-        return convertAuctionsToDTO(upcomingAuctions);
-    }
-
-    @Override
-    public List<AuctionPostSendDTO> getUpcomingAuctionsForUser(Integer auctionsPerPage, Integer pageNr, String userEmail, boolean usePreferences) {
-        List<Category> preferences = getPreferences(userEmail, usePreferences);
-        if (preferences == null || preferences.isEmpty()) {
-            logger.info("No preferences found, continue with retrieving upcoming auctions without preferences");
-            return getUpcomingAuctions(pageNr, auctionsPerPage);
-        } else {
-            logger.info("Retrieving upcoming auctions with preferences: " + preferences.toString() + " for pageNumber " + pageNr + ", and page size " + auctionsPerPage);
-            List<AuctionPost> upcomingAuctions = auctionRepository.findAllByStartTimeGreaterThanAndCategoryIn(LocalDateTime.now(), preferences,
-                    getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").ascending()));
-            logger.debug("Fetched " + upcomingAuctions.size() + " auctions from database.");
-            return convertAuctionsToDTO(upcomingAuctions);
-
-        }
-    }
 
     @Override
     public List<AuctionPost> getAllAuctions() {
@@ -383,7 +336,6 @@ public class AuctionService implements IAuctionService {
 
         AuctionPost updatedAuctionPost = auctionRepository.save(auctionPost);
         scheduleNotificationJob(updatedAuctionPost);
-        return updatedAuctionPost;
 
         adaptAuctionPopularity(updatedAuctionPost);
 

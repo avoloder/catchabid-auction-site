@@ -16,24 +16,6 @@ import java.util.Set;
 public interface IAuctionService {
 
     /**
-     * Returns recent pagable auction posts ordered by start_time descending
-     * @param pageNr page number starting at 0. (default=0 if invalid parameter)
-     * @param auctionsPerPage page size (default=50 if invalid parameter)
-     * @return
-     */
-    List<AuctionPostSendDTO> getRecentAuctions(Integer pageNr, Integer auctionsPerPage);
-
-    /**
-     * Returns recent pagable auction posts ordered by start_time descending based on user preferences
-     * @param pageNr page number starting at 0. (default=0 if invalid parameter)
-     * @param auctionsPerPage page size (default=50 if invalid parameter)
-     * @param usePreferences show auctions with user preferences or not
-     * @param userEmail of the user
-     * @return
-     */
-    List<AuctionPostSendDTO> getRecentAuctionsForUser(Integer pageNr, Integer auctionsPerPage,String userEmail,boolean usePreferences);
-
-    /**
      *
      * @param auctionsPerPage
      * @param pageNr

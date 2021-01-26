@@ -2,6 +2,7 @@ package at.ac.ase.service;
 
 import at.ac.ase.basetest.BaseIntegrationTest;
 import at.ac.ase.dto.AuctionPostSendDTO;
+import at.ac.ase.dto.AuctionQueryDTO;
 import at.ac.ase.entities.*;
 import at.ac.ase.repository.auction.AuctionRepository;
 import at.ac.ase.service.auction.IAuctionService;
@@ -50,7 +51,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         List<AuctionPostSendDTO> auctions;
         insertTestData("multiple-auctions.sql");
 
-        auctions = auctionService.getRecentAuctions(0, 5);
+        auctions = auctionService.searchAuctions(getRecentQuery(0, 5));
 
         assertThat(auctions.size(), is(5));
         assertThat(auctions.get(0).getId(), is(1L));
@@ -59,7 +60,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         assertThat(auctions.get(3).getId(), is(4L));
         assertThat(auctions.get(4).getId(), is(5L));
 
-        auctions = auctionService.getRecentAuctions(1, 5);
+        auctions = auctionService.searchAuctions(getRecentQuery(1, 5));
 
         assertThat(auctions.size(), is(5));
         assertThat(auctions.get(0).getId(), is(6L));
@@ -68,7 +69,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         assertThat(auctions.get(3).getId(), is(9L));
         assertThat(auctions.get(4).getId(), is(10L));
 
-        auctions = auctionService.getRecentAuctions(2, 5);
+        auctions = auctionService.searchAuctions(getRecentQuery(2, 5));
 
         assertThat(auctions.size(), is(1));
         assertThat(auctions.get(0).getId(), is(11L));
@@ -79,17 +80,17 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     public void testGetRecentAuctionsWithInvalidParam() {
         insertTestData("multiple-auctions.sql");
 
-        List<AuctionPostSendDTO> auctions = auctionService.getRecentAuctions(0, 0);
+        List<AuctionPostSendDTO> auctions = auctionService.searchAuctions(getRecentQuery(0, 0));
         assertThat(auctions.size(), is(11));
         assertThat(auctions.get(10).getId(), is(1L));
         assertThat(auctions.get(0).getId(), is(11L));
 
-        auctions = auctionService.getRecentAuctions(null, null);
+        auctions = auctionService.searchAuctions(getRecentQuery(null, null));
         assertThat(auctions.size(), is(11));
         assertThat(auctions.get(0).getId(), is(11L));
         assertThat(auctions.get(10).getId(), is(1L));
 
-        auctions = auctionService.getRecentAuctions(-1, 10);
+        auctions = auctionService.searchAuctions(getRecentQuery(-0, 10));
         assertThat(auctions.size(), is(10));
         assertThat(auctions.get(0).getId(), is(11L));
         assertThat(auctions.get(9).getId(), is(2L));
@@ -128,11 +129,14 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     @Transactional
     public void testRecentAuctionsForUser() {
         insertTestData("auctions-filter-preferences.sql");
-        List<AuctionPostSendDTO> posts = auctionService.getRecentAuctionsForUser(0, 10, "testRegular@test.com", true);
+        AuctionQueryDTO auctions = getRecentQuery(0, 5);
+        auctions.setUserEmail("testRegular@test.com");
+        auctions.setUseUserPreferences(true);
+        List<AuctionPostSendDTO> posts = auctionService.searchAuctions(auctions);
         assertEquals(1, posts.size());
         assertEquals("Desktop PC - Intel i7, AMD RX 580 8GB", posts.get(0).getDescription());
-
-        posts = auctionService.getRecentAuctionsForUser(0, 10, "testRegular@test.com", false);
+        auctions.setUseUserPreferences(false);
+        posts = auctionService.searchAuctions(auctions);
         assertEquals(2, posts.size());
         assertEquals("Bob Marley Tickets", posts.get(0).getDescription());
         assertEquals("Ticket to Paradise CD", posts.get(1).getDescription());
@@ -141,7 +145,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
 
     @Test
     @Transactional
-    public void testSubscribeToAuction(){
+    public void testSubscribeToAuction() {
         insertTestData("multiple-auctions.sql");
 
         List<AuctionPost> auctionPosts = auctionService.getAllAuctions();
@@ -153,7 +157,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         auctionPosts = auctionService.getAllAuctions();
         assertThat(auctionPosts.size(), is(12));
 
-        AuctionPost storedAuctionPost = auctionPosts.get(auctionPosts.size()-1);
+        AuctionPost storedAuctionPost = auctionPosts.get(auctionPosts.size() - 1);
         assertThat(storedAuctionPost.getSubscriptions().size(), is(0));
 
         User user = new RegularUser();
@@ -163,12 +167,12 @@ public class AuctionServiceTest extends BaseIntegrationTest {
 
         auctionService.subscribeToAuction(auctionPost, user);
 
-        storedAuctionPost = auctionService.getAllAuctions().get(auctionPosts.size()-1);
+        storedAuctionPost = auctionService.getAllAuctions().get(auctionPosts.size() - 1);
 
         assertThat(storedAuctionPost.getSubscriptions().size(), is(1));
 
         Iterator iterator = storedAuctionPost.getSubscriptions().iterator();
-        RegularUser subscribedUser = (RegularUser)iterator.next();
+        RegularUser subscribedUser = (RegularUser) iterator.next();
         assertThat(subscribedUser.getId(), is(2L));
         assertTrue(subscribedUser.getActive());
         assertThat(subscribedUser.getEmail(), is("test@test.com"));
@@ -176,7 +180,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
 
     @Test
     @Transactional
-    public void testUnsubscribeFromAuction(){
+    public void testUnsubscribeFromAuction() {
         insertTestData("multiple-auctions.sql");
 
         List<AuctionPost> auctionPosts = auctionService.getAllAuctions();
@@ -188,7 +192,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         auctionPosts = auctionService.getAllAuctions();
         assertThat(auctionPosts.size(), is(12));
 
-        AuctionPost storedAuctionPost = auctionPosts.get(auctionPosts.size()-1);
+        AuctionPost storedAuctionPost = auctionPosts.get(auctionPosts.size() - 1);
         assertThat(storedAuctionPost.getSubscriptions().size(), is(0));
 
         User user = new RegularUser();
@@ -198,13 +202,13 @@ public class AuctionServiceTest extends BaseIntegrationTest {
 
         auctionService.subscribeToAuction(auctionPost, user);
 
-        storedAuctionPost = auctionService.getAllAuctions().get(auctionPosts.size()-1);
+        storedAuctionPost = auctionService.getAllAuctions().get(auctionPosts.size() - 1);
 
         assertThat(storedAuctionPost.getSubscriptions().size(), is(1));
 
         auctionService.unsubscribeFromAuction(auctionPost, user);
 
-        storedAuctionPost = auctionService.getAllAuctions().get(auctionPosts.size()-1);
+        storedAuctionPost = auctionService.getAllAuctions().get(auctionPosts.size() - 1);
 
         assertThat(storedAuctionPost.getSubscriptions().size(), is(0));
     }
@@ -270,5 +274,15 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         }
         return new byte[10];
     }
+
+    private AuctionQueryDTO getRecentQuery(Integer pageNr, Integer auctionsPerPage) {
+        AuctionQueryDTO queryDTO = new AuctionQueryDTO();
+        queryDTO.setAuctionsStartUntil(LocalDateTime.now());
+        queryDTO.setAuctionsEndFrom(LocalDateTime.now());
+        queryDTO.setPageNumber(pageNr);
+        queryDTO.setPageSize(auctionsPerPage);
+        return queryDTO;
+    }
+
 }
 
