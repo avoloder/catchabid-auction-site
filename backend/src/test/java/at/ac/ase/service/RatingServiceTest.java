@@ -2,6 +2,7 @@ package at.ac.ase.service;
 
 import at.ac.ase.basetest.BaseIntegrationTest;
 import at.ac.ase.dto.AuctionPostSendDTO;
+import at.ac.ase.dto.AuctionQueryDTO;
 import at.ac.ase.dto.RatingDTO;
 import at.ac.ase.dto.RatingDataDTO;
 import at.ac.ase.entities.RatingPK;
@@ -51,7 +52,8 @@ public class RatingServiceTest extends BaseIntegrationTest {
     @Test
     @Transactional
     public void testSetValidRating(){
-        List<AuctionPostSendDTO> auctions = auctionService.getRecentAuctions(0, 0);
+
+        List<AuctionPostSendDTO> auctions = auctionService.searchAuctions(getRecentQuery(0, 0));
         RegularUser regularUser = userRepository.findByEmail("testUser@test.com");
         RatingDataDTO ratingDataDTO = new RatingDataDTO();
         AuctionPostSendDTO auctionPostSendDTO = auctions.get(0);
@@ -68,7 +70,7 @@ public class RatingServiceTest extends BaseIntegrationTest {
     @Test(expected = InvalidRatingDataException.class)
     @Transactional
     public void testSetRatingTooHigh(){
-        List<AuctionPostSendDTO> auctions = auctionService.getRecentAuctions(0, 0);
+        List<AuctionPostSendDTO> auctions = auctionService.searchAuctions(getRecentQuery(0, 0));
         RegularUser regularUser = userRepository.findByEmail("test@test.com");
         RatingDataDTO ratingDataDTO = new RatingDataDTO();
         AuctionPostSendDTO auctionPostSendDTO = auctions.get(0);
@@ -82,7 +84,7 @@ public class RatingServiceTest extends BaseIntegrationTest {
     @Transactional
     public void testSetRatingInvalidRange(){
         LocalDateTime date = LocalDateTime.of(2020, Month.DECEMBER,17,6,30,40,50000);
-        List<AuctionPostSendDTO> auctions = auctionService.getRecentAuctions(0, 0);
+        List<AuctionPostSendDTO> auctions = auctionService.searchAuctions(getRecentQuery(0, 0));
         RegularUser regularUser = userRepository.findByEmail("test@test.com");
         RatingDataDTO ratingDataDTO = new RatingDataDTO();
         AuctionPostSendDTO auctionPostSendDTO = auctions.get(0);
@@ -96,7 +98,7 @@ public class RatingServiceTest extends BaseIntegrationTest {
     @Transactional
     public void testSetRatingValidRange(){
         LocalDateTime date = LocalDateTime.now();
-        List<AuctionPostSendDTO> auctions = auctionService.getRecentAuctions(0, 0);
+        List<AuctionPostSendDTO> auctions = auctionService.searchAuctions(getRecentQuery(0, 0));
         RegularUser regularUser = userRepository.findByEmail("testUser@test.com");
         RatingDataDTO ratingDataDTO = new RatingDataDTO();
         AuctionPostSendDTO auctionPostSendDTO = auctions.get(0);
@@ -105,6 +107,13 @@ public class RatingServiceTest extends BaseIntegrationTest {
         ratingDataDTO.setRatingValue(4);
         ratingService.setRating(ratingDataDTO, regularUser);
     }
-
+private AuctionQueryDTO getRecentQuery(int pageNr, int auctionsPerPage){
+    AuctionQueryDTO queryDTO = new AuctionQueryDTO();
+    queryDTO.setAuctionsStartUntil(LocalDateTime.now());
+    queryDTO.setAuctionsEndFrom(LocalDateTime.now());
+    queryDTO.setPageNumber(pageNr);
+    queryDTO.setPageSize(auctionsPerPage);
+    return queryDTO;
+}
 
 }

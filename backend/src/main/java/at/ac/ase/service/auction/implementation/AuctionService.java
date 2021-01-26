@@ -204,30 +204,6 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public List<AuctionPostSendDTO> getRecentAuctions(Integer pageNr, Integer auctionsPerPage) {
-        logger.info("Fetching recent auctions without preferences, for pageNumber " + pageNr + ", and page size " + auctionsPerPage);
-        List<AuctionPost> recentAuctions = auctionRepository.findAllByStartTimeLessThanAndEndTimeGreaterThan(
-                LocalDateTime.now(), LocalDateTime.now(), getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").descending()));
-        logger.debug("Fetched " + recentAuctions.size() + " auctions from database.");
-        return auctionDtoTranslator.toDtoList(recentAuctions);
-    }
-
-    @Override
-    public List<AuctionPostSendDTO> getRecentAuctionsForUser(Integer pageNr, Integer auctionsPerPage, String userEmail, boolean usePreferences) {
-        List<Category> preferences = getPreferences(userEmail, usePreferences);
-        if (preferences == null || preferences.isEmpty()) {
-            logger.info("No preferences found, continue with fetching recent auctions without preferences");
-            return getRecentAuctions(pageNr, auctionsPerPage);
-        } else {
-            logger.info("Fetching recent auctions with preferences: " + preferences.toString() + "pageNumber " + pageNr + ", and page size " + auctionsPerPage);
-            List<AuctionPost> recentAuctions = auctionRepository.findAllByStartTimeLessThanAndEndTimeGreaterThanAndCategoryIn(
-                    LocalDateTime.now(), LocalDateTime.now(), preferences, getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").descending()));
-            logger.debug("Fetched " + recentAuctions.size() + " auctions from database.");
-            return auctionDtoTranslator.toDtoList(recentAuctions);
-        }
-    }
-
-    @Override
     public List<AuctionPost> getAllAuctions() {
         return auctionRepository.findAll();
     }
