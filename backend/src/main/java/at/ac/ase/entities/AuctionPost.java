@@ -74,7 +74,7 @@ public class AuctionPost {
     @JoinColumn(name="contact_form")
     private ContactForm contactForm;
 
-    @Column(columnDefinition = "DEFAULT")
+    @Enumerated(EnumType.STRING)
     private AuctionPopularity auctionPopularity;
 
 

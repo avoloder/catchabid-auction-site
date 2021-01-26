@@ -342,6 +342,8 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
+    @Transactional
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     public AuctionPost subscribeToAuction(AuctionPost auctionPost, User user) {
         if(auctionPost.getCreator().getId().equals(user.getId())) {
             throw new WrongSubscriberException();
