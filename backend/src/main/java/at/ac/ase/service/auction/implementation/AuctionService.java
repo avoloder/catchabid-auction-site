@@ -1,6 +1,5 @@
 package at.ac.ase.service.auction.implementation;
 
-import at.ac.ase.controllers.NotificationWebSocketController;
 import at.ac.ase.dto.AuctionCreationDTO;
 import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.AuctionQueryDTO;
@@ -9,14 +8,14 @@ import at.ac.ase.dto.translator.AuctionDtoTranslator;
 import at.ac.ase.entities.*;
 import at.ac.ase.repository.auction.AuctionPostQuery;
 import at.ac.ase.repository.auction.AuctionRepository;
-import at.ac.ase.repository.user.UserRepository;
 import at.ac.ase.service.auction.IAuctionService;
+import at.ac.ase.service.twitter.ITwitterService;
 import at.ac.ase.service.notification.INotificationService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
-import com.lowagie.text.DocumentException;
-import org.apache.commons.io.FileUtils;
+import at.ac.ase.util.AuctionTweetJob;
 import at.ac.ase.util.exceptions.*;
+import com.lowagie.text.DocumentException;
 import at.ac.ase.util.AuctionFinishedNotificationJob;
 import at.ac.ase.util.AuctionStartedNotificationJob;
 import at.ac.ase.util.exceptions.ObjectNotFoundException;
@@ -33,24 +32,26 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.persistence.LockModeType;
 import javax.validation.*;
-import java.io.*;
-import java.text.SimpleDateFormat;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -88,6 +89,8 @@ public class AuctionService implements IAuctionService {
     @Autowired
     NotificationWebSocketController webSocketController;
 
+    @Autowired
+    ITwitterService twitterService;
 
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private final Validator validator = factory.getValidator();
@@ -101,6 +104,8 @@ public class AuctionService implements IAuctionService {
         }
 
     }
+    private final int POPULAR_AUCTION_SUBSCRIPTIONS_MINIMUM = 1;
+    private final int AWESOME_AUCTION_SUBSCRIPTIONS_MINIMUM = 2;
 
     @Override
     public Optional<AuctionPost> getAuctionPost(Long id) {
@@ -228,6 +233,31 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
+    public List<AuctionPostSendDTO> getUpcomingAuctions(Integer auctionsPerPage, Integer pageNr) {
+        logger.info("Fetching upcoming auctions without preferences, for pageNumber " + pageNr + ", and page size " + auctionsPerPage);
+        List<AuctionPost> upcomingAuctions = auctionRepository.findAllByStartTimeGreaterThan(LocalDateTime.now(),
+                getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").ascending()));
+        logger.debug("Fetched " + upcomingAuctions.size() + " auctions from database.");
+        return convertAuctionsToDTO(upcomingAuctions);
+    }
+
+    @Override
+    public List<AuctionPostSendDTO> getUpcomingAuctionsForUser(Integer auctionsPerPage, Integer pageNr, String userEmail, boolean usePreferences) {
+        List<Category> preferences = getPreferences(userEmail, usePreferences);
+        if (preferences == null || preferences.isEmpty()) {
+            logger.info("No preferences found, continue with retrieving upcoming auctions without preferences");
+            return getUpcomingAuctions(pageNr, auctionsPerPage);
+        } else {
+            logger.info("Retrieving upcoming auctions with preferences: " + preferences.toString() + " for pageNumber " + pageNr + ", and page size " + auctionsPerPage);
+            List<AuctionPost> upcomingAuctions = auctionRepository.findAllByStartTimeGreaterThanAndCategoryIn(LocalDateTime.now(), preferences,
+                    getPageForFutureAuctions(auctionsPerPage, pageNr, Sort.by("startTime").ascending()));
+            logger.debug("Fetched " + upcomingAuctions.size() + " auctions from database.");
+            return convertAuctionsToDTO(upcomingAuctions);
+
+        }
+    }
+
+    @Override
     public List<AuctionPost> getAllAuctions() {
         return auctionRepository.findAll();
     }
@@ -335,7 +365,10 @@ public class AuctionService implements IAuctionService {
         return auctionRepository.findAllByHighestBidUserIdAndEndTimeLessThan(
             user.getId(), LocalDateTime.now());
     }
+
     @Override
+    @Transactional
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     public AuctionPost subscribeToAuction(AuctionPost auctionPost, User user) {
         if(auctionPost.getCreator().getId().equals(user.getId())) {
             throw new WrongSubscriberException();
@@ -347,8 +380,13 @@ public class AuctionService implements IAuctionService {
         Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
         subscriptions.add((RegularUser) user);
         auctionPost.setSubscriptions(subscriptions);
+
         AuctionPost updatedAuctionPost = auctionRepository.save(auctionPost);
         scheduleNotificationJob(updatedAuctionPost);
+        return updatedAuctionPost;
+
+        adaptAuctionPopularity(updatedAuctionPost);
+
         return updatedAuctionPost;
     }
 
@@ -499,4 +537,56 @@ public class AuctionService implements IAuctionService {
             logger.error(e.getMessage());
         }
     }
+
+    private void adaptAuctionPopularity(AuctionPost auctionPost) {
+
+        if (auctionPost.getSubscriptions().size() >= POPULAR_AUCTION_SUBSCRIPTIONS_MINIMUM
+                && AuctionPopularity.DEFAULT.equals(auctionPost.getAuctionPopularity()))
+        {
+            auctionPost.setAuctionPopularity(AuctionPopularity.POPULAR);
+            scheduleTweet(auctionPost, auctionPost.getStartTime(), TwitterPostType.AUCTION_START);
+        }
+
+        if (auctionPost.getSubscriptions().size() >= AWESOME_AUCTION_SUBSCRIPTIONS_MINIMUM
+                && AuctionPopularity.POPULAR.equals(auctionPost.getAuctionPopularity()) )
+        {
+            auctionPost.setAuctionPopularity(AuctionPopularity.AWESOME);
+            scheduleTweet(auctionPost, auctionPost.getStartTime().minusHours(24), TwitterPostType.AUCTION_UPCOMING);
+            scheduleTweet(auctionPost, auctionPost.getEndTime().minusHours(1),    TwitterPostType.AUCTION_CLOSE_TO_END);
+            scheduleTweet(auctionPost, auctionPost.getEndTime(),                  TwitterPostType.AUCTION_END);
+        }
+    }
+
+    private void scheduleTweet(AuctionPost auctionPost, LocalDateTime time, TwitterPostType twitterPostType) {
+        if(time.isAfter(LocalDateTime.now())) {
+            return;
+        }
+        try {
+            SchedulerFactory schedFact = new StdSchedulerFactory();
+            Scheduler sched = schedFact.getScheduler();
+            String jobName = auctionPost.getId().toString() + twitterPostType.name();
+            String triggerName = "trigger-" + auctionPost.getId() + twitterPostType.name();
+            JobDetail job = JobBuilder.newJob(AuctionTweetJob.class)
+                    .withIdentity(jobName, "group2")
+                    .build();
+            job.getJobDataMap().put("auctionPost", auctionPost);
+            job.getJobDataMap().put("twitterService", twitterService);
+            job.getJobDataMap().put("twitterPostType", twitterPostType);
+
+            Trigger trigger = TriggerBuilder.newTrigger()
+                    .withIdentity(triggerName, "group2")
+                    .startAt(java.util.Date
+                            .from(auctionPost.getStartTime().atZone(ZoneId.systemDefault())
+                                    .toInstant()))
+                    .forJob(jobName, "group2")
+                    .build();
+
+            sched.scheduleJob(job, trigger);
+            sched.start();
+
+        }catch (SchedulerException e){
+            logger.error(e.getMessage());
+        }
+    }
+
 }
