@@ -10,17 +10,15 @@ import at.ac.ase.entities.*;
 import at.ac.ase.repository.auction.AuctionPostQuery;
 import at.ac.ase.repository.auction.AuctionRepository;
 import at.ac.ase.service.auction.IAuctionService;
-import at.ac.ase.service.twitter.ITwitterService;
 import at.ac.ase.service.notification.INotificationService;
+import at.ac.ase.service.twitter.ITwitterService;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
+import at.ac.ase.util.AuctionFinishedNotificationJob;
+import at.ac.ase.util.AuctionStartedNotificationJob;
 import at.ac.ase.util.AuctionTweetJob;
 import at.ac.ase.util.exceptions.*;
 import com.lowagie.text.DocumentException;
-import at.ac.ase.util.AuctionFinishedNotificationJob;
-import at.ac.ase.util.AuctionStartedNotificationJob;
-import at.ac.ase.util.exceptions.ObjectNotFoundException;
-import at.ac.ase.util.exceptions.WrongSubscriberException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.quartz.*;
@@ -59,6 +57,8 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.time.temporal.ChronoUnit.HOURS;
 
 @Service
 public class AuctionService implements IAuctionService {
@@ -516,8 +516,11 @@ public class AuctionService implements IAuctionService {
         {
             auctionPost.setAuctionPopularity(AuctionPopularity.AWESOME);
             scheduleTweet(auctionPost, auctionPost.getStartTime().minusHours(24), TwitterPostType.AUCTION_UPCOMING);
-            scheduleTweet(auctionPost, auctionPost.getEndTime().minusHours(1),    TwitterPostType.AUCTION_CLOSE_TO_END);
             scheduleTweet(auctionPost, auctionPost.getEndTime(),                  TwitterPostType.AUCTION_END);
+
+            if (HOURS.between(auctionPost.getStartTime(), auctionPost.getEndTime()) > 4) {
+                scheduleTweet(auctionPost, auctionPost.getEndTime().minusHours(1),    TwitterPostType.AUCTION_CLOSE_TO_END);
+            }
         }
     }
 

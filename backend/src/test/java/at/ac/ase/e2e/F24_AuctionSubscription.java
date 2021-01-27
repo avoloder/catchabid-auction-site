@@ -53,30 +53,6 @@ public class F24_AuctionSubscription extends BaseE2E {
         auctionsListArea.clickSubscribeToAuction(upcomingAuctions.get(0));
     }
 
-    @Test
-    void testUnsubscribeFromAuction() throws InterruptedException {
-        insertTestData("initial-testdata.sql");
-
-        navigateToCatchabidPage();
-        loginUser();
-
-        CatchabidBasePage catchabidBasePage = getCatchabidPage();
-        AuctionsListArea auctionsListArea = catchabidBasePage.getAuctionsListArea();
-
-        Thread.sleep(3000);
-
-        List<WebElement> upcomingAuctions = auctionsListArea.getUpcomingAuctions();
-
-        Assertions.assertEquals(3, upcomingAuctions.size());
-
-        auctionsListArea.clickSubscribeToAuction(upcomingAuctions.get(0));
-
-        Thread.sleep(5000);
-
-        auctionsListArea.clickUnsubscribeFromAuction(upcomingAuctions.get(0));
-    }
-
-
     private void loginUser() throws InterruptedException {
         CatchabidBasePage catchabidBasePage = getCatchabidPage();
 
