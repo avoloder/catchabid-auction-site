@@ -514,7 +514,7 @@ public class AuctionService implements IAuctionService {
     }
 
     private void scheduleTweet(AuctionPost auctionPost, LocalDateTime time, TwitterPostType twitterPostType) {
-        if(time.isAfter(LocalDateTime.now(ZoneOffset.UTC))) {
+        if(time.isBefore(LocalDateTime.now(ZoneOffset.UTC))) {
             return;
         }
         try {
@@ -532,7 +532,7 @@ public class AuctionService implements IAuctionService {
             Trigger trigger = TriggerBuilder.newTrigger()
                     .withIdentity(triggerName, "group2")
                     .startAt(java.util.Date
-                            .from(auctionPost.getStartTime().atZone(ZoneId.systemDefault())
+                            .from(time.atZone(ZoneId.of("UTC"))
                                     .toInstant()))
                     .forJob(jobName, "group2")
                     .build();
