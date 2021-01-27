@@ -3,12 +3,11 @@ package at.ac.ase.service.user.implementation;
 import at.ac.ase.dto.RegularUserDTO;
 import at.ac.ase.dto.translator.UserDtoTranslator;
 import at.ac.ase.entities.Address;
-import at.ac.ase.entities.AuctionPost;
 import at.ac.ase.entities.RegularUser;
-import at.ac.ase.entities.User;
 import at.ac.ase.repository.user.UserRepository;
 import at.ac.ase.service.user.IRegularUserService;
 import at.ac.ase.util.exceptions.EmptyObjectException;
+import at.ac.ase.util.exceptions.InvalidDataException;
 import at.ac.ase.util.exceptions.UserAlreadyExistsException;
 import at.ac.ase.util.exceptions.UserNotFoundException;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import java.util.regex.Pattern;
 
 @Service
 public class RegularUserService implements IRegularUserService {
@@ -78,12 +77,25 @@ public class RegularUserService implements IRegularUserService {
                         throw new UserAlreadyExistsException();
                     }
                 }
+                validateUser(user);
 
                 return userRepository.save(updatePersistedValues(persisted, user));
 
             }else {
                 throw new EmptyObjectException();
             }
+        }
+
+    }
+
+    private void validateUser(RegularUser user) {
+        Pattern emailRegex = Pattern.compile("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+(/.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", Pattern.CASE_INSENSITIVE);
+        if (!emailRegex.matcher(user.getEmail()).matches()) {
+            throw new InvalidDataException("Invalid email");
+        }
+        Pattern numberRegex = Pattern.compile("\\d{3}-\\d{7}||\\d{10}");
+        if (!numberRegex.matcher(user.getPhoneNr()).matches()){
+            throw new InvalidDataException("Invalid number");
         }
 
     }

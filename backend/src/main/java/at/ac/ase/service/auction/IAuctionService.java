@@ -140,7 +140,18 @@ public interface IAuctionService {
      */
     AuctionPost unsubscribeFromAuction(AuctionPost auctionPost, User user);
 
+    /**
+     * get a list of user's auctions
+     * @param user - for which to get auctions
+     * @return list of auctions
+     */
     List<AuctionPostSendDTO> getMyAuctions(User user);
+
+    /**
+     * get a list of users subscriptions
+     * @param user - for which to get subscriptions
+     * @return list of auctions to which the user is subscribed
+     */
     Set<AuctionPostSendDTO> getMySubscriptions(RegularUser user);
 
     /**

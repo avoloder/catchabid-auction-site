@@ -12,10 +12,7 @@ import at.ac.ase.entities.User;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
 import at.ac.ase.service.user.rating.IRatingService;
-import at.ac.ase.util.exceptions.EmptyObjectException;
-import at.ac.ase.util.exceptions.UserAlreadyExistsException;
-import at.ac.ase.util.exceptions.UserAlreadyRatedException;
-import at.ac.ase.util.exceptions.UserNotFoundException;
+import at.ac.ase.util.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,10 +93,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(regularUserService.updateUser(email, user));
         }catch (Exception e){
             logger.error("Could not update user",e);
-            if (e instanceof EmptyObjectException || e instanceof UserNotFoundException || e instanceof UserAlreadyExistsException){
+            if (e instanceof EmptyObjectException || e instanceof UserNotFoundException || e instanceof UserAlreadyExistsException || e instanceof InvalidDataException){
                 throw e;
             }
-            throw new Exception("Could not retrieve bid statistics") ;
+            throw new Exception("Could not update profile") ;
         }
     }
 
@@ -111,10 +108,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).build();
         }catch (Exception e){
             logger.error("Could not update auction house",e);
-            if (e instanceof EmptyObjectException || e instanceof UserNotFoundException || e instanceof UserAlreadyExistsException){
+            if (e instanceof EmptyObjectException || e instanceof UserNotFoundException || e instanceof UserAlreadyExistsException || e instanceof InvalidDataException){
                 throw e;
             }
-            throw new Exception("Could not retrieve bid statistics") ;
+            throw new Exception("Could not update profile") ;
         }
     }
 }

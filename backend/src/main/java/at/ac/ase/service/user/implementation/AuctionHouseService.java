@@ -4,11 +4,10 @@ import at.ac.ase.dto.AuctionHouseDTO;
 import at.ac.ase.dto.translator.AuctionHouseDtoTranslator;
 import at.ac.ase.entities.Address;
 import at.ac.ase.entities.AuctionHouse;
-import at.ac.ase.entities.AuctionPost;
-import at.ac.ase.entities.RegularUser;
 import at.ac.ase.repository.user.AuctionHouseRepository;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.util.exceptions.EmptyObjectException;
+import at.ac.ase.util.exceptions.InvalidDataException;
 import at.ac.ase.util.exceptions.UserAlreadyExistsException;
 import at.ac.ase.util.exceptions.UserNotFoundException;
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 public class AuctionHouseService implements IAuctionHouseService {
@@ -76,6 +76,7 @@ public class AuctionHouseService implements IAuctionHouseService {
                         throw new UserAlreadyExistsException();
                     }
                 }
+                validateUser(auctionHouse);
 
                 return auctionHouseRepository.save(updatePersistedValues(persisted, auctionHouse));
 
@@ -83,6 +84,17 @@ public class AuctionHouseService implements IAuctionHouseService {
                 throw new EmptyObjectException();
             }
         }
+    }
+    private void validateUser(AuctionHouse user) {
+        Pattern emailRegex = Pattern.compile("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", Pattern.CASE_INSENSITIVE);
+        if (!emailRegex.matcher(user.getEmail()).matches()) {
+            throw new InvalidDataException("Invalid email");
+        }
+        Pattern numberRegex = Pattern.compile("\\d{3}-\\d{7}||\\d{10}");
+        if (!numberRegex.matcher(user.getPhoneNr()).matches()){
+            throw new InvalidDataException("Invalid number");
+        }
+
     }
 
     private AuctionHouse updatePersistedValues(AuctionHouse persisted, AuctionHouse updated) {

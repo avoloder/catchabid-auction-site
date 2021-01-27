@@ -25,7 +25,6 @@
           <div class="tab-pane fade active show" id="account-general" style="height: 1100px">
             <hr class="border-light m-0">
             <form ngNativeValidate name="form" (ngSubmit)="confirmSave()" class="form-horizontal">
-              <!--                  oninput='pass4.setCustomValidity(pass4.value != pass3.value ? "Passwords do not match." : "")'>-->
 
               <div class="card-body">
                 <div class="form-group" *ngIf="isRegularUser">
@@ -45,7 +44,7 @@
 
                 <div class="form-group">
                   <label class="form-label">E-mail</label>
-                  <input name="email" [(ngModel)]="updatedUser.email" type="email" class="form-control mb-1">
+                  <input name="email" [(ngModel)]="updatedUser.email" type="email" class="form-control mb-1" ngModel email="true">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Phone Number</label>
