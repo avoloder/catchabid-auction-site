@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,7 +73,7 @@ public class StatisticsService implements IStatisticsService {
         Map<String, Integer> statistics = new HashMap<>();
         Set<Bid> bids = retrievedUser.getBids();
 
-        Stream<Bid> wins = bids.stream().filter(x -> x.getId() == x.getAuction().getHighestBid().getId() && x.getAuction().getEndTime().isBefore(LocalDateTime.now()));
+        Stream<Bid> wins = bids.stream().filter(x -> x.getId() == x.getAuction().getHighestBid().getId() && x.getAuction().getEndTime().isBefore(LocalDateTime.now(ZoneOffset.UTC)));
 
         wins.forEach(x -> addStatistics(statistics, x));
 
@@ -93,7 +94,7 @@ public class StatisticsService implements IStatisticsService {
             return new HashMap<>();
         }
         double bidsCount=bids.stream().collect(Collectors.groupingBy(Bid::getAuction)).keySet().size();
-        Stream<Bid> wins = bids.stream().filter(x -> x.getId().equals(x.getAuction().getHighestBid().getId()) && x.getAuction().getEndTime().isBefore(LocalDateTime.now()));
+        Stream<Bid> wins = bids.stream().filter(x -> x.getId().equals(x.getAuction().getHighestBid().getId()) && x.getAuction().getEndTime().isBefore(LocalDateTime.now(ZoneOffset.UTC)));
         double winsCount = wins.toArray().length;
         statistics.put("wins", ((winsCount*100)/bidsCount));
         double lossCount = bids.stream().collect(Collectors.groupingBy(Bid::getAuction)).keySet().size() - winsCount;

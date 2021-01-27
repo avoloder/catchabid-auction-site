@@ -3,6 +3,7 @@ package at.ac.ase.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,7 +37,7 @@ public class Bid {
     @DecimalMin("0.1")
     private Double offer;
 
-    private LocalDateTime dateTime = LocalDateTime.now();
+    private LocalDateTime dateTime = LocalDateTime.now(ZoneOffset.UTC);
 
     public Long getId() {
         return id;

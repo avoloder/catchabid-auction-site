@@ -311,13 +311,13 @@ public class AuctionService implements IAuctionService {
     @Override
     public boolean isAuctionPayable(AuctionPost auctionpost) {
         return Objects.nonNull(auctionpost.getHighestBid()) &&
-            auctionpost.getEndTime().isBefore(LocalDateTime.now());
+            auctionpost.getEndTime().isBefore(LocalDateTime.now(ZoneOffset.UTC));
     }
 
     @Override
     public List<AuctionPost> getAllWonAuctionPostsForUser(User user) {
         return auctionRepository.findAllByHighestBidUserIdAndEndTimeLessThan(
-            user.getId(), LocalDateTime.now());
+            user.getId(), LocalDateTime.now(ZoneOffset.UTC));
     }
 
     @Override
@@ -514,7 +514,7 @@ public class AuctionService implements IAuctionService {
     }
 
     private void scheduleTweet(AuctionPost auctionPost, LocalDateTime time, TwitterPostType twitterPostType) {
-        if(time.isAfter(LocalDateTime.now())) {
+        if(time.isAfter(LocalDateTime.now(ZoneOffset.UTC))) {
             return;
         }
         try {

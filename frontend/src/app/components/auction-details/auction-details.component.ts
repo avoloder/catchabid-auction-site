@@ -74,14 +74,14 @@ export class AuctionDetailsComponent implements OnInit {
   }
 
   isAuctionEnded(): boolean {
-    const endDate = new Date(this.auction.endTime);
+    const endDate = new Date(this.convertUTCDatetimeToLocal(this.auction.endTime));
     return endDate.getTime() < new Date().getTime();
   }
 
   calculateDateDiff() : boolean{
     const now = new Date();
     console.log(now);
-    const date = new Date(this.auction.endTime);
+    const date = new Date(this.convertUTCDatetimeToLocal(this.auction.endTime));
     console.log(date);
     const diffTime = Math.abs(now.getTime() - date.getTime());
     const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
@@ -127,5 +127,12 @@ export class AuctionDetailsComponent implements OnInit {
     }else{
       return false;
     }
+  }
+
+  convertUTCDatetimeToLocal(date){
+    const dateUTC = new Date(date);
+    const dateLocal = new Date(Date.UTC(dateUTC.getFullYear(),dateUTC.getMonth(), dateUTC.getDate() ,
+    dateUTC.getHours(), dateUTC.getMinutes(), dateUTC.getSeconds(), dateUTC.getMilliseconds()));
+    return dateLocal;
   }
 }

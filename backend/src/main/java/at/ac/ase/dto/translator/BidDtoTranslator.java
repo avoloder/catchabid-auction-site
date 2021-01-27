@@ -6,6 +6,8 @@ import at.ac.ase.entities.Bid;
 import at.ac.ase.service.auction.IAuctionService;
 import at.ac.ase.util.exceptions.ObjectNotFoundException;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +20,7 @@ public class BidDtoTranslator {
     public Bid toBid(BidDTO bidDTO) {
         Bid bid = new Bid();
         bid.setOffer(bidDTO.getOffer());
-        bid.setDateTime(LocalDateTime.now());
+        bid.setDateTime(LocalDateTime.now(ZoneOffset.UTC));
 
         AuctionPost auction = auctionService.getAuctionPost(bidDTO.getAuctionId())
             .orElseThrow(ObjectNotFoundException::new);

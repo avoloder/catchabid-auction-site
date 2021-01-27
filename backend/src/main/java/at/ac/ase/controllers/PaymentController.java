@@ -11,6 +11,8 @@ import at.ac.ase.util.exceptions.AuctionNotPayableException;
 import at.ac.ase.util.exceptions.AuctionNotPayedException;
 import at.ac.ase.util.exceptions.ObjectNotFoundException;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,7 +63,7 @@ public class PaymentController {
         }
 
         Payment payment = new Payment();
-        payment.setPaymentDate(LocalDateTime.now());
+        payment.setPaymentDate(LocalDateTime.now(ZoneOffset.UTC));
         payment.setPaymentIntentId(paymentStoreDTO.getPaymentIntent());
 
         auctionPost.setPayment(payment);

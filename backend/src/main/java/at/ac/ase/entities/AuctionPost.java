@@ -6,6 +6,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -191,12 +192,12 @@ public class AuctionPost {
     }
 
     public boolean isUpcoming() {
-        return this.status == Status.UPCOMING && startTime.isAfter(LocalDateTime.now());
+        return this.status == Status.UPCOMING && startTime.isAfter(LocalDateTime.now(ZoneOffset.UTC));
     }
 
     public boolean isActive() {
         return (this.status == Status.UPCOMING || this.status == Status.ACTIVE)
-                && startTime.isBefore(LocalDateTime.now()) && endTime.isAfter(LocalDateTime.now());
+                && startTime.isBefore(LocalDateTime.now(ZoneOffset.UTC)) && endTime.isAfter(LocalDateTime.now(ZoneOffset.UTC));
     }
 
     public ContactForm getContactForm() {
