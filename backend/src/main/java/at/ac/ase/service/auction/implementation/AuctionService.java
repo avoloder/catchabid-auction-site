@@ -330,7 +330,10 @@ public class AuctionService implements IAuctionService {
         if(auctionPost.getStatus().equals(Status.CANCELLED)){
             throw new AuctionCancelledException();
         }
-        //ToDo: check if user trying to subsribe is a regaular user and not an auction house (also in frontend)
+        if(user instanceof AuctionHouse){
+            throw new WrongSubscriberException();
+        }
+
         Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
         subscriptions.add((RegularUser) user);
         auctionPost.setSubscriptions(subscriptions);
@@ -344,7 +347,12 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
+    @Transactional
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     public AuctionPost unsubscribeFromAuction(AuctionPost auctionPost, User user) {
+        if(user instanceof AuctionHouse){
+            throw new WrongSubscriberException();
+        }
         Set<RegularUser> subscriptions = auctionPost.getSubscriptions();
         subscriptions.removeIf(subscribedUser -> subscribedUser.getId().equals(user.getId()));
         auctionPost.setSubscriptions(subscriptions);
