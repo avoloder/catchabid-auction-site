@@ -114,7 +114,7 @@
                                     <delimiterType>normal</delimiterType>
                                     <autocommit>true</autocommit>
                                     <srcFiles>
-                                        <srcFile>src/test/resources/testdata/F32_tc1.sql</srcFile>
+                                        <srcFile>src/test/resources/testdata/initial-testdata.sql</srcFile>
                                     </srcFiles>
                                 </configuration>
                             </execution>

@@ -15,7 +15,11 @@ export class ProfileComponent implements OnInit {
   isRegularUser:boolean=true;
   dropdownList:any = [];
   selectedPreferences:[]= [];
-  dropdownSettings = {};
+  dropdownSettings = {
+    selectAllText: 'Select all',
+    unSelectAllText: 'Unselect all'
+  };
+
 
   constructor(
     private toast: ToastrService,
