@@ -13,6 +13,7 @@ import at.ac.ase.util.exceptions.AuctionCancelledException;
 import at.ac.ase.util.exceptions.AuthorizationException;
 import at.ac.ase.util.exceptions.WrongSubscriberException;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -172,14 +173,30 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         auctionPost = auctionService.getAllAuctions().get(0);
 
         assertThat(auctionPost.getSubscriptions().size(), is(1));
-        Set<AuctionPostSendDTO> subscriptions = auctionService.getMySubscriptions((RegularUser) user);
-        assertThat(subscriptions.size(), is(1));
 
-        Iterator iterator = subscriptions.iterator();
+        Iterator iterator = auctionPost.getSubscriptions().iterator();
         RegularUser subscribedUser = (RegularUser)iterator.next();
         assertThat(subscribedUser.getId(), is(2L));
         assertTrue(subscribedUser.getActive());
         assertThat(subscribedUser.getEmail(), is("test@test.com"));
+    }
+
+    @Test
+    public void testGetUserSubscriptions(){
+        insertTestData("multiple-auctions.sql");
+        RegularUser user = regularUserService.getUserById(2l).get();
+        List<AuctionPost> auctionPosts = auctionService.getAllAuctions();
+        assertThat(auctionPosts.size(), is(11));
+
+        AuctionPost auctionPost = auctionPosts.get(0);
+
+        auctionService.subscribeToAuction(auctionPost, user);
+
+        Set<AuctionPostSendDTO> subs = auctionService.getMySubscriptions(user);
+
+        Assert.assertEquals(1,subs.size());
+
+
     }
 
     @Test
