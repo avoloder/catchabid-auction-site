@@ -20,7 +20,7 @@ export class SigninComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private signinService: SigninService,
-    private router: Router, 
+    private router: Router,
     private toast: ToastrService,
     private userService: UserService
   ) { }
@@ -39,7 +39,7 @@ export class SigninComponent implements OnInit {
   }
 
   onModalClose(){
-    this,this.modalService.dismissAll();
+    this.modalService.dismissAll();
   }
 
   openRegisterModal(){

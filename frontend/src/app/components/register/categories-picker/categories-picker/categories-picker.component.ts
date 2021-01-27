@@ -20,7 +20,7 @@ export class CategoriesPickerComponent implements OnInit {
   form: FormGroup;
   preferences: any;
 
-  @Input() 
+  @Input()
   public user: User;
 
   @Input()
@@ -39,7 +39,7 @@ export class CategoriesPickerComponent implements OnInit {
   }
 
   getCategories(){
-    
+
   }
 
   ngOnInit(): void {
@@ -71,7 +71,8 @@ export class CategoriesPickerComponent implements OnInit {
     this.registerService.registerUser(this.user)
            .subscribe(
                data => {
-                   this.toast.success("User successfully registered")
+                   this.toast.success("User successfully registered");
+                   localStorage.setItem('isJustRegistered', 'true');
                    this.openLoginModal();
                },
                error => {

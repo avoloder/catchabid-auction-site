@@ -15,6 +15,7 @@ import at.ac.ase.util.exceptions.AuctionCancelledException;
 import at.ac.ase.util.exceptions.AuctionExpiredException;
 import at.ac.ase.util.exceptions.InvalidBidException;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,7 +55,7 @@ public class BidService implements IBidService {
 
     @Override
     public Bid placeBid(Bid bid) {
-        if (bid.getAuction().getEndTime().isBefore(LocalDateTime.now())) {
+        if (bid.getAuction().getEndTime().isBefore(LocalDateTime.now(ZoneOffset.UTC))) {
             throw new AuctionExpiredException();
         }
         if (bid.getAuction().getMinPrice() > bid.getOffer()) {
