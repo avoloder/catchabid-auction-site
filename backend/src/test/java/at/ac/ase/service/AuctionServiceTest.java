@@ -135,14 +135,12 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     @Transactional
     public void testRecentAuctionsForUser() {
         insertTestData("auctions-filter-preferences.sql");
-        AuctionQueryDTO auctions = getRecentQuery(0, 5);
-        auctions.setUserEmail("testRegular@test.com");
-        auctions.setUseUserPreferences(true);
-        List<AuctionPostSendDTO> posts = auctionService.searchAuctions(auctions);
+        AuctionQueryDTO queryDTO=getRecentQuery(0,10);
+        queryDTO.setUserEmail("testRegular@test.com");
+        queryDTO.setUseUserPreferences(true);
+        List<AuctionPostSendDTO> posts = auctionService.searchAuctions(queryDTO);
         assertEquals(1, posts.size());
         assertEquals("Desktop PC - Intel i7, AMD RX 580 8GB", posts.get(0).getDescription());
-        auctions.setUseUserPreferences(false);
-        posts = auctionService.searchAuctions(auctions);
 
 
         queryDTO.setUseUserPreferences(false);
@@ -150,6 +148,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         assertEquals(2, posts.size());
         assertEquals("Bob Marley Tickets", posts.get(0).getDescription());
         assertEquals("Ticket to Paradise CD", posts.get(1).getDescription());
+
 
     }
 
