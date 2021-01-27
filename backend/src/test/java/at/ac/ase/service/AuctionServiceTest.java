@@ -301,7 +301,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         insertTestData("initial-testdata.sql");
 
         User user = new AuctionHouse();
-        user.setId(5L);
+        user.setId(3L);
 
         auctionService.postContactForm(100010L, user, createContactForm());
     }
@@ -334,7 +334,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         insertTestData("initial-testdata.sql");
 
         User user = new AuctionHouse();
-        user.setId(3L);
+        user.setId(5L);
 
         AuctionPost auctionPost = auctionRepository.findById(100010L).orElse(null);
 
