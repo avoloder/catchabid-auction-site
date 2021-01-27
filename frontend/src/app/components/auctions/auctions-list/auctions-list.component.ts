@@ -65,9 +65,6 @@ export class AuctionsListComponent implements OnInit {
 
         this.currentAuctionQuery = query;
         this.loadMoreAuctions();
-        console.log("QUERY:");
-        console.log(query.searchKeys);
-        console.log(query.categories);
       }
     });
   }
@@ -76,7 +73,6 @@ export class AuctionsListComponent implements OnInit {
     const auctionsCountBeforeLoading = this.auctions.length;
 
     const handleResponse = data => {
-      console.log(this.auctionsGroup);
       this.auctions = this.auctions.concat(data);
       if(auctionsCountBeforeLoading == this.auctions.length || (this.auctions.length / (this.pageNumber+1)) < this.pageSize) {
         if (this.useUserPreferences){
@@ -181,7 +177,6 @@ export class AuctionsListComponent implements OnInit {
   }
 
   isOwnAuction(auction: AuctionPost) {
-    console.log(auction.creatorVerified);
     return auction.creatorId.toString() == localStorage.getItem('userId');
   }
 
