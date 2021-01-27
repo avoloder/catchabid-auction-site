@@ -55,6 +55,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -433,10 +434,11 @@ public class AuctionService implements IAuctionService {
             Scheduler sched = schedFact.getScheduler();
             String jobName = auctionPost.getId().toString();
             String triggerName = "trigger-" + auctionPost.getId();
+            ZoneId zone = ZoneId.of("UTC");
             Trigger trigger = null;
             JobDetail job = null;
 
-            if(auctionPost.getStartTime().isAfter(LocalDateTime.now())) {
+            if(auctionPost.getStartTime().isAfter(LocalDateTime.now(ZoneOffset.UTC))) {
                 job = JobBuilder.newJob(AuctionStartedNotificationJob.class)
                         .withIdentity(jobName, "group1")
                         .build();
@@ -449,15 +451,17 @@ public class AuctionService implements IAuctionService {
                 job.getJobDataMap().put("auctionService", this);
                 job.getJobDataMap().put("webSocketController", webSocketController);
 
+
+
                 trigger = TriggerBuilder.newTrigger()
                         .withIdentity(triggerName, "group1")
                         .startAt(java.util.Date
-                                .from(auctionPost.getStartTime().atZone(ZoneId.systemDefault())
+                                .from(auctionPost.getStartTime().atZone(zone)
                                         .toInstant()))
                         .forJob(jobName, "group1")
                         .build();
             }else{
-                if(auctionPost.getEndTime().isAfter(LocalDateTime.now())) {
+                if(auctionPost.getEndTime().isAfter(LocalDateTime.now(ZoneOffset.UTC))) {
                     job = JobBuilder.newJob(AuctionFinishedNotificationJob.class)
                             .withIdentity(jobName, "group1")
                             .build();
@@ -473,7 +477,7 @@ public class AuctionService implements IAuctionService {
                     trigger = TriggerBuilder.newTrigger()
                             .withIdentity(triggerName, "group1")
                             .startAt(java.util.Date
-                                    .from(auctionPost.getEndTime().atZone(ZoneId.systemDefault())
+                                    .from(auctionPost.getEndTime().atZone(zone)
                                             .toInstant()))
                             .forJob(jobName, "group1")
                             .build();

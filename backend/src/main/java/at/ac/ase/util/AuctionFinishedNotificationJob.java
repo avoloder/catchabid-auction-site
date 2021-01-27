@@ -67,14 +67,18 @@ public class AuctionFinishedNotificationJob implements Job {
         if(finalAuctionPost.get().getCreator() instanceof RegularUser) {
             RegularUserNotification notificationForCreator = new RegularUserNotification();
             notificationForCreator.setReceiver((RegularUser)finalAuctionPost.get().getCreator());
-        }else{
+            notificationForCreator.setInfo(creatorNotificationMessage);
+            notificationForCreator.setSeen(false);
+            notificationService.saveNotification(notificationForCreator);
+            webSocketController.sendNotification(finalAuctionPost.get().getCreator(), notificationForCreator);
+        }else {
             AuctionHouseNotification notificationForCreator = new AuctionHouseNotification();
-            notificationForCreator.setReceiver((AuctionHouse)finalAuctionPost.get().getCreator());
-
-        notificationForCreator.setInfo(creatorNotificationMessage);
-        notificationForCreator.setSeen(false);
-        notificationService.saveNotification(notificationForCreator);
-        webSocketController.sendNotification(finalAuctionPost.get().getCreator(), notificationForCreator);
+            notificationForCreator.setReceiver((AuctionHouse) finalAuctionPost.get().getCreator());
+            notificationForCreator.setInfo(creatorNotificationMessage);
+            notificationForCreator.setSeen(false);
+            notificationService.saveNotification(notificationForCreator);
+            webSocketController.sendNotification(finalAuctionPost.get().getCreator(), notificationForCreator);
+        }
 
         // sends email notification to creator of the auction
         try {
@@ -86,8 +90,6 @@ public class AuctionFinishedNotificationJob implements Job {
             emailSender.send(message);
         } catch (MailException e) {
             throw new EmailNotSentException();
-        }
-
         }
     }
 }
