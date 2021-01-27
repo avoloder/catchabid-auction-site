@@ -2,9 +2,9 @@
   <article class="card-body">
       <div class="modal-header" style="border-bottom-width: 1px; justify-content: center;">
         <div style="width: 100%; justify-content: center;">
-            <h5 class="card-title text-center mb-2" style="margin-left: 52px;">{{auction.auctionName}}</h5>
+            <h5 id="title" class="card-title text-center mb-2" style="margin-left: 52px;">{{auction.auctionName}}</h5>
         </div>
-        <button type="button" class="close pull-right" (click)="onModalClose()" aria-label="Close">
+        <button id="close-button" type="button" class="close pull-right" (click)="onModalClose()" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -23,16 +23,16 @@
                 <span><i class="fa fa-clock-o"></i> {{convertUTCDatetimeToLocal(auction.startTime) | date:"dd.MM.yyyy, HH:mm"}} - {{convertUTCDatetimeToLocal(auction.endTime) |  date:"dd.MM.yyyy, HH:mm"}}</span>
               </div>
               <div class="col-12"  style="margin-bottom: 10px;">
-                <p class="h6">Category: <span class="badge badge-secondary" style="margin-left:5px;"> {{auction.category}} </span></p>
+                <p class="h6">Category: <span id="auction-category" class="badge badge-secondary" style="margin-left:5px;"> {{auction.category}} </span></p>
               </div>
               <div *ngIf="auction.status == 'CANCELLED'" class="col-12"  style="margin-bottom: 10px;">
-                <p class="h6">Status: <span class="badge badge-danger" style="margin-left:5px;"> {{auction.status}} </span></p>
+                <p class="h6">Status: <span id="auction-status" class="badge badge-danger" style="margin-left:5px;"> {{auction.status}} </span></p>
               </div>
               <div class="col-12" style="margin-bottom: 15px;">
                 <p class="h6">Information about creator:</p>
                 <div class="row">
                   <div class="col-7">
-                    <span>{{auction.creatorName}}
+                    <span id="creator-name">{{auction.creatorName}}
                       <i *ngIf="auction.creatorVerified" class="fa fa-check-circle" style="color:dodgerblue"></i>
                     </span>
                   </div>
@@ -44,7 +44,7 @@
                     </span>
                   </div>
                 </div>
-                <span>
+                <span id="auction-address">
                     {{auction.address}} {{auction.houseNr}},
                     {{auction.city}}  {{auction.country}}
                 </span>
@@ -56,7 +56,7 @@
                 <p class="h6">Starting bid </p>
               </div>
               <div class="col-6" style="text-align: right">
-                <span>EUR {{auction.minPrice}} </span>
+                <span id="min-price">EUR {{auction.minPrice}} </span>
               </div>
               <div class="col-6">
                 <p class="h6">Highest bid </p>
@@ -74,10 +74,10 @@
               <div class="col-12"  style="margin-bottom: 10px;">
                 <a *ngIf="!isAuctionEnded() && path != 'auctions' && !isOwnAuction()" (click)="openBidModal(auction)" class="btn btn-primary card-button">Place a bid</a>
                 <a *ngIf="isUpcoming() && isOwnAuction()" (click)="cancelAuction(auction)" class="btn btn-primary card-button">Cancel Auction</a>
-                <div class="row" ngbTooltip="You have 30 days from the auction's end to rate the user">
+                <div class="row">
                   <div class="col-11">
-                    <a *ngIf="path=='wins' && !alreadyRated && calculateDateDiff()" (click)="openRatingModal(auction)" class="btn btn-primary card-button">Rate this user</a>
-                    <a *ngIf="path=='wins' && (alreadyRated || !calculateDateDiff())" class="btn btn-secondary card-button" style="background-color: grey;" disabled>Rate this user</a>
+                    <a ngbTooltip="You have 30 days from the auction's end to rate the user" *ngIf="path=='wins' && !alreadyRated && calculateDateDiff()" (click)="openRatingModal(auction)" class="btn btn-primary card-button">Rate this user</a>
+                    <a ngbTooltip="You have 30 days from the auction's end to rate the user" *ngIf="path=='wins' && (alreadyRated || !calculateDateDiff())" class="btn btn-secondary card-button" style="background-color: grey;" disabled>Rate this user</a>
                   </div>
                   <div class="col-1" style="margin-top:22px; padding:0px; font-size:20px">
                     <i *ngIf="path=='wins'" class="fa fa-question-circle" aria-hidden="true"></i>

@@ -60,7 +60,7 @@ export class BidsComponent implements OnInit {
             error.error.message.lastIndexOf(':') + 1);
           console.log(this.newCurrentBidValue);
         } else {
-          this.toastr.error('Error placing bid.');
+          this.toastr.error(error.error.message);
         }
         console.log(error);
       },

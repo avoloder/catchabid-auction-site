@@ -65,11 +65,13 @@ public class AuctionDtoTranslator {
         }
 
         if(subscriptionsRequired) {
-            Set<RegularUserDTO> subscriptions = new HashSet<>();
-            for (RegularUser user : auction.getSubscriptions()) {
-                subscriptions.add(userDtoTranslator.toRegularUserDTO(user));
+            if (auction.getSubscriptions().size() > 0) {
+                Set<RegularUserDTO> subscriptions = new HashSet<>();
+                for (RegularUser user : auction.getSubscriptions()) {
+                    subscriptions.add(userDtoTranslator.toRegularUserDTO(user));
+                }
+                auctionPostSendDTO.setSubscriptions(subscriptions);
             }
-            auctionPostSendDTO.setSubscriptions(subscriptions);
         }
 
         if(auction.isActive()) {
