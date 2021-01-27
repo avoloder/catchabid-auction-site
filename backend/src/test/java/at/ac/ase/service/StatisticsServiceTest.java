@@ -33,7 +33,7 @@ public class StatisticsServiceTest extends BaseIntegrationTest {
 
     @After
     public void cleanup() {
-//        cleanDatabase();
+        cleanDatabase();
     }
 
     @Test
@@ -102,8 +102,8 @@ public class StatisticsServiceTest extends BaseIntegrationTest {
         Map<String,Double> statistics = statisticsService.getBidsWinsRatio(user.get());
 
         Assertions.assertEquals(2.0,statistics.size());
-        Assertions.assertEquals(66.6,statistics.get("wins"));
-        Assertions.assertEquals(33.3,statistics.get("loss"));
+        Assertions.assertEquals(66.66666666666667,statistics.get("wins"));
+        Assertions.assertEquals(33.333333333333336,statistics.get("bids").doubleValue());
 
     }
     @Test
@@ -127,7 +127,7 @@ public class StatisticsServiceTest extends BaseIntegrationTest {
         }
         Map<String,Double> statistics = statisticsService.getBidsWinsRatio(user.get());
         Assert.assertFalse(statistics.isEmpty());
-        Assert.assertEquals(100.0,statistics.get("loss").intValue());
+        Assert.assertEquals(100.0,statistics.get("bids").doubleValue(),0);
 
     }
 
@@ -180,11 +180,9 @@ public class StatisticsServiceTest extends BaseIntegrationTest {
         }
         Map<String,Double> statistics = statisticsService.getSuccessOfMyAuctions(user.get());
         Assert.assertFalse(statistics.isEmpty());
-        Assert.assertEquals(2,statistics.size());
+        Assert.assertEquals(1,statistics.size());
         double cars=statistics.get("CARS").doubleValue();
-        double elec=statistics.get("ELECTRONICS").doubleValue();
         Assert.assertEquals(21.00,cars,0);
-        Assert.assertEquals(42.00,elec,0);
 
     }
     @Test
