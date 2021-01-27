@@ -67,10 +67,14 @@ public class TwitterService implements ITwitterService {
 
         switch (tweetType) {
             case AUCTION_START:
-                return String.format("Auction '%s' starts now! Dont miss is it!", auction.getName());
+                return String.format("Auction '%s' starts now! Dont miss it!", auction.getName());
             case AUCTION_END:
-                return String.format("Auction '%s' ended!! Congratulation to the winner who won with a sum of € %s",
-                        auction.getName(), auction.getHighestBid().getOffer());
+                if (auction.getHighestBid() != null) {
+                    return String.format("Auction '%s' ended!! Congratulation to the winner who won with a sum of € %s",
+                            auction.getName(), auction.getHighestBid().getOffer());
+                } else {
+                    return String.format("Auction '%s' ended! Actually with no bids!!", auction.getName());
+                }
             case AUCTION_UPCOMING:
                 return String.format("Auction '%s' starts in one hour! Be prepared!", auction.getName());
             case AUCTION_CLOSE_TO_END:
