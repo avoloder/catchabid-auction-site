@@ -85,7 +85,7 @@ public class F15_AuctionFiltering extends BaseE2E {
                 new AuctionRepr("Homer Simpson", "BMW M3", "20000€", "5h"));
 
         assertEqualAuctions(auctionsListArea.getUpcomingAuctions(), auctionsListArea,
-                new AuctionRepr("Barney Stinson", "Mustang", "22000€", "1h"));
+                new AuctionRepr("Barney Stinson", "Mustang", "22000€", "1m"));
 
 
         auctionFiltersArea.clickCategory("Electronics");
@@ -98,8 +98,8 @@ public class F15_AuctionFiltering extends BaseE2E {
                 new AuctionRepr("Barney Stinson", "Xbox Series X", "700€", "5h"));
 
         assertEqualAuctions(auctionsListArea.getUpcomingAuctions(), auctionsListArea,
-                new AuctionRepr("Barney Stinson", "Mustang", "22000€", "1h"),
-                new AuctionRepr("Homer Simpson", "Samsung S20", "500€", "9h"));
+                new AuctionRepr("Barney Stinson", "Mustang", "22000€", "1m"),
+                new AuctionRepr("Homer Simpson", "Samsung S20", "500€", "5h"));
 
         auctionFiltersArea.clickCategory("Electronics");
         auctionFiltersArea.clickCategory("Cars");
@@ -146,7 +146,7 @@ public class F15_AuctionFiltering extends BaseE2E {
                 new AuctionRepr("Pro-Shop", "Bungee Jumping", "10€", "7h"));
 
         assertEqualAuctions(auctionsListArea.getUpcomingAuctions(), auctionsListArea,
-                new AuctionRepr("Barney Stinson", "Mustang", "22000€", "1h"));
+                new AuctionRepr("Barney Stinson", "Mustang", "22000€", "1m"));
 
         auctionFiltersArea.clickCountry("Germany");
 
@@ -199,7 +199,7 @@ public class F15_AuctionFiltering extends BaseE2E {
 
         assertEquals(0L, auctionsListArea.getRecentAuctions().size());
         assertEqualAuctions(auctionsListArea.getUpcomingAuctions(), auctionsListArea,
-                new AuctionRepr("Barney Stinson", "Mustang", "22000€", "1h"));
+                new AuctionRepr("Barney Stinson", "Mustang", "22000€", "1m"));
     }
 
     private void assertEqualAuctions(List<WebElement> auctionElements, AuctionsListArea auctionsListArea, AuctionRepr... auctionsToAssert) {
@@ -223,7 +223,7 @@ public class F15_AuctionFiltering extends BaseE2E {
             this.creator = creator;
             this.auctionName = auctionName;
             this.price = price;
-            this.coutnerstr = coutnerstr;
+            this.coutnerstr = includedCounterSubstr;
         }
     }
 }
