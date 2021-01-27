@@ -277,7 +277,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     public void testCancelAuctionCancellationError() {
         insertTestData("initial-testdata.sql");
         User user = new AuctionHouse();
-        user.setId(2L);
+        user.setId(100L);
         auctionService.cancelAuction(user, 100016L);
     }
 
@@ -285,7 +285,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     public void testCancelAuctionSuccess() {
         insertTestData("initial-testdata.sql");
         User user = new AuctionHouse();
-        user.setId(3L);
+        user.setId(200L);
 
         AuctionPostSendDTO cancelledAuctionDto = auctionService.cancelAuction(user, 100017L);
         AuctionPost cancelledAuctionDb = auctionRepository.findById(100017L).orElse(null);
@@ -300,8 +300,8 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     public void testPostContactFormFalseUserError() {
         insertTestData("initial-testdata.sql");
 
-        User user = new AuctionHouse();
-        user.setId(5L);
+        User user = new RegularUser();
+        user.setId(45L);
 
         auctionService.postContactForm(100010L, user, createContactForm());
     }
@@ -310,8 +310,8 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     public void testPostContactFormSuccess() {
         insertTestData("initial-testdata.sql");
 
-        User user = new AuctionHouse();
-        user.setId(3L);
+        User user = new RegularUser();
+        user.setId(200L);
 
         AuctionPost auctionPost = auctionRepository.findById(100010L).orElse(null);
 
@@ -333,8 +333,8 @@ public class AuctionServiceTest extends BaseIntegrationTest {
     public void testGetContactFormSuccess() {
         insertTestData("initial-testdata.sql");
 
-        User user = new AuctionHouse();
-        user.setId(3L);
+        User user = new RegularUser();
+        user.setId(200L);
 
         AuctionPost auctionPost = auctionRepository.findById(100010L).orElse(null);
 
@@ -344,7 +344,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         auctionService.postContactForm(100010L, user, createContactForm());
 
         User user1 = new AuctionHouse();
-        user1.setId(2L);
+        user1.setId(100L);
 
         assertEquals(Long.valueOf(2), auctionService.getContactForm(100010L, user1).getId());
     }

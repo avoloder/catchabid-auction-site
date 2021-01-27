@@ -4,15 +4,12 @@ import at.ac.ase.dto.AuctionPostSendDTO;
 import at.ac.ase.dto.BidDTO;
 import at.ac.ase.dto.translator.AuctionDtoTranslator;
 import at.ac.ase.dto.translator.BidDtoTranslator;
-import at.ac.ase.entities.AuctionPost;
-import at.ac.ase.entities.Bid;
-import at.ac.ase.entities.RegularUser;
-import at.ac.ase.entities.Status;
-import at.ac.ase.entities.User;
+import at.ac.ase.entities.*;
 import at.ac.ase.redis.service.IHighestBidService;
 import at.ac.ase.repository.bid.BidRepository;
 import at.ac.ase.util.exceptions.AuctionCancelledException;
 import at.ac.ase.util.exceptions.AuctionExpiredException;
+import at.ac.ase.util.exceptions.AuctionHouseNotAllowedException;
 import at.ac.ase.util.exceptions.InvalidBidException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -43,6 +40,9 @@ public class BidService implements IBidService {
 
     @Override
     public Bid toBid(BidDTO bidDTO, User user) {
+        if(user instanceof AuctionHouse){
+            throw new AuctionHouseNotAllowedException();
+        }
         Bid bid = bidDtoTranslator.toBid(bidDTO);
         bid.setUser((RegularUser) user);
         return bid;
