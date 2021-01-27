@@ -5,27 +5,25 @@ import at.ac.ase.dto.RatingDataDTO;
 import at.ac.ase.dto.AuctionHouseDTO;
 import at.ac.ase.dto.RegularUserDTO;
 import at.ac.ase.dto.translator.AuctionHouseDtoTranslator;
-import at.ac.ase.dto.translator.RatingDtoTranslator;
 import at.ac.ase.dto.translator.UserDtoTranslator;
 import at.ac.ase.entities.AuctionHouse;
-import at.ac.ase.entities.Rating;
 import at.ac.ase.entities.RegularUser;
 import at.ac.ase.entities.User;
 import at.ac.ase.service.user.IAuctionHouseService;
 import at.ac.ase.service.user.IRegularUserService;
 import at.ac.ase.service.user.rating.IRatingService;
+import at.ac.ase.util.exceptions.EmptyObjectException;
 import at.ac.ase.util.exceptions.UserAlreadyExistsException;
 import at.ac.ase.util.exceptions.UserAlreadyRatedException;
+import at.ac.ase.util.exceptions.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.web.bind.annotation.*;
 
-import javax.faces.annotation.RequestMap;
 import java.util.Map;
 
 @RestController
@@ -91,16 +89,32 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(rating);
     }
     @RequestMapping(value="/updateUser", method = RequestMethod.POST)
-    public ResponseEntity<RegularUser> updateUser( @CurrentSecurityContext(expression = "authentication.principal") User oldUser, @RequestBody RegularUserDTO user){
-        logger.info("Updating user with the email " + oldUser.getEmail());
+    public ResponseEntity<RegularUser> updateUser(@RequestParam String email, @RequestBody RegularUserDTO user) throws Exception {
+        logger.info("Updating user with the email " + user.getEmail());
         logger.info("Address Data : " +user.getAddress());
-        return ResponseEntity.status(HttpStatus.OK).body(regularUserService.updateUser(oldUser.getEmail(), user));
+        try{
+        return ResponseEntity.status(HttpStatus.OK).body(regularUserService.updateUser(email, user));
+        }catch (Exception e){
+            logger.error("Could not update user",e);
+            if (e instanceof EmptyObjectException || e instanceof UserNotFoundException || e instanceof UserAlreadyExistsException){
+                throw e;
+            }
+            throw new Exception("Could not retrieve bid statistics") ;
+        }
     }
 
     @RequestMapping(value="/updateHouse", method = RequestMethod.POST)
-    public ResponseEntity updateHouse(@CurrentSecurityContext(expression = "authentication.principal") User oldUser, @RequestBody AuctionHouseDTO auctionHouse){
+    public ResponseEntity updateHouse(@RequestParam String email, @RequestBody AuctionHouseDTO auctionHouse) throws Exception {
         logger.info("Updating auction house with the email " + auctionHouse.getEmail());
-        auctionHouseService.updateHouse(oldUser.getEmail(), auctionHouse);
+        auctionHouseService.updateHouse(email, auctionHouse);
+        try{
         return ResponseEntity.status(HttpStatus.OK).build();
+        }catch (Exception e){
+            logger.error("Could not update auction house",e);
+            if (e instanceof EmptyObjectException || e instanceof UserNotFoundException || e instanceof UserAlreadyExistsException){
+                throw e;
+            }
+            throw new Exception("Could not retrieve bid statistics") ;
+        }
     }
 }

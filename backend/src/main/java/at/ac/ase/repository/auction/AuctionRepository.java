@@ -15,41 +15,6 @@ import java.util.List;
 public interface AuctionRepository extends JpaRepository<AuctionPost, Long>, AuctionRepositoryCustomQueries {
 
     /**
-     * get upcoming auctions from database
-     * @param from earliest starting date of results
-     * @return
-     */
-    List<AuctionPost> findAllByStartTimeGreaterThan(LocalDateTime from);
-
-    /**
-     * get active auctions from database
-     * @param fromStartTime latest start date
-     * @param untilEndTime earliest end time
-     * @param pageable page of results
-     * @return
-     */
-    List<AuctionPost> findAllByStartTimeLessThanAndEndTimeGreaterThan(LocalDateTime fromStartTime, LocalDateTime untilEndTime, Pageable pageable);
-
-    /**
-     * get active auctions from database by user preferences
-     * @param fromStartTime latest start date
-     * @param untilEndTime earliest end time
-     * @param categories preferences categories of user
-     * @param pageable page of results
-     * @return
-     */
-    List<AuctionPost> findAllByStartTimeLessThanAndEndTimeGreaterThanAndCategoryIn(LocalDateTime fromStartTime, LocalDateTime untilEndTime, List<Category> categories, Pageable pageable);
-
-    /**
-     * get upcoming auctions from database by user preferences
-     * @param from earliest starting date of results
-     * @param pageable page of results
-     * @param categories preferences categories of user
-     * @return
-     */
-    List<AuctionPost> findAllByStartTimeGreaterThanAndCategoryIn(LocalDateTime from, List<Category> categories, Pageable pageable);
-
-    /**
      * get countries where auctions exist
      * @return
      */
@@ -71,13 +36,6 @@ public interface AuctionRepository extends JpaRepository<AuctionPost, Long>, Auc
      * @return
      */
     List<AuctionPost> findALlByCreatorId(Long user);
-
-    /**
-     * Get all auctions created by one user
-     * @param user user who created the auctions
-     * @return
-     */
-    List<AuctionPost> findALlBySubscriptions_IdAndStartTimeGreaterThan(long user, LocalDateTime startDate);
 
 
 }

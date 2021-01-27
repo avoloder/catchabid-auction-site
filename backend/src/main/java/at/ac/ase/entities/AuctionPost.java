@@ -1,15 +1,14 @@
 package at.ac.ase.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Type;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
-
-import java.time.LocalDateTime;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table
@@ -75,6 +74,10 @@ public class AuctionPost {
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="contact_form")
     private ContactForm contactForm;
+
+    @Enumerated(EnumType.STRING)
+    private AuctionPopularity auctionPopularity;
+
 
     public Long getId() {
         return id;
@@ -189,12 +192,12 @@ public class AuctionPost {
     }
 
     public boolean isUpcoming() {
-        return this.status == Status.UPCOMING && startTime.isAfter(LocalDateTime.now());
+        return this.status == Status.UPCOMING && startTime.isAfter(LocalDateTime.now(ZoneOffset.UTC));
     }
 
     public boolean isActive() {
         return (this.status == Status.UPCOMING || this.status == Status.ACTIVE)
-                && startTime.isBefore(LocalDateTime.now()) && endTime.isAfter(LocalDateTime.now());
+                && startTime.isBefore(LocalDateTime.now(ZoneOffset.UTC)) && endTime.isAfter(LocalDateTime.now(ZoneOffset.UTC));
     }
 
     public ContactForm getContactForm() {
@@ -203,5 +206,13 @@ public class AuctionPost {
 
     public void setContactForm(ContactForm contactForm) {
         this.contactForm = contactForm;
+    }
+
+    public AuctionPopularity getAuctionPopularity() {
+        return auctionPopularity;
+    }
+
+    public void setAuctionPopularity(AuctionPopularity auctionPopularity) {
+        this.auctionPopularity = auctionPopularity;
     }
 }

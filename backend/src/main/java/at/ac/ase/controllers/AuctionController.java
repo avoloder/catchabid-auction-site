@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -108,10 +107,15 @@ public class AuctionController {
 
     @GetMapping("/won")
     public ResponseEntity<List<AuctionPostSendDTO>> getWonAuctionsForUser(
-        @CurrentSecurityContext(expression = "authentication.principal") User user) {
+            @CurrentSecurityContext(expression = "authentication.principal") User user) throws Exception {
+        try{
         return ResponseEntity.ok(
-            auctionDtoTranslator.toDtoList(
-                auctionService.getAllWonAuctionPostsForUser(user)));
+                auctionDtoTranslator.toDtoList(
+                        auctionService.getAllWonAuctionPostsForUser(user)));
+        }catch(Exception e){
+            logger.error("Could not retrieve wins",e);
+            throw new Exception("Could not find wins");
+        }
     }
 
     @PostMapping(value = "/unsubscribe")
@@ -126,14 +130,27 @@ public class AuctionController {
 
     @GetMapping(value = "/myAuctions")
     public ResponseEntity<Object> myAuctions(
-            @CurrentSecurityContext(expression = "authentication.principal") User user) {
-        return ResponseEntity.ok(auctionService.getMyAuctions(user));
+            @CurrentSecurityContext(expression = "authentication.principal") User user) throws Exception {
+        try {
+            return ResponseEntity.ok(auctionService.getMyAuctions(user));
+        } catch (Exception e) {
+            logger.error("Could not retrieve owned auctions",e);
+            throw new Exception("Could not find owned Auctions");
+
+        }
     }
 
     @GetMapping(value = "/mySubscriptions")
     public ResponseEntity<Object> mySubscriptions(
-            @CurrentSecurityContext(expression = "authentication.principal") RegularUser user) {
-        return ResponseEntity.ok(auctionService.getMySubscriptions(user));
+            @CurrentSecurityContext(expression = "authentication.principal") RegularUser user) throws Exception {
+        try {
+            return ResponseEntity.ok(auctionService.getMySubscriptions(user));
+        } catch (Exception e) {
+            logger.error("Could not retrieve subscriptions",e);
+
+            throw new Exception("Could not find subscriptions");
+
+        }
     }
 
     @PostMapping(value = "/sendConfirmation")

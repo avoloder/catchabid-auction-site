@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import {AuctionsModule} from "../auctions/auctions.module";
 import {StatisticsComponent} from "./statistics/statistics.component";
 import { ChartsModule } from 'ng2-charts';
+import {NgbTooltipModule} from "@ng-bootstrap/ng-bootstrap";
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { ChartsModule } from 'ng2-charts';
     NgMultiSelectDropDownModule.forRoot(),
     FormsModule,
     AuctionsModule,
-    ChartsModule
+    ChartsModule,
+    NgbTooltipModule
   ]
 })
 export class ProfileModule {

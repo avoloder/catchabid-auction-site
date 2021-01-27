@@ -31,6 +31,7 @@ import {CategoriesPickerComponent} from './components/register/categories-picker
 import {ContactFormComponent} from "./components/auctions/contact-form/contact-form.component";
 import { RatingComponent } from './components/rating/rating/rating.component';
 import {ProfileModule} from "./components/profile/profile.module";
+import { TutorialComponent } from './components/tutorial/tutorial.component';
 
 
 @NgModule({
@@ -46,6 +47,7 @@ import {ProfileModule} from "./components/profile/profile.module";
     AuctionDetailsComponent,
     CategoriesPickerComponent,
     RatingComponent,
+    TutorialComponent,
   ],
   imports: [
     BrowserModule,

@@ -4,27 +4,35 @@
     <div>
       <div class="d-flex align-content-center flex-wrap" style="margin-left: 5%">
         <div *ngIf="!showBidsChart">
-          <div class="card statistic-card" >
+          <div class="card statistic-card">
             <div class="card-body">
-              <p class="card-title">Bids per Category</p>
+              <p class="card-title font-weight-bold">Bids per Category <i class="fa fa-question-circle"
+                                                                          ngbTooltip="  How many bids do you have per category"
+                                                                          style="margin-left: 2px"
+                                                                          aria-hidden="true"></i></p>
               <canvas baseChart
                       [data]="doughnutChartBidsData"
                       [options]="options"
                       [colors]="chartColors"
                       [labels]="doughnutChartBidsLabels"
-                      [chartType]="doughnutChartType" ></canvas>
+                      [legend]="false"
+                      [chartType]="doughnutChartType"></canvas>
             </div>
           </div>
         </div>
         <div *ngIf="!showWinsChart">
           <div class="card statistic-card">
             <div class="card-body">
-              <p>Wins per Category</p>
+              <p class="card-title font-weight-bold">Wins per Category <i
+                ngbTooltip="How many wins do you have per category" class="fa fa-question-circle"
+                style="margin-left: 2px" placement="top"
+                aria-hidden="true"></i></p>
               <canvas baseChart
                       [data]="doughnutChartWinsData"
                       [options]="options"
                       [colors]="chartColors"
                       [labels]="doughnutChartWinsLabels"
+                      [legend]="false"
                       [chartType]="doughnutChartType"></canvas>
             </div>
           </div>
@@ -32,7 +40,10 @@
         <div *ngIf="!showRatioChart">
           <div class="card statistic-card">
             <div class="card-body">
-              <p class="card-title">Wins ratio</p>
+              <p class="card-title font-weight-bold">Wins ratio <i
+                ngbTooltip="How many wins vs. bids do you have per category" class="fa fa-question-circle"
+                style="margin-left: 2px"
+                aria-hidden="true"></i></p>
               <div>
                 <div class="chartTitle">
                   {{myRatio}}
@@ -59,7 +70,10 @@
         <div *ngIf="!showPopularity">
           <div class="card statistic-card">
             <div class="card-body">
-              <p class="card-title">Popularity of Auctions per Category</p>
+              <p class="card-title font-weight-bold" style="margin-left:-2%;">Popularity of Auctions per Category<i
+                class="fa fa-question-circle"
+                ngbTooltip="How many bids do you have on average on your auctions in each category"
+                style="margin-left: 2px" aria-hidden="true"></i></p>
               <canvas baseChart
                       [data]="barChartPopularityData"
                       [labels]="barChartPopularityLabels"
@@ -71,9 +85,11 @@
         </div>
 
         <div *ngIf="!showSuccess">
-          <div class="card statistic-card" >
+          <div class="card statistic-card">
             <div class="card-body">
-              <p class="card-title">Success of Auctions per Category</p>
+              <p class="card-title font-weight-bold" style="margin-left:-2%;">Success of Auctions per Category<i
+                ngbTooltip="Average increase in price of your auctions per category"
+                class="fa fa-question-circle" style="margin-left: 1px" aria-hidden="true"></i></p>
               <canvas baseChart
                       [data]="barChartSuccessData"
                       [labels]="barChartSuccessLabels"

@@ -114,7 +114,7 @@
                                     <delimiterType>normal</delimiterType>
                                     <autocommit>true</autocommit>
                                     <srcFiles>
-                                        <srcFile>src/test/resources/testdata/F32_tc1.sql</srcFile>
+                                        <srcFile>src/test/resources/testdata/initial-testdata.sql</srcFile>
                                     </srcFiles>
                                 </configuration>
                             </execution>
@@ -404,6 +404,11 @@
         </dependency>
 
         <dependency>
+            <groupId>oauth.signpost</groupId>
+            <artifactId>signpost-core</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
             <version>2.4.2</version>
@@ -427,6 +432,11 @@
             <version>9.1.20</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20180813</version>
+        </dependency>
     </dependencies>
 
 

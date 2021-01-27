@@ -52,7 +52,6 @@ public class RatingServiceTest extends BaseIntegrationTest {
     @Test
     @Transactional
     public void testSetValidRating(){
-
         List<AuctionPostSendDTO> auctions = auctionService.searchAuctions(getRecentQuery(0, 0));
         RegularUser regularUser = userRepository.findByEmail("testUser@test.com");
         RatingDataDTO ratingDataDTO = new RatingDataDTO();
@@ -107,6 +106,7 @@ public class RatingServiceTest extends BaseIntegrationTest {
         ratingDataDTO.setRatingValue(4);
         ratingService.setRating(ratingDataDTO, regularUser);
     }
+
 private AuctionQueryDTO getRecentQuery(int pageNr, int auctionsPerPage){
     AuctionQueryDTO queryDTO = new AuctionQueryDTO();
     queryDTO.setAuctionsStartUntil(LocalDateTime.now());

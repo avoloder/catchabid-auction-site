@@ -150,11 +150,12 @@ public class AuctionServiceTest extends BaseIntegrationTest {
         assertEquals("Bob Marley Tickets", posts.get(0).getDescription());
         assertEquals("Ticket to Paradise CD", posts.get(1).getDescription());
 
+
     }
 
     @Test
     @Transactional
-    public void testSubscribeToAuction(){
+    public void testSubscribeToAuction() {
         insertTestData("multiple-auctions.sql");
 
         List<AuctionPost> auctionPosts = auctionService.getAllAuctions();
@@ -201,7 +202,7 @@ public class AuctionServiceTest extends BaseIntegrationTest {
 
     @Test
     @Transactional
-    public void testUnsubscribeFromAuction(){
+    public void testUnsubscribeFromAuction() {
         insertTestData("multiple-auctions.sql");
 
         List<AuctionPost> auctionPosts = auctionService.getAllAuctions();

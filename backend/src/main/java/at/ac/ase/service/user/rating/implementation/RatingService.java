@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.ZoneOffset;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -99,7 +100,7 @@ public class RatingService implements IRatingService {
         if (ratingDataDTO.getRatingValue() <= 5 && ratingDataDTO.getRatingValue() >= 1){
             correctRatingValue = true;
         }
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
         Duration duration = Duration.between(ratingDataDTO.getAuctionPost().getEndTime(), now);
         if(duration.toDays() <= 30){
             correctTimePeriod = true;

@@ -21,30 +21,55 @@ public class StatisticsController {
     StatisticsService service;
 
     @GetMapping("bidStatistics")
-    public ResponseEntity<Map<String,Integer>> bidStatistics( @CurrentSecurityContext(expression = "authentication.principal")User user) {
+    public ResponseEntity<Map<String,Integer>> bidStatistics( @CurrentSecurityContext(expression = "authentication.principal")User user) throws Exception {
         logger.info("Get bid statistics for user with email " + user.getEmail());
-        return ResponseEntity.status(HttpStatus.OK).body(service.getBidsStatistics(user));
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(service.getBidsStatistics(user));
+        }catch (Exception e){
+            logger.error("Could not retrieve bid statistics",e);
+            throw new Exception("Could not retrieve bid statistics") ;
+        }
     }
 
     @GetMapping("winStatistics")
-    public ResponseEntity<Map<String,Integer>> winsStatistics( @CurrentSecurityContext(expression = "authentication.principal")User user) {
+    public ResponseEntity<Map<String,Integer>> winsStatistics( @CurrentSecurityContext(expression = "authentication.principal")User user) throws Exception {
         logger.info("Get bid statistics for user with email " + user.getEmail());
+        try{
         return ResponseEntity.status(HttpStatus.OK).body(service.getWinsStatistics(user));
+        }catch (Exception e){
+            logger.error("Could not retrieve win statistics",e);
+            throw new Exception("Could not retrieve win statistics") ;
+        }
     }
     @GetMapping("winBidRatio")
-    public ResponseEntity<Map<String,Double>> winBidRatio( @CurrentSecurityContext(expression = "authentication.principal")User user) {
+    public ResponseEntity<Map<String,Double>> winBidRatio( @CurrentSecurityContext(expression = "authentication.principal")User user) throws Exception {
         logger.info("Get bid statistics for user with email " + user.getEmail());
+        try{
         return ResponseEntity.status(HttpStatus.OK).body(service.getBidsWinsRatio(user));
+        }catch (Exception e){
+            logger.error("Could not retrieve win ratio ",e);
+            throw new Exception("Could not retrieve win ratio") ;
+        }
     }
     @GetMapping("myAuctionsPopularity")
-    public ResponseEntity<Map<String,Integer>> popularityOfAuctions( @CurrentSecurityContext(expression = "authentication.principal")User user) {
+    public ResponseEntity<Map<String,Integer>> popularityOfAuctions( @CurrentSecurityContext(expression = "authentication.principal")User user) throws Exception {
         logger.info("Get bid statistics for user with email " + user.getEmail());
+        try{
         return ResponseEntity.status(HttpStatus.OK).body(service.getPopularityOfOwnAuctions(user));
+        }catch (Exception e){
+            logger.error("Could not retrieve auction popularity",e);
+            throw new Exception("Could not retrieve auction popularity") ;
+        }
     }
     @GetMapping("myAuctionsSuccess")
-    public ResponseEntity<Map<String,Double>> successOfAuctions( @CurrentSecurityContext(expression = "authentication.principal")User user) {
+    public ResponseEntity<Map<String,Double>> successOfAuctions( @CurrentSecurityContext(expression = "authentication.principal")User user) throws Exception {
         logger.info("Get bid statistics for user with email " + user.getEmail());
+        try{
         return ResponseEntity.status(HttpStatus.OK).body(service.getSuccessOfMyAuctions(user));
+        }catch (Exception e){
+            logger.error("Could not retrieve success of auctions",e);
+            throw new Exception("Could not retrieve success of auctions") ;
+        }
     }
 
 }
