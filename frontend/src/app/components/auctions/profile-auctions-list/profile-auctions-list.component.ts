@@ -158,4 +158,11 @@ export class ProfileAuctionsListComponent implements OnInit {
       this.toast.error(error.error.message);
     });
   }
+
+  convertUTCDatetimeToLocal(date){
+    const dateUTC = new Date(date);
+    const dateLocal = new Date(Date.UTC(dateUTC.getFullYear(),dateUTC.getMonth(), dateUTC.getDate() ,
+    dateUTC.getHours(), dateUTC.getMinutes(), dateUTC.getSeconds(), dateUTC.getMilliseconds()));
+    return dateLocal;
+  }
 }
