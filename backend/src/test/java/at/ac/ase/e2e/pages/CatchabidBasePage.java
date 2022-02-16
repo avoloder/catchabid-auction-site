@@ -19,7 +19,7 @@ public class CatchabidBasePage extends PageObject {
     @FindBy(xpath = "//footer")
     private WebElement footerCopyrightLink;
 
-    @FindBy(css = ".dropdown-toggle")
+    @FindBy(className = "profile")
     private WebElement dropdownToggleButton;
 
     @FindBy(linkText = "Create an auction post")

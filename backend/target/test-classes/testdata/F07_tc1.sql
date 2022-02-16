@@ -1,0 +1,1 @@
+INSERT INTO public.auction_house (id, active, email, name, password_hash, phone_nr, tid) VALUES (1, true, 'test@test.com', 'Testname', '$2a$10$B2TMssd3/5ysj7N69J2yY.NEshFo.HAz2iJjvA/PF.7hwM9q71cHa', '123', '1234567');

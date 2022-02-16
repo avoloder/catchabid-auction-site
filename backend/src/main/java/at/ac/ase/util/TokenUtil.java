@@ -43,7 +43,6 @@ public class TokenUtil {
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 .subject(email)
                 .issuer("CatchaBid")
-                .claim("password", password)
                 .expirationTime(calculateExpiryDate(EXPIRATION))
                 .build();
 
